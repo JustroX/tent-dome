@@ -1,5 +1,5 @@
 import { Mongoose , Schema as MongooseSchema, Model as MongooseModel } from "mongoose";
-import { ModelInterface } from "./model";
+import { Model } from "./model";
 
 
 interface MongooseSchemaInterface extends MongooseSchema {};
@@ -17,12 +17,12 @@ interface VirtualsStoreInterface
 	[ key : string ] : VirtualInterface<any>
 }
 
-interface SchemaConfig
+export interface SchemaConfig
 {
 	[ key : string ] : any;
 }
 
-interface SchemaDefinition
+export interface SchemaDefinition
 {
 	[ key : string ] : any;
 }
@@ -32,15 +32,15 @@ export class Schema
 	private schema 	 : SchemaDefinition;
 	private virtuals : VirtualsStoreInterface = {};
 	private config	 : SchemaConfig = {};
-	private parent   : ModelInterface;
+	private name     : string;
 	
 	model  		   : MongooseModel;
 	mongooseSchema : MongooseSchemaInterface;
 	
 
-	constructor(parent : ModelInterface)
+	constructor(name : string)
 	{
-		this.parent = parent;
+		this.name = name;
 	}
 
 	define( schema: SchemaDefinition , config? : SchemaConfig ) : void
@@ -75,7 +75,6 @@ export class Schema
 	register()
 	{
 		this.mongooseSchema = new MongooseSchema( this.schema , this.config );
+		this.model = MongooseModel(this.name , this.mongooseSchema);
 	}
 }
-
-export interface SchemaInterface extends Schema{};

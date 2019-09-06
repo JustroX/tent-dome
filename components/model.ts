@@ -1,27 +1,73 @@
-import { Schema 	 , SchemaInterface} from "./schema"
-import { Permissions } from "./permission"
-import { Routes 	 } from "./route"
-import { Method 	 } from "./method"
-import { Validation  } from "./validation"
+import { TentDome, Tent } from "../index";
 
-export class Model
+import { Schema , SchemaConfig , SchemaDefinition } from "./schema"
+import { Permissions } from "./permission";
+import { Routes	, RegisterRoute } from "./route";
+import { Method 	 } from "./method";
+import { Validation  } from "./validation";
+
+import { Application as ExpressApp } from "express";
+import * as pluralize from "pluralize";
+
+interface ModelStore<T>
 {
-	Schema 		: SchemaInterface;
-	Permissions ;
-	Method		;
-	Routes		;
+	[ key : string ] : Model<T>
+}
 
-	constructor()
-	{
-		this.Schema = new Schema( this );
-		this.Method = new Method();
-	}
+var Models : ModelStore<any> = {};
 
-	register()
+export function get<T>( name : string ) : Model<T>
+{
+	return Models[name];
+}
+
+export function RegisterModels( app : ExpressApp )
+{
+	app.use( Tent.get<string>("api prefix") , RegisterRoute() );
+
+	for(let name in Models)
 	{
-		this.Schema.register();
-		this.Method.register();
+		let model : Model<any> = Models[name]; 
+		app.use( Tent.get<string>("api prefix") + "/" + model.dbname , model.Routes.expose());
 	}
 }
 
-export interface ModelInterface extends Model{};
+export class Model<T>
+{
+	name : string;
+	dbname : string;
+	
+	Schema 		: Schema;
+	Permissions ;
+	Method		;
+	Routes		: Routes<T>;
+
+	constructor(name : string)
+	{
+		this.name = name;
+		this.dbname = pluralize(name);
+
+		this.Routes = new Routes<T>( name );
+		this.Schema = new Schema( name );
+		this.Method = new Method();
+	}
+
+	define( schema : SchemaDefinition, config ?: SchemaConfig ) : void
+	{
+		this.Schema.define( schema, config );
+	}
+
+	register() : void
+	{
+		this.Schema.register();
+		this.Method.register();
+		this.Routes.register();
+
+		Models[ this.name ] = this;
+	}
+
+	start()
+	{
+
+	}
+}

@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("./index");
 var chai_1 = require("chai");
 describe("index", function () {

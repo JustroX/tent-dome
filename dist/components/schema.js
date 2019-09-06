@@ -4,10 +4,10 @@ var mongoose_1 = require("mongoose");
 ;
 ;
 var Schema = /** @class */ (function () {
-    function Schema(parent) {
+    function Schema(name) {
         this.virtuals = {};
         this.config = {};
-        this.parent = parent;
+        this.name = name;
     }
     Schema.prototype.define = function (schema, config) {
         this.schema = schema;
@@ -29,8 +29,8 @@ var Schema = /** @class */ (function () {
     };
     Schema.prototype.register = function () {
         this.mongooseSchema = new mongoose_1.Schema(this.schema, this.config);
+        this.model = mongoose_1.Model(this.name, this.mongooseSchema);
     };
     return Schema;
 }());
 exports.Schema = Schema;
-;

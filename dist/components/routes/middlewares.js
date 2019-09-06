@@ -194,3 +194,24 @@ function param(name) {
     };
 }
 exports.param = param;
+function success(name) {
+    return function (req, res, next) {
+        res.status(200).send({
+            message: "Success",
+            code: 200
+        });
+    };
+}
+exports.success = success;
+function show(name) {
+    return function (req, res, next) {
+        res.status(200).send(req.tent.Show());
+    };
+}
+exports.show = show;
+function present(name) {
+    return function (req, res, next) {
+        res.status(200).send(req.tent.Present());
+    };
+}
+exports.present = present;

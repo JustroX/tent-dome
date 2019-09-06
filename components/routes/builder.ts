@@ -12,11 +12,16 @@ const BUILT_IN_FACTORIES : readonly string[] =
 	"read",   	//
 	"remove", 	//
 
+
 	"assign", 	//
 	"sanitize", //
 
-	"param",	
+	"param",	//
 	"list",		//
+
+	"success",  // return success message
+	"show",		// return value
+	"present"   // return list
 ];
 
 export class Builder<T> extends Hooks
@@ -28,6 +33,20 @@ export class Builder<T> extends Hooks
 	hook : Hooks.hook;
 	pre	 : Hooks.pre;
 	post : Hooks.post;
+
+	//Builtin functions
+	model;
+	create;
+	save;
+	read;
+	remove;
+	assign;
+	sanitize;
+	param;
+	list;
+	success;
+	show;
+	present;
 	
 	constructor( name : string )
 	{
@@ -40,12 +59,14 @@ export class Builder<T> extends Hooks
 	{
 		this.middlewares.splice( this.head , 0 , mw );
 		this.head ++;
+		return this;
 	}
 
 	pointHead( index : number )
 	{
 		Assert( index >=0  && index < this.middlewares.length , "Head index out of range" );
 		this.head = index;
+		return this;
 	}
 
 	lookHead()
@@ -56,11 +77,13 @@ export class Builder<T> extends Hooks
 	prevHead()
 	{
 		this.pointHead( this.head - 1 );
+		return this;
 	}
 
 	nextHead()
 	{
 		this.pointHead( this.head + 1 );
+		return this;
 	}
 
 	importBuiltIn()
@@ -76,7 +99,8 @@ export class Builder<T> extends Hooks
 		const _this = this;
 		this[name] = function()
 		{ 
-			this.middlewares.splice( this.head , 0 , mw ) 
+			this.middlewares.splice( this.head , 0 , mw );
+			return this;
 		};
 		
 		this.hook(name, mw);
@@ -84,7 +108,7 @@ export class Builder<T> extends Hooks
 
 	preHook( name : string, mw : ( req : Request , res: Response, next : Next  )=> void )
 	{
-		this.pre(name,( nextHook , req, res, next )=>
+		return this.pre(name,( nextHook , req, res, next )=>
 		{
 			mw( req, res, (...args)=>
 			{
@@ -97,7 +121,7 @@ export class Builder<T> extends Hooks
 	
 	postHook( name : string, mw : ( req : Request , res: Response, next : Next  )=> void )
 	{
-		this.post(name,( nextHook , req, res, next )=>
+		return this.post(name,( nextHook , req, res, next )=>
 		{
 			mw( req, res, (...args)=>
 			{

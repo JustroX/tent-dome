@@ -26,6 +26,9 @@ var BUILT_IN_FACTORIES = [
     "sanitize",
     "param",
     "list",
+    "success",
+    "show",
+    "present" // return list
 ];
 var Builder = /** @class */ (function (_super) {
     __extends(Builder, _super);
@@ -41,19 +44,23 @@ var Builder = /** @class */ (function (_super) {
     Builder.prototype.custom = function (mw) {
         this.middlewares.splice(this.head, 0, mw);
         this.head++;
+        return this;
     };
     Builder.prototype.pointHead = function (index) {
         Assert(index >= 0 && index < this.middlewares.length, "Head index out of range");
         this.head = index;
+        return this;
     };
     Builder.prototype.lookHead = function () {
         return this.middlewares[this.head];
     };
     Builder.prototype.prevHead = function () {
         this.pointHead(this.head - 1);
+        return this;
     };
     Builder.prototype.nextHead = function () {
         this.pointHead(this.head + 1);
+        return this;
     };
     Builder.prototype.importBuiltIn = function () {
         for (var _i = 0, BUILT_IN_FACTORIES_1 = BUILT_IN_FACTORIES; _i < BUILT_IN_FACTORIES_1.length; _i++) {
@@ -66,11 +73,12 @@ var Builder = /** @class */ (function (_super) {
         var _this = this;
         this[name] = function () {
             this.middlewares.splice(this.head, 0, mw);
+            return this;
         };
         this.hook(name, mw);
     };
     Builder.prototype.preHook = function (name, mw) {
-        this.pre(name, function (nextHook, req, res, next) {
+        return this.pre(name, function (nextHook, req, res, next) {
             mw(req, res, function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
@@ -84,7 +92,7 @@ var Builder = /** @class */ (function (_super) {
         });
     };
     Builder.prototype.postHook = function (name, mw) {
-        this.post(name, function (nextHook, req, res, next) {
+        return this.post(name, function (nextHook, req, res, next) {
             mw(req, res, function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {

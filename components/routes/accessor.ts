@@ -72,7 +72,18 @@ export class Accessor<SchemaInterface>
 	{
 		try
 		{
-			this.list = await this.collection.find(this.param).exec();
+			let { sort, filters, populate, pagination } = this.param; 
+
+			let query = this.collection.find(filters);
+
+			query.sort(sort)
+				 .limit(pagination.limit)
+				 .skip(pagination.offset * pagination.limit);
+
+			for(let field of populate)
+				query.populate( field );
+
+			this.list = await query.exec();
 		}
 		catch(e)
 		{
@@ -114,6 +125,24 @@ export class Accessor<SchemaInterface>
 		this.document = new this.collection();
 	}
 
+
+	Present()
+	{
+		/**
+		* @Todo sanitize output
+		*/
+
+		return this.list;
+	}
+
+	Show()
+	{
+		/**
+		* @Todo sanitize output
+		*/
+
+		return this.document;
+	}
 }
 
 export class Dispatcher

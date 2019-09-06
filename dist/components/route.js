@@ -31,26 +31,6 @@ var Routes = /** @class */ (function () {
                 (_c = this.router)[method].apply(_c, __spreadArrays([endpoint + "/:id"], builder.expose()));
         }
     };
-    Routes.prototype.create = function (endpoint, fresh) {
-        if (fresh === void 0) { fresh = false; }
-        return this.endpoint(endpoint, "POST", fresh);
-    };
-    Routes.prototype.update = function (endpoint, fresh) {
-        if (fresh === void 0) { fresh = false; }
-        return this.endpoint(endpoint, "PUT", fresh);
-    };
-    Routes.prototype.read = function (endpoint, fresh) {
-        if (fresh === void 0) { fresh = false; }
-        return this.endpoint(endpoint, "GET", fresh);
-    };
-    Routes.prototype.list = function (endpoint, fresh) {
-        if (fresh === void 0) { fresh = false; }
-        return this.endpoint(endpoint, "LIST", fresh);
-    };
-    Routes.prototype["delete"] = function (endpoint, fresh) {
-        if (fresh === void 0) { fresh = false; }
-        return this.endpoint(endpoint, "DELETE", fresh);
-    };
     Routes.prototype.endpoint = function (endpoint, method, fresh) {
         if (fresh === void 0) { fresh = false; }
         var a = {
@@ -62,6 +42,57 @@ var Routes = /** @class */ (function () {
     };
     Routes.prototype.expose = function () {
         return this.router;
+    };
+    /**
+     * Default Builders
+     */
+    Routes.prototype.create = function (endpoint, fresh) {
+        if (fresh === void 0) { fresh = false; }
+        var builder = this.endpoint(endpoint, "POST", fresh);
+        builder
+            .model()
+            .create()
+            .sanitize()
+            .assign()
+            .save();
+        return builder;
+    };
+    Routes.prototype.update = function (endpoint, fresh) {
+        if (fresh === void 0) { fresh = false; }
+        var builder = this.endpoint(endpoint, "PUT", fresh);
+        builder
+            .model()
+            .read()
+            .sanitize()
+            .assign()
+            .save();
+        return builder;
+    };
+    Routes.prototype.read = function (endpoint, fresh) {
+        if (fresh === void 0) { fresh = false; }
+        var builder = this.endpoint(endpoint, "GET", fresh);
+        builder
+            .model()
+            .read();
+        return builder;
+    };
+    Routes.prototype.list = function (endpoint, fresh) {
+        if (fresh === void 0) { fresh = false; }
+        var builder = this.endpoint(endpoint, "LIST", fresh);
+        builder
+            .model()
+            .param()
+            .list();
+        return builder;
+    };
+    Routes.prototype["delete"] = function (endpoint, fresh) {
+        if (fresh === void 0) { fresh = false; }
+        var builder = this.endpoint(endpoint, "DELETE", fresh);
+        builder
+            .model()
+            .read()
+            .remove();
+        return builder;
     };
     return Routes;
 }());

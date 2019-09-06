@@ -88,18 +88,27 @@ var Accessor = /** @class */ (function () {
     };
     Accessor.prototype.List = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, e_2;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var _a, sort, filters, populate, pagination, query, _i, populate_1, field, _b, e_2;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        _a = this;
-                        return [4 /*yield*/, this.collection.find(this.param).exec()];
+                        _c.trys.push([0, 2, , 3]);
+                        _a = this.param, sort = _a.sort, filters = _a.filters, populate = _a.populate, pagination = _a.pagination;
+                        query = this.collection.find(filters);
+                        query.sort(sort)
+                            .limit(pagination.limit)
+                            .skip(pagination.offset * pagination.limit);
+                        for (_i = 0, populate_1 = populate; _i < populate_1.length; _i++) {
+                            field = populate_1[_i];
+                            query.populate(field);
+                        }
+                        _b = this;
+                        return [4 /*yield*/, query.exec()];
                     case 1:
-                        _a.list = _b.sent();
+                        _b.list = _c.sent();
                         return [3 /*break*/, 3];
                     case 2:
-                        e_2 = _b.sent();
+                        e_2 = _c.sent();
                         throw e_2;
                     case 3: return [2 /*return*/];
                 }
@@ -154,6 +163,18 @@ var Accessor = /** @class */ (function () {
                 return [2 /*return*/];
             });
         });
+    };
+    Accessor.prototype.Present = function () {
+        /**
+        * @Todo sanitize output
+        */
+        return this.list;
+    };
+    Accessor.prototype.Show = function () {
+        /**
+        * @Todo sanitize output
+        */
+        return this.document;
     };
     return Accessor;
 }());

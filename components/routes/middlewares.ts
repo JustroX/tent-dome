@@ -141,3 +141,35 @@ export function param<T>( name ?: string)
 		next();
 	};
 }
+
+
+export function success<T>( name ?: string )
+{
+	return (req,res,next)=>
+	{
+		res.status(200).send({
+			message : "Success",
+			code: 200
+		});
+	}
+}
+
+export function show<T>( name ?: string )
+{
+	return (req,res,next)=>
+	{
+		res.status(200).send(
+			(req.tent as Accessor<T>).Show()
+		);
+	}
+}
+
+export function present<T>( name ?: string )
+{
+	return (req,res,next)=>
+	{
+		res.status(200).send(
+			(req.tent as Accessor<T>).Present()
+		);
+	}
+}

@@ -48,33 +48,6 @@ export class Routes<T>
 		}
 	}
 
-	create( endpoint : string , fresh :  boolean = false ) : Builder<T>
-	{
-		return this.endpoint( endpoint , "POST" , fresh );
-	}
-
-	update( endpoint : string , fresh :  boolean = false ) : Builder<T>
-	{
-		return this.endpoint( endpoint , "PUT" , fresh );
-	}
-
-	read( endpoint : string , fresh :  boolean = false ) : Builder<T>
-	{
-		return this.endpoint( endpoint , "GET" , fresh );
-	}
-	
-	list( endpoint : string , fresh :  boolean = false ) : Builder<T>
-	{
-		return this.endpoint( endpoint , "LIST" , fresh );
-	}
-	
-	delete( endpoint : string , fresh :  boolean = false ) : Builder<T>
-	{
-		return this.endpoint( endpoint , "DELETE" , fresh );
-	}
-
-
-
 	endpoint( endpoint : string , method: "GET" | "POST" | "PUT" | "DELETE" | "LIST"  , fresh : boolean = false) : Builder<T>
 	{
 		let a : BuilderConfig<T> = 
@@ -91,6 +64,78 @@ export class Routes<T>
 	{
 		return this.router;
 	}
+
+
+
+	/**
+	 * Default Builders
+	 */
+
+	create( endpoint : string , fresh :  boolean = false ) : Builder<T>
+	{
+		let builder : Builder<T> = this.endpoint( endpoint , "POST" , fresh );
+		
+		builder
+		 .model()
+		 .create()
+		 .sanitize()
+		 .assign()
+		 .save();
+		
+
+		return builder;
+	}
+
+	update( endpoint : string , fresh :  boolean = false ) : Builder<T>
+	{
+		let builder : Builder<T> = this.endpoint( endpoint , "PUT" , fresh );
+		
+		builder
+		 .model()
+		 .read()
+		 .sanitize()
+		 .assign()
+		 .save();
+
+		return builder;
+	}
+
+	read( endpoint : string , fresh :  boolean = false ) : Builder<T>
+	{
+		let builder : Builder<T> = this.endpoint( endpoint , "GET" , fresh );
+		
+		builder
+		 .model()
+		 .read()
+
+		return builder;
+	}
+	
+	list( endpoint : string , fresh :  boolean = false ) : Builder<T>
+	{
+		let builder : Builder<T> = this.endpoint( endpoint , "LIST" , fresh );
+		
+		builder
+		 .model()
+		 .param()
+		 .list()
+
+		return builder;
+	}
+	
+	delete( endpoint : string , fresh :  boolean = false ) : Builder<T>
+	{
+		let builder : Builder<T> = this.endpoint( endpoint , "DELETE" , fresh );
+		
+		builder
+		 .model()
+		 .read()
+		 .remove()
+
+		return builder;
+	}
+
+
 
 }
 

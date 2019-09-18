@@ -11,7 +11,7 @@ export function initTent<T>(req,res,next)
 
 export function model<T>( name : string)
 {
-	return ( req, res, next )=>
+	return function modelMiddleware( req, res, next )
 	{
 		(req.tent  as Accessor<T> ).Model( name );
 		next();
@@ -20,7 +20,7 @@ export function model<T>( name : string)
 
 export function read<T>()
 {
-	return async( req, res, next )=>
+	return async function readMiddleware( req, res, next )
 	{
 		Assert( req.params.id , "Id parameter is missing." );
 		
@@ -30,8 +30,8 @@ export function read<T>()
 		}
 		catch( e )
 		{
-			if(e.toString() == "Document not found")
-				res.tent.apiError(404,"Document not found");
+			if(e.name == "AssertionError" || e.name=="CastError")
+				return res.tent.apiError(404,"Document not found");
 			throw e;
 		}		
 
@@ -41,7 +41,7 @@ export function read<T>()
 
 export function create<T>()
 {
-	return ( req, res, next )=>
+	return function createMiddleware( req, res, next )
 	{
 		Assert((req.tent  as Accessor<T> ).collection, "'create' middleware can not be called without calling 'model' middleware first.");
 		(req.tent  as Accessor<T> ).FreshDocument();
@@ -51,7 +51,7 @@ export function create<T>()
 
 export function sanitize<T>()
 {
-	return ( req, res, next ) =>
+	return function sanitizeMiddleware( req, res, next )
 	{
 		Assert((req.tent  as Accessor<T> ).collection, "'sanitize' middleware can not be called without calling 'model' middleware first.");
 		Assert((req.tent  as Accessor<T> ).document,   "'sanitize' middleware can not be called without calling 'create' or 'read' middleware first.");
@@ -64,7 +64,7 @@ export function sanitize<T>()
 
 export function assign<T>( name ?: string )
 {
-	return ( req , res, next )=>
+	return function assignMiddleware( req , res, next )
 	{
 		Assert((req.tent  as Accessor<T> ).collection, "'assign' middleware can not be called without calling 'model' middleware first.");
 		Assert((req.tent  as Accessor<T> ).document,   "'assign' middleware can not be called without calling 'create' or 'read' middleware first.");
@@ -78,7 +78,7 @@ export function assign<T>( name ?: string )
 
 export function save<T>( name ?: string )
 {
-	return async(req,res, next) =>
+	return async function saveMiddleware(req,res, next)
 	{
 		Assert((req.tent  as Accessor<T> ).collection, "'save' middleware can not be called without calling 'model' middleware first.");
 		Assert((req.tent  as Accessor<T> ).document,   "'save' middleware can not be called without calling 'create' or 'read' middleware first.");
@@ -98,7 +98,7 @@ export function save<T>( name ?: string )
 
 export function remove<T>( name ?: string )
 {
-	return async(req,res, next) =>
+	return async function removeMiddleware(req,res, next)
 	{
 		Assert((req.tent  as Accessor<T> ).collection, "'remove' middleware can not be called without calling 'model' middleware first.");
 		Assert((req.tent  as Accessor<T> ).document,   "'remove' middleware can not be called without calling 'read' middleware first.");
@@ -117,7 +117,7 @@ export function remove<T>( name ?: string )
 
 export function list<T>()
 {
-	return async(req,res, next) =>
+	return async function listMiddleware(req,res, next)
 	{
 		Assert((req.tent  as Accessor<T> ).collection, "'list' middleware can not be called without calling 'model' middleware first.");
 		Assert((req.tent  as Accessor<T> ).param     , "'list' middleware can not be called without calling 'param' middleware first.");
@@ -135,7 +135,7 @@ export function list<T>()
 
 export function param<T>()
 {
-	return (req,res,next)=>
+	return function paramMiddleware(req,res,next)
 	{
 		req.tent.Param( req.query );
 		next();
@@ -145,7 +145,7 @@ export function param<T>()
 
 export function success<T>( )
 {
-	return (req,res,next)=>
+	return function successMiddleware (req,res,next)
 	{
 		res.status(200).send({
 			message : "Success",
@@ -156,8 +156,9 @@ export function success<T>( )
 
 export function show<T>()
 {
-	return (req,res,next)=>
+	return function showMiddleware (req,res,next)
 	{
+		Assert((req.tent  as Accessor<T> ).document, "'show' middleware can not be called without calling 'read' or 'create' middleware first.");
 		res.status(200).send(
 			(req.tent as Accessor<T>).Show()
 		);
@@ -166,7 +167,7 @@ export function show<T>()
 
 export function present<T>( name ?: string )
 {
-	return (req,res,next)=>
+	return function presentMiddleware (req,res,next)
 	{
 		res.status(200).send(
 			(req.tent as Accessor<T>).Present()

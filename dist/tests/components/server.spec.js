@@ -3,8 +3,8 @@ exports.__esModule = true;
 var server_1 = require("../../components/server");
 var chai_1 = require("chai");
 var http_1 = require("http");
+var server;
 describe("Server", function () {
-    var server;
     describe('#constructor', function () {
         it('should return an object', function () {
             server = new server_1.Server();
@@ -24,7 +24,7 @@ describe("Server", function () {
     describe("#initDatabase()", function () {
         it('should not throw errors', function () {
             chai_1.expect(function () {
-                server.initDatabase(process.env.MONGODB_URI);
+                server.initDatabase(process.env.TEST_MONGODB_URI);
             }).to.not["throw"]();
         });
     });
@@ -45,4 +45,7 @@ describe("Server", function () {
     // 		}).to.not.throw();
     // 	});		
     // });
+});
+after(function () {
+    server.close();
 });

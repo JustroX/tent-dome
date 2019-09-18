@@ -234,7 +234,7 @@ describe("Accessor",function()
 			})
 			.catch((err)=>
 			{
-				if(err.name=="AssertionError")
+				if(err.name=="AssertionError" || err.name =="CastError")
 					done();
 				else
 					done(err);
@@ -280,16 +280,25 @@ describe("Accessor",function()
 	{
 		before(function()
 		{
-			accessor.payload = {};
-			accessor.Sanitize({ name: "Sample", age: 18 });
+			accessor.payload = undefined;
+			accessor.document = undefined;
 		});
 
-		it("should throw error if #Read or #FreshDocument is not yet called",function()
+		it("should throw error if #Sanitize is not yet called",function()
 		{
 			expect(function()
 			{
 				accessor.Assign();
-			}).to.throw("AssertionError");
+			}).to.throw("Assign can not be called without first calling Sanitize");
+		});	
+
+		it("should throw error if #Read or #FreshDocument is not yet called",function()
+		{
+			accessor.Sanitize({ name: "Sample", age: 18 });
+			expect(function()
+			{
+				accessor.Assign();
+			}).to.throw("Assign can not be called without first calling Read or FreshDocument");
 		});	
 
 		it("should not throw error",function()
@@ -402,7 +411,7 @@ describe("Accessor",function()
 
 		it('should work properly pagination query',async function()
 		{
-			accessor.Param({ limit: "10" , offset: "1" });
+			accessor.Param({ limit: "1" , offset: "1" });
 			await accessor.List();
 
 			expect(accessor.list).to.exist;
@@ -428,6 +437,11 @@ describe("Accessor",function()
 
 	describe("#Save",function()
 	{
+		before(function()
+		{
+			accessor.document = undefined;
+		});
+
 		it('should throw AssertionError when document is not yet defined',function(done)
 		{
 			accessor.Save()
@@ -485,6 +499,7 @@ describe("Accessor",function()
 		{
 			accessor.model = undefined;
 			accessor.collection = undefined;
+			accessor.document = undefined;
 			accessor.Model("Person");
 
 			//add new Person
@@ -639,7 +654,7 @@ describe("Accessor",function()
 			expect(function()
 			{
 				accessor.Present();
-			}).to.throw("AssertionError");
+			}).to.throw().property("name","AssertionError");
 		})
 
 		it('should not throw when list is called',function(done)
@@ -700,6 +715,7 @@ describe("Accessor",function()
 		{
 			accessor.model = undefined;
 			accessor.collection = undefined;
+			accessor.document = undefined;
 
 			//add new Person
 			let Person = get("Person").Schema.model;
@@ -727,7 +743,7 @@ describe("Accessor",function()
 			expect(function()
 			{
 				accessor.Show();
-			}).to.throw("AssertionError");
+			}).to.throw().property("name","AssertionError");
 		});
 
 		it('should throw when document is fresh.',function(done)
@@ -738,7 +754,7 @@ describe("Accessor",function()
 				expect(function()
 				{
 					accessor.Show()
-				}).to.throw("AssertionError");
+				}).to.throw().property("name","AssertionError");
 
 				done();
 			})

@@ -425,6 +425,7 @@ describe("Middlewares", function () {
                         case 0:
                             req.tent.model = undefined;
                             req.tent.collection = undefined;
+                            req.tent.document = undefined;
                             req.tent.Model("Person");
                             Person = model_1.get("Person").Schema.model;
                             person = new Person();
@@ -546,12 +547,18 @@ describe("Middlewares", function () {
             };
             util_1.promisify(Middlewares.param(), req, res)
                 .then(function () {
-                chai_1.expect(req.tent.param).to.be.deep.equal({
-                    sort: { name: -1 },
-                    pagination: { limit: 1, offset: 12 },
-                    filters: { key1: "a", key2: { $gte: "12", $lte: "15" } },
-                    populate: ["bubble"]
-                });
+                try {
+                    chai_1.expect(req.tent.param).to.be.deep.equal({
+                        sort: { name: -1 },
+                        pagination: { limit: 1, offset: 12 },
+                        filters: { key1: "a", key2: { $gte: "12", $lte: "15" } },
+                        populate: ["bubble"]
+                    });
+                    done();
+                }
+                catch (err) {
+                    done(err);
+                }
             })["catch"](function (err) {
                 done(err);
             });
@@ -662,6 +669,7 @@ describe("Middlewares", function () {
                             chai_1.expect(req.tent.list.length).to.be.equal(3);
                             chai_1.expect(req.tent.list[0].age).to.be.equal(100);
                             chai_1.expect(req.tent.list[2].age).to.be.equal(2);
+                            done();
                         }
                         catch (err) {
                             done(err);
@@ -673,7 +681,7 @@ describe("Middlewares", function () {
         });
         it('should work properly pagination query', function (done) {
             var _this = this;
-            req.query = { limit: "10", offset: "1" };
+            req.query = { limit: "1", offset: "1" };
             util_1.promisify(Middlewares.param(), req, res)
                 .then(function () {
                 util_1.promisify(Middlewares.list(), req, res)
@@ -683,6 +691,7 @@ describe("Middlewares", function () {
                             chai_1.expect(req.tent.list).to.exist;
                             chai_1.expect(req.tent.list.length).to.be.equal(1);
                             chai_1.expect(req.tent.list[0].age).to.be.equal(20);
+                            done();
                         }
                         catch (err) {
                             done(err);
@@ -704,6 +713,7 @@ describe("Middlewares", function () {
                             chai_1.expect(req.tent.list).to.exist;
                             chai_1.expect(req.tent.list.length).to.be.equal(1);
                             chai_1.expect(req.tent.list[0].age).to.be.equal(20);
+                            done();
                         }
                         catch (err) {
                             done(err);
@@ -756,6 +766,7 @@ describe("Middlewares", function () {
                         case 0:
                             req.tent.model = undefined;
                             req.tent.collection = undefined;
+                            req.tent.document = undefined;
                             Person = model_1.get("Person").Schema.model;
                             person = new Person();
                             person.name = "Sample Person";

@@ -2,7 +2,7 @@
 exports.__esModule = true;
 var model_1 = require("../../components/model");
 var chai_1 = require("chai");
-var util_1 = require("../util");
+var Express = require("express");
 //Preconditions
 require("./schema.spec");
 // import "./method";
@@ -46,7 +46,15 @@ describe("Model", function () {
         });
     });
     describe("#RegisterModels", function () {
-        util_1.todo();
+        var app;
+        before(function () {
+            app = Express();
+        });
+        it('should not throw', function () {
+            chai_1.expect(function () {
+                model_1.RegisterModels(app);
+            }).to.not["throw"]();
+        });
     });
     describe("#get", function () {
         it('should be saved on model store dictionary', function () {

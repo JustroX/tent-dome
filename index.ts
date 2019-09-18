@@ -17,11 +17,12 @@ export class TentDome
 
 	Models : Model<any>[] = [];
 	
-	constructor(){}
+	constructor(){
+		this.setDefaultOptions();
+	}
 
 	init( options : TentOptionsInterface ) : void
 	{
-		this.setDefaultOptions();
 		for(let i in options)
 			this.TentOptions[i] = options[i];
 
@@ -69,7 +70,7 @@ export class TentDome
 
 	start( port : number = 7072 ) : Promise<void>
 	{
-		RegisterModels(this.AppServer.app());
+		RegisterModels(this.app());
 		this.AppServer.initDatabase( this.get<string>("mongoose uri") );
 		return this.AppServer.start( port );
 	}

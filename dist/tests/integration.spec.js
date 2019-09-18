@@ -23,8 +23,10 @@ describe("Tent sample run 1.", function () {
                 }]
         });
     });
-    it("should start properly", function () {
-        Tent.start();
+    it("should start properly", function (done) {
+        Tent.start().then(function () {
+            done();
+        })["catch"](done);
     });
     after(function () {
         Tent.AppServer.close();

@@ -7,9 +7,9 @@ var TentDome = /** @class */ (function () {
         this.AppServer = {};
         this.TentOptions = {};
         this.Models = [];
+        this.setDefaultOptions();
     }
     TentDome.prototype.init = function (options) {
-        this.setDefaultOptions();
         for (var i in options)
             this.TentOptions[i] = options[i];
         this.AppServer = new server_1.Server();
@@ -41,7 +41,7 @@ var TentDome = /** @class */ (function () {
      */
     TentDome.prototype.start = function (port) {
         if (port === void 0) { port = 7072; }
-        model_1.RegisterModels(this.AppServer.app());
+        model_1.RegisterModels(this.app());
         this.AppServer.initDatabase(this.get("mongoose uri"));
         return this.AppServer.start(port);
     };

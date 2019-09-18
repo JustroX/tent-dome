@@ -23,11 +23,10 @@ export function get<T>( name : string ) : Model<T>
 export function RegisterModels( app : ExpressApp )
 {
 	app.use( Tent.get<string>("api prefix") , RegisterRoute() );
-
 	for(let name in Models)
 	{
 		let model : Model<any> = Models[name]; 
-		app.use( Tent.get<string>("api prefix") + "/" + model.dbname , model.Routes.expose());
+		app.use(  Tent.get<string>("api prefix") + "/" + model.dbname , model.Routes.expose());
 	}
 }
 

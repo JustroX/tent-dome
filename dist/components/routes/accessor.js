@@ -62,33 +62,31 @@ var Accessor = /** @class */ (function () {
         this.payload = flatten(payload);
     };
     Accessor.prototype.Assign = function () {
+        Assert(this.payload, "Assign can not be called without first calling Sanitize");
+        Assert(this.document, "Assign can not be called without first calling Read or FreshDocument");
         for (var i in this.payload)
             this.document.set(i, this.payload[i]);
     };
     Accessor.prototype.Read = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, e_1;
+            var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _b.trys.push([0, 2, , 3]);
+                        Assert(this.collection, "Read cannot be used when model is not yet called.");
                         _a = this;
                         return [4 /*yield*/, this.collection.find({ _id: id }).exec()];
                     case 1:
                         _a.document = (_b.sent())[0];
                         Assert(this.document, "Document not found");
-                        return [3 /*break*/, 3];
-                    case 2:
-                        e_1 = _b.sent();
-                        throw e_1;
-                    case 3: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
     };
     Accessor.prototype.List = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, sort, filters, populate, pagination, query, _i, populate_1, field, _b, e_2;
+            var _a, sort, filters, populate, pagination, query, _i, populate_1, field, _b, e_1;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -108,8 +106,8 @@ var Accessor = /** @class */ (function () {
                         _b.list = _c.sent();
                         return [3 /*break*/, 3];
                     case 2:
-                        e_2 = _c.sent();
-                        throw e_2;
+                        e_1 = _c.sent();
+                        throw e_1;
                     case 3: return [2 /*return*/];
                 }
             });
@@ -117,38 +115,45 @@ var Accessor = /** @class */ (function () {
     };
     Accessor.prototype.Save = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var e_3;
+            var e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.document.save()];
+                        Assert(this.document, "Save can not be called without first calling Read or FreshDocument");
+                        _a.label = 1;
                     case 1:
-                        _a.sent();
-                        return [3 /*break*/, 3];
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.document.save()];
                     case 2:
-                        e_3 = _a.sent();
-                        throw e_3;
-                    case 3: return [2 /*return*/];
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_2 = _a.sent();
+                        throw e_2;
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
     Accessor.prototype.Delete = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var e_4;
+            var e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.document["delete"]()];
+                        Assert(this.document, "Delete can not be called without first calling Read");
+                        Assert(!this.document.isNew, "Delete can not be called when Fresh Document is called.");
+                        _a.label = 1;
                     case 1:
-                        _a.sent();
-                        return [3 /*break*/, 3];
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.document["delete"]()];
                     case 2:
-                        e_4 = _a.sent();
-                        throw e_4;
-                    case 3: return [2 /*return*/];
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_3 = _a.sent();
+                        throw e_3;
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -156,7 +161,8 @@ var Accessor = /** @class */ (function () {
     Accessor.prototype.Param = function (params) {
         var str = "";
         for (var i in params)
-            str += i + ":" + params[i] + '&';
+            str += i + "=" + params[i] + '&';
+        str = str.slice(0, str.length - 1);
         this.param = params_1.Parse(str);
     };
     Accessor.prototype.FreshDocument = function () {
@@ -169,12 +175,15 @@ var Accessor = /** @class */ (function () {
         });
     };
     Accessor.prototype.Present = function () {
+        Assert(this.list, "Present can not be called without first calling List");
         /**
         * @Todo sanitize output
         */
         return this.list;
     };
     Accessor.prototype.Show = function () {
+        Assert(this.document, "Show can not be called without first calling Read");
+        Assert(!this.document.isNew, "Show can not be called when FreshDocument is called.");
         /**
         * @Todo sanitize output
         */

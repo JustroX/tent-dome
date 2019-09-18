@@ -80,7 +80,8 @@ export class Routes<T>
 		 .create()
 		 .sanitize()
 		 .assign()
-		 .save();
+		 .save()
+		 .success();
 		
 
 		return builder;
@@ -95,7 +96,8 @@ export class Routes<T>
 		 .read()
 		 .sanitize()
 		 .assign()
-		 .save();
+		 .save()
+		 .success();
 
 		return builder;
 	}
@@ -107,6 +109,7 @@ export class Routes<T>
 		builder
 		 .model()
 		 .read()
+		 .show();
 
 		return builder;
 	}
@@ -119,6 +122,7 @@ export class Routes<T>
 		 .model()
 		 .param()
 		 .list()
+		 .present();
 
 		return builder;
 	}
@@ -131,6 +135,7 @@ export class Routes<T>
 		 .model()
 		 .read()
 		 .remove()
+		 .success();
 
 		return builder;
 	}

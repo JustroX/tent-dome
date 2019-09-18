@@ -45,42 +45,43 @@ function initTent(req, res, next) {
 }
 exports.initTent = initTent;
 function model(name) {
-    return function (req, res, next) {
+    return function modelMiddleware(req, res, next) {
         req.tent.Model(name);
         next();
     };
 }
 exports.model = model;
 function read() {
-    var _this = this;
-    return function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var e_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    Assert(req.params.id, "Id parameter is missing.");
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, req.tent.Read(req.params.id)];
-                case 2:
-                    _a.sent();
-                    return [3 /*break*/, 4];
-                case 3:
-                    e_1 = _a.sent();
-                    if (e_1.toString() == "Document not found")
-                        res.tent.apiError(404, "Document not found");
-                    throw e_1;
-                case 4:
-                    next();
-                    return [2 /*return*/];
-            }
+    return function readMiddleware(req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        Assert(req.params.id, "Id parameter is missing.");
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, req.tent.Read(req.params.id)];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_1 = _a.sent();
+                        if (e_1.name == "AssertionError" || e_1.name == "CastError")
+                            return [2 /*return*/, res.tent.apiError(404, "Document not found")];
+                        throw e_1;
+                    case 4:
+                        next();
+                        return [2 /*return*/];
+                }
+            });
         });
-    }); };
+    };
 }
 exports.read = read;
 function create() {
-    return function (req, res, next) {
+    return function createMiddleware(req, res, next) {
         Assert(req.tent.collection, "'create' middleware can not be called without calling 'model' middleware first.");
         req.tent.FreshDocument();
         next();
@@ -88,7 +89,7 @@ function create() {
 }
 exports.create = create;
 function sanitize() {
-    return function (req, res, next) {
+    return function sanitizeMiddleware(req, res, next) {
         Assert(req.tent.collection, "'sanitize' middleware can not be called without calling 'model' middleware first.");
         Assert(req.tent.document, "'sanitize' middleware can not be called without calling 'create' or 'read' middleware first.");
         req.tent.Sanitize(req.body);
@@ -97,7 +98,7 @@ function sanitize() {
 }
 exports.sanitize = sanitize;
 function assign(name) {
-    return function (req, res, next) {
+    return function assignMiddleware(req, res, next) {
         Assert(req.tent.collection, "'assign' middleware can not be called without calling 'model' middleware first.");
         Assert(req.tent.document, "'assign' middleware can not be called without calling 'create' or 'read' middleware first.");
         Assert(req.tent.payload, "'assign' middleware can not be called without calling 'sanitize' middleware first.");
@@ -107,95 +108,98 @@ function assign(name) {
 }
 exports.assign = assign;
 function save(name) {
-    var _this = this;
-    return function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var e_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    Assert(req.tent.collection, "'save' middleware can not be called without calling 'model' middleware first.");
-                    Assert(req.tent.document, "'save' middleware can not be called without calling 'create' or 'read' middleware first.");
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, req.tent.Save()];
-                case 2:
-                    _a.sent();
-                    return [3 /*break*/, 4];
-                case 3:
-                    e_2 = _a.sent();
-                    throw e_2;
-                case 4:
-                    next();
-                    return [2 /*return*/];
-            }
+    return function saveMiddleware(req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        Assert(req.tent.collection, "'save' middleware can not be called without calling 'model' middleware first.");
+                        Assert(req.tent.document, "'save' middleware can not be called without calling 'create' or 'read' middleware first.");
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, req.tent.Save()];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_2 = _a.sent();
+                        throw e_2;
+                    case 4:
+                        next();
+                        return [2 /*return*/];
+                }
+            });
         });
-    }); };
+    };
 }
 exports.save = save;
 function remove(name) {
-    var _this = this;
-    return function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var e_3;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    Assert(req.tent.collection, "'remove' middleware can not be called without calling 'model' middleware first.");
-                    Assert(req.tent.document, "'remove' middleware can not be called without calling 'read' middleware first.");
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, req.tent.Delete()];
-                case 2:
-                    _a.sent();
-                    return [3 /*break*/, 4];
-                case 3:
-                    e_3 = _a.sent();
-                    throw e_3;
-                case 4:
-                    next();
-                    return [2 /*return*/];
-            }
+    return function removeMiddleware(req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        Assert(req.tent.collection, "'remove' middleware can not be called without calling 'model' middleware first.");
+                        Assert(req.tent.document, "'remove' middleware can not be called without calling 'read' middleware first.");
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, req.tent.Delete()];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_3 = _a.sent();
+                        throw e_3;
+                    case 4:
+                        next();
+                        return [2 /*return*/];
+                }
+            });
         });
-    }); };
+    };
 }
 exports.remove = remove;
 function list() {
-    var _this = this;
-    return function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var e_4;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    Assert(req.tent.collection, "'list' middleware can not be called without calling 'model' middleware first.");
-                    Assert(req.tent.param, "'list' middleware can not be called without calling 'param' middleware first.");
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, req.tent.List()];
-                case 2:
-                    _a.sent();
-                    return [3 /*break*/, 4];
-                case 3:
-                    e_4 = _a.sent();
-                    throw e_4;
-                case 4:
-                    next();
-                    return [2 /*return*/];
-            }
+    return function listMiddleware(req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        Assert(req.tent.collection, "'list' middleware can not be called without calling 'model' middleware first.");
+                        Assert(req.tent.param, "'list' middleware can not be called without calling 'param' middleware first.");
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, req.tent.List()];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_4 = _a.sent();
+                        throw e_4;
+                    case 4:
+                        next();
+                        return [2 /*return*/];
+                }
+            });
         });
-    }); };
+    };
 }
 exports.list = list;
 function param() {
-    return function (req, res, next) {
+    return function paramMiddleware(req, res, next) {
         req.tent.Param(req.query);
         next();
     };
 }
 exports.param = param;
 function success() {
-    return function (req, res, next) {
+    return function successMiddleware(req, res, next) {
         res.status(200).send({
             message: "Success",
             code: 200
@@ -204,13 +208,14 @@ function success() {
 }
 exports.success = success;
 function show() {
-    return function (req, res, next) {
+    return function showMiddleware(req, res, next) {
+        Assert(req.tent.document, "'show' middleware can not be called without calling 'read' or 'create' middleware first.");
         res.status(200).send(req.tent.Show());
     };
 }
 exports.show = show;
 function present(name) {
-    return function (req, res, next) {
+    return function presentMiddleware(req, res, next) {
         res.status(200).send(req.tent.Present());
     };
 }

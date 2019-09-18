@@ -91,8 +91,16 @@ export function FilterParse( result : QueryParams )
 {
 	for(let key in result.filters)
 	{
-		let bounds  : string[] = result.filters[key].split("..");
-		let list    : string[] = result.filters[key].split(",");
+		let filterValue = result.filters[key];
+
+		if(typeof filterValue != "string")
+		{
+			result.filters[key] = filterValue;
+			return;				
+		}
+
+		let bounds  : string[] = filterValue.split("..");
+		let list    : string[] = filterValue.split(",");
 
 		let isRange : boolean  = bounds.length == 2;
 		let isList  : boolean  =   list.length  > 1;

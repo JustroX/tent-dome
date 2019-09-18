@@ -95,14 +95,14 @@ describe("Routes", function () {
                     var endpiontSpy = sinon_1.spy(route, "endpoint");
                     var builder = route.create();
                     chai_1.expect(endpiontSpy.calledWith(route.name, "POST", false));
-                    chai_1.expect(builder.expose()).to.be.deep.equal([
-                        Middlewares.model,
-                        Middlewares.create,
-                        Middlewares.sanitize,
-                        Middlewares.assign,
-                        Middlewares.save,
-                        Middlewares.success
-                    ]);
+                    chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
+                        Middlewares.model("endpoint"),
+                        Middlewares.create(),
+                        Middlewares.sanitize(),
+                        Middlewares.assign(),
+                        Middlewares.save(),
+                        Middlewares.success()
+                    ].map(function (x) { return x.name; }));
                 });
             });
             describe("#update", function () {
@@ -110,14 +110,14 @@ describe("Routes", function () {
                     var endpiontSpy = sinon_1.spy(route, "endpoint");
                     var builder = route.update();
                     chai_1.expect(endpiontSpy.calledWith(route.name, "PUT", false));
-                    chai_1.expect(builder.expose()).to.be.deep.equal([
-                        Middlewares.model,
-                        Middlewares.read,
-                        Middlewares.sanitize,
-                        Middlewares.assign,
-                        Middlewares.save,
-                        Middlewares.success
-                    ]);
+                    chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
+                        Middlewares.model("endpoint"),
+                        Middlewares.read(),
+                        Middlewares.sanitize(),
+                        Middlewares.assign(),
+                        Middlewares.save(),
+                        Middlewares.success()
+                    ].map(function (x) { return x.name; }));
                 });
             });
             describe("#read", function () {
@@ -125,11 +125,11 @@ describe("Routes", function () {
                     var endpiontSpy = sinon_1.spy(route, "endpoint");
                     var builder = route.read();
                     chai_1.expect(endpiontSpy.calledWith(route.name, "GET", false));
-                    chai_1.expect(builder.expose()).to.be.deep.equal([
-                        Middlewares.model,
-                        Middlewares.read,
-                        Middlewares.show
-                    ]);
+                    chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
+                        Middlewares.model("endpoint"),
+                        Middlewares.read(),
+                        Middlewares.show()
+                    ].map(function (x) { return x.name; }));
                 });
             });
             describe("#list", function () {
@@ -137,12 +137,12 @@ describe("Routes", function () {
                     var endpiontSpy = sinon_1.spy(route, "endpoint");
                     var builder = route.list();
                     chai_1.expect(endpiontSpy.calledWith(route.name, "LIST", false));
-                    chai_1.expect(builder.expose()).to.be.deep.equal([
-                        Middlewares.model,
-                        Middlewares.param,
-                        Middlewares.list,
-                        Middlewares.present
-                    ]);
+                    chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
+                        Middlewares.model("endpoint"),
+                        Middlewares.param(),
+                        Middlewares.list(),
+                        Middlewares.present()
+                    ].map(function (x) { return x.name; }));
                 });
             });
             describe("#delete", function () {
@@ -150,12 +150,12 @@ describe("Routes", function () {
                     var endpiontSpy = sinon_1.spy(route, "endpoint");
                     var builder = route["delete"]();
                     chai_1.expect(endpiontSpy.calledWith(route.name, "DELETE", false));
-                    chai_1.expect(builder.expose()).to.be.deep.equal([
-                        Middlewares.model,
-                        Middlewares.read,
-                        Middlewares.remove,
-                        Middlewares.success
-                    ]);
+                    chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
+                        Middlewares.model("endpoint"),
+                        Middlewares.read(),
+                        Middlewares.remove(),
+                        Middlewares.success()
+                    ].map(function (x) { return x.name; }));
                 });
             });
         });

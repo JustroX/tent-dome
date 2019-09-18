@@ -149,14 +149,14 @@ describe("Routes",function()
 
 					let builder = route.create();
 					expect(endpiontSpy.calledWith(route.name, "POST", false));
-					expect(builder.expose()).to.be.deep.equal([
-						Middlewares.model,
-						Middlewares.create,
-						Middlewares.sanitize,
-						Middlewares.assign,
-						Middlewares.save,
-						Middlewares.success
-					]);
+					expect(builder.expose().map(x=>x.name)).to.be.deep.equal([
+						Middlewares.model("endpoint"),
+						Middlewares.create(),
+						Middlewares.sanitize(),
+						Middlewares.assign(),
+						Middlewares.save(),
+						Middlewares.success()
+					].map(x=>x.name));
 				});
 			});
 			describe("#update",function()
@@ -167,14 +167,14 @@ describe("Routes",function()
 
 					let builder = route.update();
 					expect(endpiontSpy.calledWith(route.name, "PUT", false));
-					expect(builder.expose()).to.be.deep.equal([
-						Middlewares.model,
-						Middlewares.read,
-						Middlewares.sanitize,
-						Middlewares.assign,
-						Middlewares.save,
-						Middlewares.success
-					]);					
+					expect(builder.expose().map(x=>x.name)).to.be.deep.equal([
+						Middlewares.model("endpoint"),
+						Middlewares.read(),
+						Middlewares.sanitize(),
+						Middlewares.assign(),
+						Middlewares.save(),
+						Middlewares.success()
+					].map(x=>x.name));					
 				});
 			});
 			describe("#read",function()
@@ -185,11 +185,11 @@ describe("Routes",function()
 
 					let builder = route.read();
 					expect(endpiontSpy.calledWith(route.name, "GET", false));
-					expect(builder.expose()).to.be.deep.equal([
-						Middlewares.model,
-						Middlewares.read,
-						Middlewares.show
-					]);					
+					expect(builder.expose().map(x=>x.name)).to.be.deep.equal([
+						Middlewares.model("endpoint"),
+						Middlewares.read(),
+						Middlewares.show()
+					].map(x=>x.name));					
 				});
 			});
 			describe("#list",function()
@@ -200,12 +200,12 @@ describe("Routes",function()
 
 					let builder = route.list();
 					expect(endpiontSpy.calledWith(route.name, "LIST", false));
-					expect(builder.expose()).to.be.deep.equal([
-						Middlewares.model,
-						Middlewares.param,
-						Middlewares.list,
-						Middlewares.present
-					]);
+					expect(builder.expose().map(x=>x.name)).to.be.deep.equal([
+						Middlewares.model("endpoint"),
+						Middlewares.param(),
+						Middlewares.list(),
+						Middlewares.present()
+					].map(x=>x.name));
 
 				});
 			});
@@ -217,12 +217,12 @@ describe("Routes",function()
 
 					let builder = route.delete();
 					expect(endpiontSpy.calledWith(route.name, "DELETE", false));
-					expect(builder.expose()).to.be.deep.equal([
-						Middlewares.model,
-						Middlewares.read,
-						Middlewares.remove,
-						Middlewares.success
-					]);
+					expect(builder.expose().map(x=>x.name)).to.be.deep.equal([
+						Middlewares.model("endpoint"),
+						Middlewares.read(),
+						Middlewares.remove(),
+						Middlewares.success()
+					].map(x=>x.name));
 				});
 			});
 		});

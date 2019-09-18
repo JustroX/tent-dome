@@ -547,6 +547,7 @@ describe("Middlewares",function()
 		{
 			req.tent.model = undefined;
 			req.tent.collection = undefined;
+			req.tent.document = undefined;
 			req.tent.Model("Person");
 
 			//add new Person
@@ -682,12 +683,20 @@ describe("Middlewares",function()
 			promisify(Middlewares.param(),req,res)
 			.then(()=>
 			{
-				expect(req.tent.param).to.be.deep.equal({ 
-					sort: { name: -1 },
-					pagination: { limit: 1, offset: 12 },
-					filters: { key1 : "a" , key2 : { $gte: "12", $lte: "15" } },
-					populate : ["bubble"]
-				});
+				try
+				{
+					expect(req.tent.param).to.be.deep.equal({ 
+						sort: { name: -1 },
+						pagination: { limit: 1, offset: 12 },
+						filters: { key1 : "a" , key2 : { $gte: "12", $lte: "15" } },
+						populate : ["bubble"]
+					});
+					done();
+				}
+				catch(err)
+				{
+					done(err);
+				}
 			})
 			.catch((err)=>
 			{
@@ -819,6 +828,7 @@ describe("Middlewares",function()
 						expect(req.tent.list.length).to.be.equal(3);
 						expect(req.tent.list[0].age).to.be.equal(100);
 						expect(req.tent.list[2].age).to.be.equal(2);
+						done();
 					}catch(err)
 					{
 						done(err);
@@ -830,7 +840,7 @@ describe("Middlewares",function()
 
 		it('should work properly pagination query',function(done)
 		{
-			req.query = { limit: "10" , offset: "1" };
+			req.query = { limit: "1" , offset: "1" };
 			promisify(Middlewares.param(),req,res)
 			.then(()=>
 			{
@@ -841,6 +851,7 @@ describe("Middlewares",function()
 						expect(req.tent.list).to.exist;
 						expect(req.tent.list.length).to.be.equal(1);
 						expect(req.tent.list[0].age).to.be.equal(20);
+						done();
 					}catch(err)
 					{
 						done(err);
@@ -864,6 +875,7 @@ describe("Middlewares",function()
 						expect(req.tent.list).to.exist;
 						expect(req.tent.list.length).to.be.equal(1);
 						expect(req.tent.list[0].age).to.be.equal(20);
+						done();
 					}catch(err)
 					{
 						done(err);
@@ -926,6 +938,7 @@ describe("Middlewares",function()
 		{
 			req.tent.model = undefined;
 			req.tent.collection = undefined;
+			req.tent.document = undefined;
 
 			//add new Person
 			let Person = get("Person").Schema.model;

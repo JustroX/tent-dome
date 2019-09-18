@@ -51,21 +51,18 @@ export class Accessor<SchemaInterface>
 
 	Assign()
 	{
+		Assert(this.payload,"Assign can not be called without first calling Sanitize");
+		Assert(this.document,"Assign can not be called without first calling Read or FreshDocument");
 		for(let i in this.payload)
 			this.document.set( i , this.payload[i] );
 	}
 
 	async Read( id : string ) : Promise<void>
 	{
-		try
-		{
-			this.document = (await this.collection.find({ _id : id }).exec())[0];
-			Assert(this.document, "Document not found");
-		}
-		catch(e)
-		{
-			throw e;
-		}
+		Assert(this.collection,"Read cannot be used when model is not yet called.")
+		this.document = (await this.collection.find({ _id : id }).exec())[0];
+		Assert(this.document, "Document not found");
+		
 	}
 	
 	async List() : Promise<void>
@@ -93,6 +90,7 @@ export class Accessor<SchemaInterface>
 
 	async Save() : Promise< void >
 	{
+		Assert(this.document,"Save can not be called without first calling Read or FreshDocument");
 		try
 		{
 			await this.document.save();
@@ -105,6 +103,8 @@ export class Accessor<SchemaInterface>
 	
 	async Delete() : Promise< void >
 	{
+		Assert(this.document,"Delete can not be called without first calling Read");
+		Assert(!this.document.isNew,"Delete can not be called when Fresh Document is called.");
 		try
 		{
 			await this.document.delete();
@@ -119,7 +119,9 @@ export class Accessor<SchemaInterface>
 	{
 		let str : string= "";
 		for(let i in params)
-			str += i + ":" + params[i] + '&';
+			str += i + "=" + params[i] + '&';
+		str = str.slice(0,str.length-1);
+
 		this.param = Parse( str );
 	}
 	
@@ -132,6 +134,8 @@ export class Accessor<SchemaInterface>
 
 	Present()
 	{
+		Assert(this.list,"Present can not be called without first calling List");
+
 		/**
 		* @Todo sanitize output
 		*/
@@ -141,6 +145,9 @@ export class Accessor<SchemaInterface>
 
 	Show()
 	{
+		Assert(this.document,"Show can not be called without first calling Read");
+		Assert(!this.document.isNew,"Show can not be called when FreshDocument is called.");
+	
 		/**
 		* @Todo sanitize output
 		*/

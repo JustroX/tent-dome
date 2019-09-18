@@ -52,21 +52,30 @@ describe("Tent", function () {
             Tent.init({});
             chai_1.expect(Tent.TentOptions["api prefix"]).to.equal('api');
         });
+        after(function () {
+            Tent.AppServer.close();
+        });
     });
     describe("#Entity", function () {
         var Tent = new index_1.TentDome();
         it('should return proper model', function () {
             var model = Tent.Entity("sample", { name: String });
-            chai_1.expect(model).to.be.equal(model_1.get("sample"));
+            chai_1.expect(model).to.be["instanceof"](model_1.Model);
         });
     });
     describe("#start", function () {
         var Tent = new index_1.TentDome();
         var model = Tent.Entity("sample", { name: String });
+        Tent.init({
+            "mongoose uri": process.env.TEST_MONGODB_URI
+        });
         it('should not throw any error', function () {
             chai_1.expect(function () {
                 Tent.start();
             }).to.not["throw"]();
+        });
+        after(function () {
+            Tent.AppServer.close();
         });
     });
     describe("#server", function () {
@@ -82,4 +91,4 @@ describe("Tent", function () {
         });
     });
 });
-require("./run.spec");
+require("./integration.spec");

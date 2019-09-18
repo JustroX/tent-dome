@@ -82,7 +82,19 @@ describe("Model",function()
 
 	describe("#RegisterModels",function()
 	{
-		todo();
+		let app;
+		before(function()
+		{
+			app  = Express();
+		});
+
+		it('should not throw',function()
+		{
+			expect(function()
+			{
+				RegisterModels(app);			
+			}).to.not.throw();
+		});
 	});
 
 	describe("#get",function()

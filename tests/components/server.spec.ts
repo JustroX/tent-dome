@@ -1,10 +1,12 @@
 import { Server } from "../../components/server";
 import { assert, expect } from "chai";
 import { Server as HttpServer} 	from "http";
+import * as Mongoose 	 from "mongoose";
 
+
+var server : Server;
 describe("Server",()=>
 {
-	var server : Server;
 	describe('#constructor',function()
 	{
 		it('should return an object',()=>
@@ -35,7 +37,7 @@ describe("Server",()=>
 		{
 			expect(function()
 			{
-				server.initDatabase(process.env.MONGODB_URI);
+				server.initDatabase(process.env.TEST_MONGODB_URI);
 			}).to.not.throw();
 		});
 	});
@@ -61,4 +63,10 @@ describe("Server",()=>
 	// 		}).to.not.throw();
 	// 	});		
 	// });
+
 });
+
+after(function()
+{
+	server.close();
+})

@@ -194,7 +194,7 @@ describe("Accessor", function () {
                 .then(function () {
                 done(new Error("Does not throw."));
             })["catch"](function (err) {
-                if (err.name == "AssertionError")
+                if (err.name == "AssertionError" || err.name == "CastError")
                     done();
                 else
                     done(err);
@@ -232,13 +232,19 @@ describe("Accessor", function () {
     });
     describe("#Assign", function () {
         before(function () {
-            accessor.payload = {};
-            accessor.Sanitize({ name: "Sample", age: 18 });
+            accessor.payload = undefined;
+            accessor.document = undefined;
         });
-        it("should throw error if #Read or #FreshDocument is not yet called", function () {
+        it("should throw error if #Sanitize is not yet called", function () {
             chai_1.expect(function () {
                 accessor.Assign();
-            }).to["throw"]("AssertionError");
+            }).to["throw"]("Assign can not be called without first calling Sanitize");
+        });
+        it("should throw error if #Read or #FreshDocument is not yet called", function () {
+            accessor.Sanitize({ name: "Sample", age: 18 });
+            chai_1.expect(function () {
+                accessor.Assign();
+            }).to["throw"]("Assign can not be called without first calling Read or FreshDocument");
         });
         it("should not throw error", function () {
             accessor.FreshDocument();
@@ -365,7 +371,7 @@ describe("Accessor", function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            accessor.Param({ limit: "10", offset: "1" });
+                            accessor.Param({ limit: "1", offset: "1" });
                             return [4 /*yield*/, accessor.List()];
                         case 1:
                             _a.sent();
@@ -399,6 +405,9 @@ describe("Accessor", function () {
         });
     });
     describe("#Save", function () {
+        before(function () {
+            accessor.document = undefined;
+        });
         it('should throw AssertionError when document is not yet defined', function (done) {
             accessor.Save()
                 .then(function () {
@@ -457,6 +466,7 @@ describe("Accessor", function () {
                         case 0:
                             accessor.model = undefined;
                             accessor.collection = undefined;
+                            accessor.document = undefined;
                             accessor.Model("Person");
                             Person = model_1.get("Person").Schema.model;
                             person = new Person();
@@ -602,7 +612,7 @@ describe("Accessor", function () {
         it('should throw when list is not yet called', function () {
             chai_1.expect(function () {
                 accessor.Present();
-            }).to["throw"]("AssertionError");
+            }).to["throw"]().property("name", "AssertionError");
         });
         it('should not throw when list is called', function (done) {
             accessor.Model("Person");
@@ -659,6 +669,7 @@ describe("Accessor", function () {
                         case 0:
                             accessor.model = undefined;
                             accessor.collection = undefined;
+                            accessor.document = undefined;
                             Person = model_1.get("Person").Schema.model;
                             person = new Person();
                             person.name = "Sample Person";
@@ -689,14 +700,14 @@ describe("Accessor", function () {
         it('should throw when #Read is not yet called.', function () {
             chai_1.expect(function () {
                 accessor.Show();
-            }).to["throw"]("AssertionError");
+            }).to["throw"]().property("name", "AssertionError");
         });
         it('should throw when document is fresh.', function (done) {
             accessor.FreshDocument()
                 .then(function () {
                 chai_1.expect(function () {
                     accessor.Show();
-                }).to["throw"]("AssertionError");
+                }).to["throw"]().property("name", "AssertionError");
                 done();
             })["catch"](function (err) {
                 done(err);

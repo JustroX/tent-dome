@@ -1,5 +1,6 @@
 import { TentDome } from "../index";
 import { assert, expect } from "chai";
+import * as log from 'why-is-node-running';
 
 describe("Tent sample run 1.",function()
 {
@@ -24,7 +25,7 @@ describe("Tent sample run 1.",function()
 		expect(function()
 		{
 			Tent.init({
-				"mongoose uri": process.env.MONGODB_URI
+				"mongoose uri": process.env.TEST_MONGODB_URI
 			});
 		}).to.not.throw();
 	});
@@ -45,15 +46,19 @@ describe("Tent sample run 1.",function()
 		});
 	});
 
-	it("should start properly",function()
+	it("should start properly",function(done)
 	{
-		Tent.start();
+		Tent.start().then(()=>
+		{
+			done();
+		})
+		.catch(done)
 	});
 
 
 	after(function()
 	{
-		Tent.AppServer.close();
+		Tent.AppServer.close();		
 	});
 
 

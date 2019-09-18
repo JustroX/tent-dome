@@ -1,6 +1,9 @@
 import { TentDome } from "../index";
-import { get } from "../components/model";
+import { Model} from "../components/model";
 import { assert, expect } from "chai";
+
+import mongoose = require("mongoose");
+
 
 
 
@@ -78,6 +81,11 @@ describe("Tent",function()
 			Tent.init({});
 			expect(Tent.TentOptions["api prefix"]).to.equal('api');
 		});
+
+		after(function()
+		{
+			Tent.AppServer.close();
+		})
 	});
 
 	describe("#Entity",function()
@@ -86,7 +94,7 @@ describe("Tent",function()
 		it('should return proper model',function()
 		{
 			let model = Tent.Entity<any>( "sample" , { name : String });
-			expect(model).to.be.equal(get("sample"));
+			expect(model).to.be.instanceof(Model);
 		});
 	});
 
@@ -94,12 +102,22 @@ describe("Tent",function()
 	{
 		let Tent = new TentDome();
 		let model = Tent.Entity<any>( "sample" , { name : String });
+
+		Tent.init({
+			"mongoose uri" :process.env.TEST_MONGODB_URI
+		});
+
 		it('should not throw any error',function()
 		{
 			expect(function()
 			{
 				Tent.start();
 			}).to.not.throw();
+		});
+
+		after(function()
+		{
+			Tent.AppServer.close();
 		});
 	});
 
@@ -126,4 +144,4 @@ describe("Tent",function()
 
 });
 
-import "./run.spec";
+import "./integration.spec";

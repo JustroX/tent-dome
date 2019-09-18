@@ -54,7 +54,8 @@ var Routes = /** @class */ (function () {
             .create()
             .sanitize()
             .assign()
-            .save();
+            .save()
+            .success();
         return builder;
     };
     Routes.prototype.update = function () {
@@ -64,14 +65,16 @@ var Routes = /** @class */ (function () {
             .read()
             .sanitize()
             .assign()
-            .save();
+            .save()
+            .success();
         return builder;
     };
     Routes.prototype.read = function () {
         var builder = this.endpoint(this.name, "GET", false);
         builder
             .model()
-            .read();
+            .read()
+            .show();
         return builder;
     };
     Routes.prototype.list = function () {
@@ -79,7 +82,8 @@ var Routes = /** @class */ (function () {
         builder
             .model()
             .param()
-            .list();
+            .list()
+            .present();
         return builder;
     };
     Routes.prototype["delete"] = function () {
@@ -87,7 +91,8 @@ var Routes = /** @class */ (function () {
         builder
             .model()
             .read()
-            .remove();
+            .remove()
+            .success();
         return builder;
     };
     return Routes;

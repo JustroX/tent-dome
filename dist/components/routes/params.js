@@ -54,8 +54,13 @@ function FilterSanitize(result, raw) {
 exports.FilterSanitize = FilterSanitize;
 function FilterParse(result) {
     for (var key in result.filters) {
-        var bounds = result.filters[key].split("..");
-        var list = result.filters[key].split(",");
+        var filterValue = result.filters[key];
+        if (typeof filterValue != "string") {
+            result.filters[key] = filterValue;
+            return;
+        }
+        var bounds = filterValue.split("..");
+        var list = filterValue.split(",");
         var isRange = bounds.length == 2;
         var isList = list.length > 1;
         var lower = void 0, upper = void 0, value = void 0;

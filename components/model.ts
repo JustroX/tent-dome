@@ -15,7 +15,6 @@ interface ModelStore<T>
 }
 
 var Models : ModelStore<any> = {};
-
 export function get<T>( name : string ) : Model<T>
 {
 	return Models[name];
@@ -52,7 +51,7 @@ export class Model<T>
 		this.Method = new Method();
 	}
 
-	define( schema : SchemaDefinition, config ?: SchemaConfig ) : void
+	define( schema : SchemaDefinition, config : SchemaConfig = {} ) : void
 	{
 		this.Schema.define( schema, config );
 	}
@@ -64,10 +63,5 @@ export class Model<T>
 		this.Routes.register();
 
 		Models[ this.name ] = this;
-	}
-
-	start()
-	{
-
 	}
 }

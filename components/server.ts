@@ -20,6 +20,8 @@ export class Server
 	{
 		this.app = Express();
 		this.server = createServer(this.app);
+		
+		this.initDefaultMiddlewares();
 	}
 
 	initDefaultMiddlewares()
@@ -34,7 +36,7 @@ export class Server
 		Mongoose.connect( databaseURI , { useNewUrlParser: true });
 	}
 
-	start( port : number  ) : Promise<void>
+	start( port ?: number  ) : Promise<void>
 	{
 		return new Promise<void>(
 		(resolve, reject)=>
@@ -44,6 +46,12 @@ export class Server
 				resolve();
 			});
 		});
+	}
+
+	close()
+	{
+		this.server.close();
+		Mongoose.connection.close();	
 	}
 
 

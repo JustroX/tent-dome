@@ -5,8 +5,11 @@ var mongoose_1 = require("mongoose");
 ;
 var Schema = /** @class */ (function () {
     function Schema(name) {
+        this.schema = {};
         this.virtuals = {};
         this.config = {};
+        this.model = {};
+        this.mongooseSchema = {};
         this.name = name;
     }
     Schema.prototype.define = function (schema, config) {
@@ -19,9 +22,6 @@ var Schema = /** @class */ (function () {
         this.virtuals[key] = virtual;
     };
     Schema.prototype.set = function (key, value) {
-        var BLACKLIST = ["define", "virtual", "set", "get", "register"];
-        if (BLACKLIST.indexOf(key) >= 0)
-            throw "Can not set " + key + ", " + key + " is a reserved keyword.";
         this.config[key] = value;
     };
     Schema.prototype.get = function (key) {
@@ -29,7 +29,7 @@ var Schema = /** @class */ (function () {
     };
     Schema.prototype.register = function () {
         this.mongooseSchema = new mongoose_1.Schema(this.schema, this.config);
-        this.model = mongoose_1.Model(this.name, this.mongooseSchema);
+        this.model = mongoose_1.model(this.name, this.mongooseSchema);
     };
     return Schema;
 }());

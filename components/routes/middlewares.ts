@@ -18,7 +18,7 @@ export function model<T>( name : string)
 	}
 }
 
-export function read<T>( name ?: string)
+export function read<T>()
 {
 	return async( req, res, next )=>
 	{
@@ -39,7 +39,7 @@ export function read<T>( name ?: string)
 	}
 }
 
-export function create<T>( name ?: string )
+export function create<T>()
 {
 	return ( req, res, next )=>
 	{
@@ -49,7 +49,7 @@ export function create<T>( name ?: string )
 	}
 }
 
-export function sanitize<T>( name ?: string )
+export function sanitize<T>()
 {
 	return ( req, res, next ) =>
 	{
@@ -115,7 +115,7 @@ export function remove<T>( name ?: string )
 	}
 }
 
-export function list<T>( name ?: string )
+export function list<T>()
 {
 	return async(req,res, next) =>
 	{
@@ -133,17 +133,17 @@ export function list<T>( name ?: string )
 	}
 }
 
-export function param<T>( name ?: string)
+export function param<T>()
 {
 	return (req,res,next)=>
 	{
-		req.tent.Parse( req.query );
+		req.tent.Param( req.query );
 		next();
 	};
 }
 
 
-export function success<T>( name ?: string )
+export function success<T>( )
 {
 	return (req,res,next)=>
 	{
@@ -154,7 +154,7 @@ export function success<T>( name ?: string )
 	}
 }
 
-export function show<T>( name ?: string )
+export function show<T>()
 {
 	return (req,res,next)=>
 	{

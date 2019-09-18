@@ -1,9 +1,8 @@
 import { Request, Response, Next } from "express";
 import * as Middlewares from "./middlewares";
 import * as Assert from "assert";
-import * as Hooks from "hooks";
 
-const BUILT_IN_FACTORIES : readonly string[] = 
+export const BUILT_IN_FACTORIES : readonly string[] = 
 [ 
 	"model", 	//
 
@@ -24,35 +23,42 @@ const BUILT_IN_FACTORIES : readonly string[] =
 	"present"   // return list
 ];
 
-export class Builder<T> extends Hooks
+export interface BuilderOptions
+{
+	"import builtin" : boolean
+}
+
+export class Builder<T>
 {
 	private middlewares : (( req : Request , res: Response, next : Next  )=> void)[] = [];
 	head : number = 0;
 	name : string = "";
 
-	hook : Hooks.hook;
-	pre	 : Hooks.pre;
-	post : Hooks.post;
-
 	//Builtin functions
-	model;
-	create;
-	save;
-	read;
-	remove;
-	assign;
-	sanitize;
-	param;
-	list;
-	success;
-	show;
-	present;
+	model : any = null;
+	create : any = null;
+	save : any = null;
+	read : any = null;
+	remove : any = null;
+	assign : any = null;
+	sanitize : any = null;
+	param : any = null;
+	list : any = null;
+	success : any = null;
+	show : any = null;
+	present : any = null;
 	
-	constructor( name : string )
+	constructor( name : string 
+			, options : BuilderOptions = 
+			{
+				"import builtin" : true
+			}
+	)
 	{
-		super();
-		this.importBuiltIn();
 		this.name = name;
+
+		if( options["import builtin"] )
+			this.importBuiltIn();
 	}
 
 	custom(mw : ( req : Request , res: Response, next : Next  )=> void )
@@ -100,36 +106,19 @@ export class Builder<T> extends Hooks
 		this[name] = function()
 		{ 
 			this.middlewares.splice( this.head , 0 , mw );
+			this.head++;
 			return this;
 		};
-		
-		this.hook(name, mw);
 	}
 
-	preHook( name : string, mw : ( req : Request , res: Response, next : Next  )=> void )
+	pre( name : string, mw : ( req : Request , res: Response, next : Next  )=> void )
 	{
-		return this.pre(name,( nextHook , req, res, next )=>
-		{
-			mw( req, res, (...args)=>
-			{
-				if(args.length) next(...args);
-				else
-					nextHook( req, res, next );
-			});
-		});
+
 	}
 	
-	postHook( name : string, mw : ( req : Request , res: Response, next : Next  )=> void )
+	post( name : string, mw : ( req : Request , res: Response, next : Next  )=> void )
 	{
-		return this.post(name,( nextHook , req, res, next )=>
-		{
-			mw( req, res, (...args)=>
-			{
-				if(args.length) next(...args);
-				else
-					nextHook( req, res, next );
-			});
-		});
+
 	}
 
 	expose() :  (( req : Request , res: Response, next : Next  )=> void)[] 

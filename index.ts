@@ -6,13 +6,14 @@ import { SchemaDefinition , SchemaConfig } from "./components/schema"
 export interface TentOptionsInterface
 {
 	"api prefix"   ?: string,
-	"mongoose uri" ?: string
+	"mongoose uri" ?: string,
+	[ key : string ]: any
 }
 
 export class TentDome
 {
-	AppServer : Server					= null;
-	TentOptions: TentOptionsInterface	= null;
+	AppServer : Server					= {} as Server;
+	TentOptions: TentOptionsInterface	= {} as TentOptionsInterface;
 
 	Models : Model<any>[] = [];
 	
@@ -51,7 +52,7 @@ export class TentDome
 	 * Entity related
 	 */
 
-	Entity<T>( name: string, schema ?: SchemaDefinition , config ?: SchemaConfig ) : Model<T>
+	Entity<T>( name: string, schema ?: SchemaDefinition , config : SchemaConfig = {} ) : Model<T>
 	{
 		let model = new Model<T>(name);
 

@@ -13,6 +13,7 @@ var builder_1 = require("./routes/builder");
 var express_1 = require("express");
 var Routes = /** @class */ (function () {
     function Routes(name) {
+        this.builders = {};
         this.name = "";
         this.name = name;
         this.router = new express_1.Router();
@@ -46,9 +47,8 @@ var Routes = /** @class */ (function () {
     /**
      * Default Builders
      */
-    Routes.prototype.create = function (endpoint, fresh) {
-        if (fresh === void 0) { fresh = false; }
-        var builder = this.endpoint(endpoint, "POST", fresh);
+    Routes.prototype.create = function () {
+        var builder = this.endpoint(this.name, "POST", false);
         builder
             .model()
             .create()
@@ -57,9 +57,8 @@ var Routes = /** @class */ (function () {
             .save();
         return builder;
     };
-    Routes.prototype.update = function (endpoint, fresh) {
-        if (fresh === void 0) { fresh = false; }
-        var builder = this.endpoint(endpoint, "PUT", fresh);
+    Routes.prototype.update = function () {
+        var builder = this.endpoint(this.name, "PUT", false);
         builder
             .model()
             .read()
@@ -68,26 +67,23 @@ var Routes = /** @class */ (function () {
             .save();
         return builder;
     };
-    Routes.prototype.read = function (endpoint, fresh) {
-        if (fresh === void 0) { fresh = false; }
-        var builder = this.endpoint(endpoint, "GET", fresh);
+    Routes.prototype.read = function () {
+        var builder = this.endpoint(this.name, "GET", false);
         builder
             .model()
             .read();
         return builder;
     };
-    Routes.prototype.list = function (endpoint, fresh) {
-        if (fresh === void 0) { fresh = false; }
-        var builder = this.endpoint(endpoint, "LIST", fresh);
+    Routes.prototype.list = function () {
+        var builder = this.endpoint(this.name, "LIST", false);
         builder
             .model()
             .param()
             .list();
         return builder;
     };
-    Routes.prototype["delete"] = function (endpoint, fresh) {
-        if (fresh === void 0) { fresh = false; }
-        var builder = this.endpoint(endpoint, "DELETE", fresh);
+    Routes.prototype["delete"] = function () {
+        var builder = this.endpoint(this.name, "DELETE", false);
         builder
             .model()
             .read()

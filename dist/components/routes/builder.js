@@ -1,22 +1,8 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 exports.__esModule = true;
 var Middlewares = require("./middlewares");
 var Assert = require("assert");
-var Hooks = require("hooks");
-var BUILT_IN_FACTORIES = [
+exports.BUILT_IN_FACTORIES = [
     "model",
     "create",
     "save",
@@ -30,16 +16,30 @@ var BUILT_IN_FACTORIES = [
     "show",
     "present" // return list
 ];
-var Builder = /** @class */ (function (_super) {
-    __extends(Builder, _super);
-    function Builder(name) {
-        var _this_1 = _super.call(this) || this;
-        _this_1.middlewares = [];
-        _this_1.head = 0;
-        _this_1.name = "";
-        _this_1.importBuiltIn();
-        _this_1.name = name;
-        return _this_1;
+var Builder = /** @class */ (function () {
+    function Builder(name, options) {
+        if (options === void 0) { options = {
+            "import builtin": true
+        }; }
+        this.middlewares = [];
+        this.head = 0;
+        this.name = "";
+        //Builtin functions
+        this.model = null;
+        this.create = null;
+        this.save = null;
+        this.read = null;
+        this.remove = null;
+        this.assign = null;
+        this.sanitize = null;
+        this.param = null;
+        this.list = null;
+        this.success = null;
+        this.show = null;
+        this.present = null;
+        this.name = name;
+        if (options["import builtin"])
+            this.importBuiltIn();
     }
     Builder.prototype.custom = function (mw) {
         this.middlewares.splice(this.head, 0, mw);
@@ -63,7 +63,7 @@ var Builder = /** @class */ (function (_super) {
         return this;
     };
     Builder.prototype.importBuiltIn = function () {
-        for (var _i = 0, BUILT_IN_FACTORIES_1 = BUILT_IN_FACTORIES; _i < BUILT_IN_FACTORIES_1.length; _i++) {
+        for (var _i = 0, BUILT_IN_FACTORIES_1 = exports.BUILT_IN_FACTORIES; _i < BUILT_IN_FACTORIES_1.length; _i++) {
             var mw = BUILT_IN_FACTORIES_1[_i];
             this.define(mw, Middlewares[mw](this.name));
         }
@@ -73,41 +73,17 @@ var Builder = /** @class */ (function (_super) {
         var _this = this;
         this[name] = function () {
             this.middlewares.splice(this.head, 0, mw);
+            this.head++;
             return this;
         };
-        this.hook(name, mw);
     };
-    Builder.prototype.preHook = function (name, mw) {
-        return this.pre(name, function (nextHook, req, res, next) {
-            mw(req, res, function () {
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i] = arguments[_i];
-                }
-                if (args.length)
-                    next.apply(void 0, args);
-                else
-                    nextHook(req, res, next);
-            });
-        });
+    Builder.prototype.pre = function (name, mw) {
     };
-    Builder.prototype.postHook = function (name, mw) {
-        return this.post(name, function (nextHook, req, res, next) {
-            mw(req, res, function () {
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i] = arguments[_i];
-                }
-                if (args.length)
-                    next.apply(void 0, args);
-                else
-                    nextHook(req, res, next);
-            });
-        });
+    Builder.prototype.post = function (name, mw) {
     };
     Builder.prototype.expose = function () {
         return this.middlewares;
     };
     return Builder;
-}(Hooks));
+}());
 exports.Builder = Builder;

@@ -11,6 +11,7 @@ var Server = /** @class */ (function () {
     function Server() {
         this.app = Express();
         this.server = http_1.createServer(this.app);
+        this.initDefaultMiddlewares();
     }
     Server.prototype.initDefaultMiddlewares = function () {
         this.app.use(urlencodedParser);
@@ -27,6 +28,10 @@ var Server = /** @class */ (function () {
                 resolve();
             });
         });
+    };
+    Server.prototype.close = function () {
+        this.server.close();
+        Mongoose.connection.close();
     };
     return Server;
 }());

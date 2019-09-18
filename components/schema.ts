@@ -1,4 +1,4 @@
-import { Mongoose , Schema as MongooseSchema, Model as MongooseModel } from "mongoose";
+import { Mongoose , Schema as MongooseSchema, model as MongooseModel } from "mongoose";
 import { Model } from "./model";
 
 
@@ -8,7 +8,8 @@ interface MongooseModelInterface  extends MongooseModel {};
 interface VirtualInterface<T>
 {
 	set? (value: T) : void,
-	get? () : T
+	get? () : T,
+	[ key : string ] : any
 }
 
 
@@ -29,13 +30,13 @@ export interface SchemaDefinition
 
 export class Schema
 {
-	private schema 	 : SchemaDefinition;
+	private schema 	 : SchemaDefinition = {};
 	private virtuals : VirtualsStoreInterface = {};
 	private config	 : SchemaConfig = {};
 	private name     : string;
 	
-	model  		   : MongooseModel;
-	mongooseSchema : MongooseSchemaInterface;
+	model  		   : MongooseModel = {};
+	mongooseSchema : MongooseSchemaInterface = {};
 	
 
 	constructor(name : string)
@@ -59,11 +60,6 @@ export class Schema
 
 	set(key : string, value : any) : void
 	{
-		const BLACKLIST : string[] = ["define","virtual","set","get","register"];
-
-		if(BLACKLIST.indexOf(key) >= 0)
-			throw `Can not set ${key}, ${key} is a reserved keyword.`;
-
 		this.config[key] = value;
 	}
 

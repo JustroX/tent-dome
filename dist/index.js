@@ -4,8 +4,8 @@ var model_1 = require("./components/model");
 var server_1 = require("./components/server");
 var TentDome = /** @class */ (function () {
     function TentDome() {
-        this.AppServer = null;
-        this.TentOptions = null;
+        this.AppServer = {};
+        this.TentOptions = {};
         this.Models = [];
     }
     TentDome.prototype.init = function (options) {
@@ -30,6 +30,7 @@ var TentDome = /** @class */ (function () {
      * Entity related
      */
     TentDome.prototype.Entity = function (name, schema, config) {
+        if (config === void 0) { config = {}; }
         var model = new model_1.Model(name);
         if (schema)
             model.define(schema, config);

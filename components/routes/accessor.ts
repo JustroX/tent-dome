@@ -11,15 +11,15 @@ import { Document , MongooseModel } from "mongoose";
 
 export class Accessor<SchemaInterface>
 {
-	res 		: Request;
-	req 		: Response;
-	model 		: Model.Model<SchemaInterface>;
-	document 	: Document;
-	collection 	: MongooseModel;
-	payload 	: SchemaInterface;
-	list		: Document[];
+	res 		: Request | undefined;
+	req 		: Response | undefined;
+	model 		: Model.Model<SchemaInterface> | undefined;
+	document 	: Document | undefined;
+	collection 	: MongooseModel | undefined;
+	payload 	: SchemaInterface | undefined;
+	list		: Document[] | undefined;
 
-	param		: QueryParams;
+	param		: QueryParams | undefined;
 
 	constructor( req : Request , res : Response )
 	{
@@ -72,7 +72,7 @@ export class Accessor<SchemaInterface>
 	{
 		try
 		{
-			let { sort, filters, populate, pagination } = this.param; 
+			let { sort, filters, populate, pagination } = this.param as QueryParams; 
 
 			let query = this.collection.find(filters);
 
@@ -115,13 +115,17 @@ export class Accessor<SchemaInterface>
 		}
 	}
 
-	Param( params : string )
+	Param( params : { [key:string] : string } )
 	{
-		this.param = Parse( params );
+		let str : string= "";
+		for(let i in params)
+			str += i + ":" + params[i] + '&';
+		this.param = Parse( str );
 	}
 	
 	async FreshDocument()
 	{
+		Assert(this.collection,"`Model` should be called first before calling `FreshDocument`");
 		this.document = new this.collection();
 	}
 
@@ -160,7 +164,7 @@ export class Dispatcher
 	* From KeystoneJS
 	*/
 	
-	apiError( statusCode: any, error : any, detail ?: any )
+	apiError( statusCode: any, error? : any, detail ?: any )
 	{
 		if (typeof statusCode !== 'number' && detail === undefined) {
 			detail = error;
@@ -191,7 +195,7 @@ export class Dispatcher
 			? { error: error, detail: detail }
 			: error;
 		
-		this.res.json(data);
+		this.res.send(data);
 		
 		return assign({
 			statusCode: statusCode,

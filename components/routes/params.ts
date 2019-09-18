@@ -30,7 +30,7 @@ export function Parse( param : string ) : QueryParams
 		parseNumbers: true,
 		parseBooleans: true
 	}) as RawQuery;
-	let output : QueryParams = {  sort: {}, pagination: { limit: 0, offset: 0 }, filters: {}, populate: [] };
+	let output : QueryParams = {  sort: {}, pagination: { limit: 10, offset: 0 }, filters: {}, populate: [] };
 
 	Sort(output, raw);
 	Pagination(output, raw);
@@ -40,9 +40,9 @@ export function Parse( param : string ) : QueryParams
 	return output;
 }
 
-function Sort( result : QueryParams , raw : RawQuery )
+export function Sort( result : QueryParams , raw : RawQuery )
 {
-	this.extractField = ( fieldValue : string ) : { val: string , orientation : number } =>
+	let extractField = ( fieldValue : string ) : { val: string , orientation : number } =>
 	{
 		let indexOfDash = fieldValue.indexOf('-') + 1;
 		return { val : fieldValue.slice( indexOfDash, ) , orientation : 1 - 2*Number(fieldValue[0]=='-') };
@@ -54,24 +54,24 @@ function Sort( result : QueryParams , raw : RawQuery )
 
 	if(raw.sort)
 	{
-		let { val , orientation } = this.extractField(raw.sort);
+		let { val , orientation } = extractField(raw.sort as string);
 		result.sort[val] = orientation;
 	}
 }
 
-function Pagination( result : QueryParams , raw : RawQuery )
+export function Pagination( result : QueryParams , raw : RawQuery )
 {
 	if(raw.limit)  result.pagination.limit  = raw.limit  as number;
 	if(raw.offset) result.pagination.offset = raw.offset as number;
 }
 
-function Filters(  result : QueryParams , raw : RawQuery  )
+export function Filters(  result : QueryParams , raw : RawQuery  )
 {
 	FilterSanitize( result, raw );
 	FilterParse( result );
 }
 
-function FilterSanitize(   result : QueryParams , raw : RawQuery   )
+export function FilterSanitize(   result : QueryParams , raw : RawQuery   )
 {
 	const BLACKLIST = [ "sort"  , "limit", "offset" , "expand" ];
 	for(let i in raw)
@@ -87,7 +87,7 @@ function FilterSanitize(   result : QueryParams , raw : RawQuery   )
 
 }
 
-function FilterParse( result : QueryParams )
+export function FilterParse( result : QueryParams )
 {
 	for(let key in result.filters)
 	{
@@ -95,7 +95,7 @@ function FilterParse( result : QueryParams )
 		let list    : string[] = result.filters[key].split(",");
 
 		let isRange : boolean  = bounds.length == 2;
-		let isList  : boolean  =   list.length  > 0;
+		let isList  : boolean  =   list.length  > 1;
 
 		let lower, upper, value;
 
@@ -110,6 +110,7 @@ function FilterParse( result : QueryParams )
 			if(upper) result.filters[key].$lte = upper;
 
 		}
+		else
 		if(isList)
 		{
 			for(let i in list)
@@ -119,7 +120,7 @@ function FilterParse( result : QueryParams )
 		}
 		else
 		{
-			value = ValueParse(bounds[1]);
+			value = ValueParse(bounds[0]);
 			result.filters[key] = value;
 		}
 
@@ -127,12 +128,12 @@ function FilterParse( result : QueryParams )
 	}
 }
 
-function ValueParse( value : string ) : any
+export function ValueParse( value : string ) : any
 {
 	let prefix : string = value.slice( 0, 4 );
 	let unparsedValue : string = value.slice(4,);
 
-	if( prefix == "$dl_" )
+	if( prefix == "$dt_" )
 		return new Date(unparsedValue);
 	if( prefix == "$bl_" )
 		return unparsedValue == "true";
@@ -146,11 +147,12 @@ function ValueParse( value : string ) : any
 		return { $ne : ValueParse(unparsedValue) };
 	if( prefix == "$lk_" )
 		return { $regex: new RegExp( ValueParse(unparsedValue) ) , $options: 'i' };
-	// if( prefix == "$nll" )
+	if( prefix == "$nll" )
 		return null;
+	return prefix + unparsedValue;
 }
 
-function Expand(  result : QueryParams , raw : RawQuery  )
+export function Expand(  result : QueryParams , raw : RawQuery  )
 {
 	if(!raw.expand) return;		
 	/**

@@ -27,6 +27,7 @@ var Model = /** @class */ (function () {
         this.Method = new method_1.Method();
     }
     Model.prototype.define = function (schema, config) {
+        if (config === void 0) { config = {}; }
         this.Schema.define(schema, config);
     };
     Model.prototype.register = function () {
@@ -34,8 +35,6 @@ var Model = /** @class */ (function () {
         this.Method.register();
         this.Routes.register();
         Models[this.name] = this;
-    };
-    Model.prototype.start = function () {
     };
     return Model;
 }());

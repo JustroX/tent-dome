@@ -6,7 +6,7 @@ function Parse(param) {
         parseNumbers: true,
         parseBooleans: true
     });
-    var output = { sort: {}, pagination: { limit: 0, offset: 0 }, filters: {}, populate: [] };
+    var output = { sort: {}, pagination: { limit: 10, offset: 0 }, filters: {}, populate: [] };
     Sort(output, raw);
     Pagination(output, raw);
     Filters(output, raw);
@@ -15,7 +15,7 @@ function Parse(param) {
 }
 exports.Parse = Parse;
 function Sort(result, raw) {
-    this.extractField = function (fieldValue) {
+    var extractField = function (fieldValue) {
         var indexOfDash = fieldValue.indexOf('-') + 1;
         return { val: fieldValue.slice(indexOfDash), orientation: 1 - 2 * Number(fieldValue[0] == '-') };
     };
@@ -23,20 +23,23 @@ function Sort(result, raw) {
      * @todo Validate if field has read permissions
      */
     if (raw.sort) {
-        var _a = this.extractField(raw.sort), val = _a.val, orientation_1 = _a.orientation;
+        var _a = extractField(raw.sort), val = _a.val, orientation_1 = _a.orientation;
         result.sort[val] = orientation_1;
     }
 }
+exports.Sort = Sort;
 function Pagination(result, raw) {
     if (raw.limit)
         result.pagination.limit = raw.limit;
     if (raw.offset)
         result.pagination.offset = raw.offset;
 }
+exports.Pagination = Pagination;
 function Filters(result, raw) {
     FilterSanitize(result, raw);
     FilterParse(result);
 }
+exports.Filters = Filters;
 function FilterSanitize(result, raw) {
     var BLACKLIST = ["sort", "limit", "offset", "expand"];
     for (var i in raw) {
@@ -48,12 +51,13 @@ function FilterSanitize(result, raw) {
         }
     }
 }
+exports.FilterSanitize = FilterSanitize;
 function FilterParse(result) {
     for (var key in result.filters) {
         var bounds = result.filters[key].split("..");
         var list = result.filters[key].split(",");
         var isRange = bounds.length == 2;
-        var isList = list.length > 0;
+        var isList = list.length > 1;
         var lower = void 0, upper = void 0, value = void 0;
         if (isRange) {
             lower = ValueParse(bounds[0]);
@@ -64,21 +68,22 @@ function FilterParse(result) {
             if (upper)
                 result.filters[key].$lte = upper;
         }
-        if (isList) {
+        else if (isList) {
             for (var i in list)
                 list[i] = ValueParse(list[i]);
             result.filters[key] = { $in: list };
         }
         else {
-            value = ValueParse(bounds[1]);
+            value = ValueParse(bounds[0]);
             result.filters[key] = value;
         }
     }
 }
+exports.FilterParse = FilterParse;
 function ValueParse(value) {
     var prefix = value.slice(0, 4);
     var unparsedValue = value.slice(4);
-    if (prefix == "$dl_")
+    if (prefix == "$dt_")
         return new Date(unparsedValue);
     if (prefix == "$bl_")
         return unparsedValue == "true";
@@ -92,9 +97,11 @@ function ValueParse(value) {
         return { $ne: ValueParse(unparsedValue) };
     if (prefix == "$lk_")
         return { $regex: new RegExp(ValueParse(unparsedValue)), $options: 'i' };
-    // if( prefix == "$nll" )
-    return null;
+    if (prefix == "$nll")
+        return null;
+    return prefix + unparsedValue;
 }
+exports.ValueParse = ValueParse;
 function Expand(result, raw) {
     if (!raw.expand)
         return;
@@ -106,3 +113,4 @@ function Expand(result, raw) {
         result.populate.push(field);
     }
 }
+exports.Expand = Expand;

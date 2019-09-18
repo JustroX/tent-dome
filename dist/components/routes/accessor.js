@@ -154,11 +154,15 @@ var Accessor = /** @class */ (function () {
         });
     };
     Accessor.prototype.Param = function (params) {
-        this.param = params_1.Parse(params);
+        var str = "";
+        for (var i in params)
+            str += i + ":" + params[i] + '&';
+        this.param = params_1.Parse(str);
     };
     Accessor.prototype.FreshDocument = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
+                Assert(this.collection, "`Model` should be called first before calling `FreshDocument`");
                 this.document = new this.collection();
                 return [2 /*return*/];
             });
@@ -211,7 +215,7 @@ var Dispatcher = /** @class */ (function () {
         var data = typeof error === 'string' || (error && detail)
             ? { error: error, detail: detail }
             : error;
-        this.res.json(data);
+        this.res.send(data);
         return assign({
             statusCode: statusCode
         }, data);

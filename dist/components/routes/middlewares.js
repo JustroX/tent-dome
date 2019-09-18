@@ -51,7 +51,7 @@ function model(name) {
     };
 }
 exports.model = model;
-function read(name) {
+function read() {
     var _this = this;
     return function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
         var e_1;
@@ -79,7 +79,7 @@ function read(name) {
     }); };
 }
 exports.read = read;
-function create(name) {
+function create() {
     return function (req, res, next) {
         Assert(req.tent.collection, "'create' middleware can not be called without calling 'model' middleware first.");
         req.tent.FreshDocument();
@@ -87,7 +87,7 @@ function create(name) {
     };
 }
 exports.create = create;
-function sanitize(name) {
+function sanitize() {
     return function (req, res, next) {
         Assert(req.tent.collection, "'sanitize' middleware can not be called without calling 'model' middleware first.");
         Assert(req.tent.document, "'sanitize' middleware can not be called without calling 'create' or 'read' middleware first.");
@@ -160,7 +160,7 @@ function remove(name) {
     }); };
 }
 exports.remove = remove;
-function list(name) {
+function list() {
     var _this = this;
     return function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
         var e_4;
@@ -187,14 +187,14 @@ function list(name) {
     }); };
 }
 exports.list = list;
-function param(name) {
+function param() {
     return function (req, res, next) {
-        req.tent.Parse(req.query);
+        req.tent.Param(req.query);
         next();
     };
 }
 exports.param = param;
-function success(name) {
+function success() {
     return function (req, res, next) {
         res.status(200).send({
             message: "Success",
@@ -203,7 +203,7 @@ function success(name) {
     };
 }
 exports.success = success;
-function show(name) {
+function show() {
     return function (req, res, next) {
         res.status(200).send(req.tent.Show());
     };

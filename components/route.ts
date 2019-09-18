@@ -22,7 +22,7 @@ interface BuilderStore<T>
 export class Routes<T>
 {
 	router  : Router;
-	builders : BuilderStore<T>;
+	builders : BuilderStore<T> = {};
 	name : string = "";
 
 	constructor( name : string )
@@ -71,9 +71,9 @@ export class Routes<T>
 	 * Default Builders
 	 */
 
-	create( endpoint : string , fresh :  boolean = false ) : Builder<T>
+	create() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( endpoint , "POST" , fresh );
+		let builder : Builder<T> = this.endpoint( this.name , "POST" , false );
 		
 		builder
 		 .model()
@@ -86,9 +86,9 @@ export class Routes<T>
 		return builder;
 	}
 
-	update( endpoint : string , fresh :  boolean = false ) : Builder<T>
+	update() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( endpoint , "PUT" , fresh );
+		let builder : Builder<T> = this.endpoint( this.name , "PUT" , false );
 		
 		builder
 		 .model()
@@ -100,9 +100,9 @@ export class Routes<T>
 		return builder;
 	}
 
-	read( endpoint : string , fresh :  boolean = false ) : Builder<T>
+	read() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( endpoint , "GET" , fresh );
+		let builder : Builder<T> = this.endpoint( this.name , "GET" , false );
 		
 		builder
 		 .model()
@@ -111,9 +111,9 @@ export class Routes<T>
 		return builder;
 	}
 	
-	list( endpoint : string , fresh :  boolean = false ) : Builder<T>
+	list() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( endpoint , "LIST" , fresh );
+		let builder : Builder<T> = this.endpoint( this.name , "LIST" , false );
 		
 		builder
 		 .model()
@@ -123,9 +123,9 @@ export class Routes<T>
 		return builder;
 	}
 	
-	delete( endpoint : string , fresh :  boolean = false ) : Builder<T>
+	delete() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( endpoint , "DELETE" , fresh );
+		let builder : Builder<T> = this.endpoint( this.name , "DELETE" , false );
 		
 		builder
 		 .model()

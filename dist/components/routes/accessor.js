@@ -52,14 +52,15 @@ var Accessor = /** @class */ (function () {
         this.collection = this.model.Schema.model;
     };
     Accessor.prototype.Sanitize = function (body) {
+        Assert(this.collection && this.model, "Sanitize can not be called without first calling Model");
         var payload = {};
-        /**
-         *	@Todo Put validation code here
-         */
-        for (var i in body) {
-            payload[i] = body[i];
+        var paths = this.collection.schema.paths;
+        var _body = flatten(body, { safe: true });
+        for (var i in _body) {
+            if (paths[i])
+                payload[i] = _body[i];
         }
-        this.payload = flatten(payload);
+        this.payload = payload;
     };
     Accessor.prototype.Assign = function () {
         Assert(this.payload, "Assign can not be called without first calling Sanitize");

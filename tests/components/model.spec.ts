@@ -1,4 +1,10 @@
 import { Model, get, RegisterModels } from "../../components/model";
+
+import { Routes } from "../../components/route";
+import { Expand } from "../../components/expand";
+import { Schema } from "../../components/schema";
+
+
 import { assert, expect } from "chai";
 import * as Express from "express";
 import { todo } from "../util";
@@ -6,13 +12,8 @@ import { todo } from "../util";
 
 //Preconditions
 
+import "./expand.spec";
 import "./schema.spec";
-
-// import "./method";
-// import "./validation";
-// import "./permission";
-
-
 
 describe("Model",function()
 {
@@ -28,26 +29,54 @@ describe("Model",function()
 	describe("Model class",function()
 	{
 
-		it('should be ok',function()
+		describe('constructor',function()
 		{
-			model = new Model<SampleSchema>(MODEL_NAME);
-		});
+			it("should not throw",function()
+			{
+				expect(function()
+				{
+					model = new Model<SampleSchema>(MODEL_NAME);
+				}).to.not.throw();				
+			});
 
-		
-		describe('.name',function()
-		{
-			it('should be the same',function()
+			it("should have .name",function()
+			{
+				expect(model.name).to.exist;
+			});
+
+			it('name should be the same',function()
 			{
 				expect(model.name).to.be.equal(MODEL_NAME);
 			});
-		});
-		
-		describe('.dbname',function()
-		{
-			it('should be the pluralized',function()
+
+			it('should have .dbname',function()
+			{
+				expect(model.dbname).to.exist;
+			});
+
+			it('dbname should be the pluralized',function()
 			{
 				expect(model.dbname).to.be.equal("Samples");
 			});
+
+			it('should have a Route object ',function()
+			{
+				expect(model.Routes).to.exist;
+				expect(model.Routes).to.be.an.instanceof(Routes)
+			});
+
+			it('should have a Schema object ',function()
+			{
+				expect(model.Schema).to.exist;
+				expect(model.Schema).to.be.an.instanceof(Schema);
+			});
+			
+			// it('should have an Expand object ',function()
+			// {
+			// 	expect(model.Expand).to.exist;
+			// 	expect(model.Expand).to.be.an.instanceof(Expand);
+			// });
+
 		});
 
 		describe('#define',function()

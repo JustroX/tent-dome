@@ -2,7 +2,6 @@
 exports.__esModule = true;
 var builder_1 = require("../../../components/routes/builder");
 var chai_1 = require("chai");
-var util_1 = require("../../util");
 //preconditions
 require("./middlewares.spec");
 describe("Builder", function () {
@@ -27,6 +26,9 @@ describe("Builder", function () {
         });
         it('should create a class function', function () {
             chai_1.expect(builder.sample).to.exist;
+        });
+        it('should put tag on', function () {
+            chai_1.expect(builder.sample.tag).to.be.equal("sample");
         });
         it('should throw when middleware is already defined', function () {
             chai_1.expect(function () {
@@ -193,10 +195,52 @@ describe("Builder", function () {
         });
     });
     describe("#pre", function () {
-        util_1.todo();
+        before(function () {
+            var a = function () { };
+            var b = function b() { };
+            var c = function () { };
+            var d = function () { };
+            var e = function () { };
+            b.tag = "b";
+            a.tag = "a";
+            builder.middlewares = [a, b, c, d, e];
+        });
+        it('should add new middleware before the tagged one', function () {
+            var sample = function sample(req, res, next) { };
+            builder.pre("b", sample);
+            chai_1.expect(builder.middlewares[1].name).to.be.equal("sample");
+            builder.pre("a", sample);
+            chai_1.expect(builder.middlewares[0].name).to.be.equal("sample");
+        });
+        it('should not do anything if tag is missing', function () {
+            var sample = function sample(req, res, next) { };
+            builder.pre("missing_tag", sample);
+            chai_1.expect(builder.middlewares.length).to.be.equal(7);
+        });
     });
     describe("#post", function () {
-        util_1.todo();
+        before(function () {
+            var a = function () { };
+            var b = function b() { };
+            var c = function () { };
+            var d = function () { };
+            var e = function () { };
+            b.tag = "b";
+            e.tag = "e";
+            builder.middlewares = [a, b, c, d, e];
+        });
+        it('should add new middleware after the tagged one', function () {
+            var sample = function sample(req, res, next) { };
+            builder.post("b", sample);
+            chai_1.expect(builder.middlewares[2].name).to.be.equal("sample");
+            builder.post("e", sample);
+            chai_1.expect(builder.middlewares[6].name).to.be.equal("sample");
+        });
+        it('should not do anything if tag is missing', function () {
+            var sample = function sample(req, res, next) { };
+            builder.post("missing_tag", sample);
+            chai_1.expect(builder.middlewares.length).to.be.equal(7);
+        });
     });
     describe("#expose", function () {
         before(function () {

@@ -57,7 +57,10 @@ describe("Accessor", function () {
         model.define({
             name: String,
             age: Number,
-            date: { type: Date, "default": Date.now }
+            date: { type: Date, "default": Date.now },
+            layer: {
+                sublayer: Number
+            }
         });
         model.register();
         process.nextTick(function () {
@@ -85,11 +88,21 @@ describe("Accessor", function () {
         });
     });
     describe("#Sanitize", function () {
+        before(function () {
+            accessor.collection = undefined;
+        });
         beforeEach(function () {
             //reset payload
             accessor.payload = {};
         });
+        it("should throw when model is not yet called", function () {
+            chai_1.expect(function () {
+                accessor.Sanitize({});
+            })
+                .to["throw"]().property("name", "AssertionError");
+        });
         it("should be able to work on basic body", function () {
+            accessor.Model("Person");
             accessor.Sanitize({
                 name: "sample",
                 age: 12
@@ -113,7 +126,13 @@ describe("Accessor", function () {
                 "layer.sublayer": 2
             });
         });
-        it("should remove forbidden keys");
+        it("should be able to block undefined fields", function () {
+            accessor.Sanitize({ not_field: 23, age: 12, name: "sample" });
+            chai_1.expect(accessor.payload).to.be.eql({
+                age: 12,
+                name: "sample"
+            });
+        });
     });
     describe("#Validate", function () {
         util_1.todo();
@@ -734,7 +753,6 @@ describe("Accessor", function () {
                 done(err);
             });
         });
-        it('should sanitize output.');
     });
 });
 describe("Dispatcher", function () {

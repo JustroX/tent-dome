@@ -109,16 +109,32 @@ export class Builder<T>
 			this.head++;
 			return this;
 		};
+
+		this[name].tag = name; 
 	}
 
 	pre( name : string, mw : ( req : Request , res: Response, next : Next  )=> void )
 	{
-
+		for(let i=0; i<this.middlewares.length; i++)
+		{
+			if((this.middlewares[i] as any ).tag == name)
+			{
+				this.middlewares.splice( i , 0 , mw );
+				return;
+			}
+		}	
 	}
 	
 	post( name : string, mw : ( req : Request , res: Response, next : Next  )=> void )
 	{
-
+		for(let i=0; i<this.middlewares.length; i++)
+		{
+			if((this.middlewares[i] as any ).tag == name)
+			{
+				this.middlewares.splice( i+1 , 0 , mw );
+				return;
+			}
+		}	
 	}
 
 	expose() :  (( req : Request , res: Response, next : Next  )=> void)[] 

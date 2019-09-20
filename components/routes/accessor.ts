@@ -35,18 +35,18 @@ export class Accessor<SchemaInterface>
 
 	Sanitize(body : any)
 	{
+		Assert(this.collection && this.model,"Sanitize can not be called without first calling Model");
 		let payload : SchemaInterface = {} as SchemaInterface;
 
-		/**
-		 *	@Todo Put validation code here
-		 */
-
-		for( let i in body )
+		let paths = this.collection.schema.paths;
+		let _body = flatten(body,{safe: true})
+		for( let i in _body )
 		{
-			payload[i] = body[i];
+			if(paths[i])
+				payload[i] = _body[i];
 		}
 
-		this.payload = flatten(payload);
+		this.payload = payload;
 	}
 
 	Assign()

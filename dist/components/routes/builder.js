@@ -76,10 +76,23 @@ var Builder = /** @class */ (function () {
             this.head++;
             return this;
         };
+        this[name].tag = name;
     };
     Builder.prototype.pre = function (name, mw) {
+        for (var i = 0; i < this.middlewares.length; i++) {
+            if (this.middlewares[i].tag == name) {
+                this.middlewares.splice(i, 0, mw);
+                return;
+            }
+        }
     };
     Builder.prototype.post = function (name, mw) {
+        for (var i = 0; i < this.middlewares.length; i++) {
+            if (this.middlewares[i].tag == name) {
+                this.middlewares.splice(i + 1, 0, mw);
+                return;
+            }
+        }
     };
     Builder.prototype.expose = function () {
         return this.middlewares;

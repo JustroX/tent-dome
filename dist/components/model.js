@@ -11,10 +11,10 @@ function get(name) {
 }
 exports.get = get;
 function RegisterModels(app) {
-    app.use(index_1.Tent.get("api prefix"), route_1.RegisterRoute());
+    app.use("/" + index_1.Tent.get("api prefix"), route_1.RegisterRoute());
     for (var name_1 in Models) {
         var model = Models[name_1];
-        app.use(index_1.Tent.get("api prefix") + "/" + model.dbname, model.Routes.expose());
+        app.use("/" + index_1.Tent.get("api prefix") + "/" + model.dbname, model.Routes.expose());
     }
 }
 exports.RegisterModels = RegisterModels;
@@ -22,7 +22,7 @@ var Model = /** @class */ (function () {
     function Model(name) {
         this.name = name;
         this.dbname = pluralize(name);
-        this.Routes = new route_1.Routes(name);
+        this.Routes = new route_1.Routes(this.name);
         this.Schema = new schema_1.Schema(name);
         this.Method = new method_1.Method();
     }

@@ -67,7 +67,7 @@ describe("Routes",function()
 			it('should create new builder',function()
 			{
 				builder = route.endpoint("sample","GET");
-				expect(route.builders["sample"].builder).to.be.equal(builder);
+				expect(route.builders.map(x=>x.builder)).to.include(builder);
 			});
 			
 			it('should create fresh builder');
@@ -155,7 +155,7 @@ describe("Routes",function()
 						Middlewares.sanitize(),
 						Middlewares.assign(),
 						Middlewares.save(),
-						Middlewares.success()
+						Middlewares.show()
 					].map(x=>x.name));
 				});
 			});
@@ -173,7 +173,7 @@ describe("Routes",function()
 						Middlewares.sanitize(),
 						Middlewares.assign(),
 						Middlewares.save(),
-						Middlewares.success()
+						Middlewares.show()
 					].map(x=>x.name));					
 				});
 			});

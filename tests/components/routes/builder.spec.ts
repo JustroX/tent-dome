@@ -43,6 +43,11 @@ describe("Builder",function()
 			expect(builder.sample).to.exist;
 		});
 
+		it('should put tag on',function()
+		{
+			expect(builder.sample.tag).to.be.equal("sample");
+		});
+
 		it('should throw when middleware is already defined',function()
 		{
 			expect(function()
@@ -281,12 +286,70 @@ describe("Builder",function()
 
 	describe("#pre",function()
 	{
-		todo();
+		before(function()
+		{
+			let a = ()=>{};
+			let b = function b(){};
+			let c = ()=>{};
+			let d = ()=>{};
+			let e = ()=>{};
+
+			(b as any).tag = "b";
+			(a as any).tag = "a";
+
+			builder.middlewares = [a,b,c,d,e];
+		});
+
+		it('should add new middleware before the tagged one',function()
+		{
+			let sample = function sample(req,res,next){};
+			builder.pre("b",sample);
+			expect(builder.middlewares[1].name).to.be.equal("sample");
+			builder.pre("a",sample);
+			expect(builder.middlewares[0].name).to.be.equal("sample");
+
+		});
+		
+		it('should not do anything if tag is missing',function()
+		{
+			let sample = function sample(req,res,next){};
+			builder.pre("missing_tag",sample);
+
+			expect( builder.middlewares.length ).to.be.equal(7);
+		});
 	});
 
 	describe("#post",function()
 	{
-		todo();
+		before(function()
+		{
+			let a = ()=>{};
+			let b = function b(){};
+			let c = ()=>{};
+			let d = ()=>{};
+			let e = ()=>{};
+
+			(b as any).tag = "b";
+			(e as any).tag = "e";
+			builder.middlewares = [a,b,c,d,e];
+		});
+
+		it('should add new middleware after the tagged one',function()
+		{
+			let sample = function sample(req,res,next){};
+			builder.post("b",sample);
+			expect(builder.middlewares[2].name).to.be.equal("sample");
+			builder.post("e",sample);
+			expect(builder.middlewares[6].name).to.be.equal("sample");
+		});
+
+		it('should not do anything if tag is missing',function()
+		{
+			let sample = function sample(req,res,next){};
+			builder.post("missing_tag",sample);
+
+			expect( builder.middlewares.length ).to.be.equal(7);
+		});
 	});
 
 	describe("#expose",function()

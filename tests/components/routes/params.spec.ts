@@ -118,10 +118,6 @@ describe("Params",function()
 					expect(output.filters[key]).to.not.exist;
 				}
 			});
-			describe("case 4: unauthorized field, unauthorized=spy",function()
-			{
-				todo();
-			});
 		});
 		describe("#ValueParse",function()
 		{
@@ -361,7 +357,7 @@ describe("Params",function()
 			//set expandable fields
 		});
 
-		it("should work have empty object if there is no expand",function()
+		it("should have empty object if there is no expand",function()
 		{
 			output.populate = [];
 			parseURI("")
@@ -376,7 +372,7 @@ describe("Params",function()
 			expect(output.populate).to.be.deep.equal(["key1","key2"]);
 		});
 
-		it("should not add fields that are not expandable")
+		it("should not expand fields that are not expandable")
 	});
 
 	describe("#Parse",function()

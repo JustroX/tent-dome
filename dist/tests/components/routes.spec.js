@@ -43,7 +43,7 @@ describe("Routes", function () {
             var builder;
             it('should create new builder', function () {
                 builder = route.endpoint("sample", "GET");
-                chai_1.expect(route.builders["sample"].builder).to.be.equal(builder);
+                chai_1.expect(route.builders.map(function (x) { return x.builder; })).to.include(builder);
             });
             it('should create fresh builder');
             it('should create non-fresh builder');
@@ -101,7 +101,7 @@ describe("Routes", function () {
                         Middlewares.sanitize(),
                         Middlewares.assign(),
                         Middlewares.save(),
-                        Middlewares.success()
+                        Middlewares.show()
                     ].map(function (x) { return x.name; }));
                 });
             });
@@ -116,7 +116,7 @@ describe("Routes", function () {
                         Middlewares.sanitize(),
                         Middlewares.assign(),
                         Middlewares.save(),
-                        Middlewares.success()
+                        Middlewares.show()
                     ].map(function (x) { return x.name; }));
                 });
             });

@@ -10,19 +10,16 @@ import { Router } from "express";
 interface BuilderConfig<T>
 {
 	builder : Builder<T>,
-	method	: "GET" | "POST" | "PUT" | "DELETE" | "LIST" 
+	method	: "GET" | "POST" | "PUT" | "DELETE" | "LIST" ,
+	endpoint : string
 }
 
-interface BuilderStore<T>
-{
-	[ key: string ] : BuilderConfig<T>
-}
 
 
 export class Routes<T>
 {
 	router  : Router;
-	builders : BuilderStore<T> = {};
+	builders : BuilderConfig<T>[] = [];
 	name : string = "";
 
 	constructor( name : string )
@@ -33,9 +30,10 @@ export class Routes<T>
 
 	register() : void
 	{
-		for(let endpoint in this.builders)
+		for(let i in this.builders)
 		{
-			let item 	: BuilderConfig<T> = this.builders[endpoint];
+			let item 	: BuilderConfig<T> = this.builders[i];
+			let endpoint : string  = item.endpoint;
 			let method 	: string  = ( item.method as string ).toLowerCase();
 			let builder : Builder<T> = item.builder;
 
@@ -44,7 +42,8 @@ export class Routes<T>
 			else if(method == "post")
 				this.router.post(endpoint , ...builder.expose() );
 			else
-				this.router[method](endpoint + "/:id", ...builder.expose() );
+				this.router[method](endpoint + ":id", ...builder.expose() );
+
 		}
 	}
 
@@ -53,10 +52,11 @@ export class Routes<T>
 		let a : BuilderConfig<T> = 
 		{
 			builder : new Builder<T>( this.name ),
-			method  : method
+			method  : method,
+			endpoint : endpoint
 		};
 
-		this.builders[endpoint] = a;
+		this.builders.push(a);
 		return a.builder;
 	}
 
@@ -73,15 +73,15 @@ export class Routes<T>
 
 	create() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( this.name , "POST" , false );
+		let builder : Builder<T> = this.endpoint( "/" , "POST" , false );
 		
 		builder
-		 .model()
+		 .model(this.name)
 		 .create()
 		 .sanitize()
 		 .assign()
 		 .save()
-		 .success();
+		 .show();
 		
 
 		return builder;
@@ -89,25 +89,25 @@ export class Routes<T>
 
 	update() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( this.name , "PUT" , false );
+		let builder : Builder<T> = this.endpoint( "/" , "PUT" , false );
 		
 		builder
-		 .model()
+		 .model(this.name)
 		 .read()
 		 .sanitize()
 		 .assign()
 		 .save()
-		 .success();
+		 .show();
 
 		return builder;
 	}
 
 	read() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( this.name , "GET" , false );
+		let builder : Builder<T> = this.endpoint( "/" , "GET" , false );
 		
 		builder
-		 .model()
+		 .model(this.name)
 		 .read()
 		 .show();
 
@@ -116,23 +116,21 @@ export class Routes<T>
 	
 	list() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( this.name , "LIST" , false );
-		
+		let builder : Builder<T> = this.endpoint( "/" , "LIST" , false );
 		builder
-		 .model()
+		 .model(this.name)
 		 .param()
 		 .list()
 		 .present();
-
 		return builder;
 	}
 	
 	delete() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( this.name , "DELETE" , false );
+		let builder : Builder<T> = this.endpoint( "/" , "DELETE" , false );
 		
 		builder
-		 .model()
+		 .model(this.name)
 		 .read()
 		 .remove()
 		 .success();
@@ -142,13 +140,13 @@ export class Routes<T>
 
 
 
+
 }
 
 export function RegisterRoute() : Router
 {
-	let prefix = Tent.get<string>("api prefix");
 	let router = new Router();
 
-	router.use( "/" + prefix , Middlewares.initTent );
+	router.use( "/" , Middlewares.initTent );
 	return router;
 }

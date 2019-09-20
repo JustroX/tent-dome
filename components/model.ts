@@ -5,6 +5,8 @@ import { Permissions } from "./permission";
 import { Routes	, RegisterRoute } from "./route";
 import { Method 	 } from "./method";
 import { Validation  } from "./validation";
+import {  Expand } from "./expand";
+
 
 import { Application as ExpressApp } from "express";
 import * as pluralize from "pluralize";
@@ -22,11 +24,12 @@ export function get<T>( name : string ) : Model<T>
 
 export function RegisterModels( app : ExpressApp )
 {
-	app.use( Tent.get<string>("api prefix") , RegisterRoute() );
+	app.use( "/" + Tent.get<string>("api prefix") , RegisterRoute() );
 	for(let name in Models)
 	{
 		let model : Model<any> = Models[name]; 
-		app.use(  Tent.get<string>("api prefix") + "/" + model.dbname , model.Routes.expose());
+		app.use(  "/" + Tent.get<string>("api prefix") + "/" + model.dbname , model.Routes.expose());
+
 	}
 }
 
@@ -39,13 +42,14 @@ export class Model<T>
 	Permissions ;
 	Method		;
 	Routes		: Routes<T>;
+	Expand 		: Expand;
 
 	constructor(name : string)
 	{
 		this.name = name;
 		this.dbname = pluralize(name);
 
-		this.Routes = new Routes<T>( name );
+		this.Routes = new Routes<T>( this.name );
 		this.Schema = new Schema( name );
 		this.Method = new Method();
 	}

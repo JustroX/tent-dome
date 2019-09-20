@@ -2,7 +2,6 @@
 exports.__esModule = true;
 var Params = require("../../../components/routes/params");
 var chai_1 = require("chai");
-var util_1 = require("../../util");
 var query_string_1 = require("query-string");
 describe("Params", function () {
     var output = { sort: {}, pagination: { limit: 10, offset: 0 }, filters: {}, populate: [] };
@@ -89,9 +88,6 @@ describe("Params", function () {
                     Params.FilterSanitize(output, raw);
                     chai_1.expect(output.filters[key]).to.not.exist;
                 }
-            });
-            describe("case 4: unauthorized field, unauthorized=spy", function () {
-                util_1.todo();
             });
         });
         describe("#ValueParse", function () {
@@ -273,7 +269,7 @@ describe("Params", function () {
         before(function () {
             //set expandable fields
         });
-        it("should work have empty object if there is no expand", function () {
+        it("should have empty object if there is no expand", function () {
             output.populate = [];
             parseURI("");
             Params.Expand(output, raw);
@@ -284,7 +280,7 @@ describe("Params", function () {
             Params.Expand(output, raw);
             chai_1.expect(output.populate).to.be.deep.equal(["key1", "key2"]);
         });
-        it("should not add fields that are not expandable");
+        it("should not expand fields that are not expandable");
     });
     describe("#Parse", function () {
         it('should work properly', function () {

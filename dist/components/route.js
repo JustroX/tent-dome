@@ -7,21 +7,21 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 exports.__esModule = true;
-var index_1 = require("../index");
 var Middlewares = require("./routes/middlewares");
 var builder_1 = require("./routes/builder");
 var express_1 = require("express");
 var Routes = /** @class */ (function () {
     function Routes(name) {
-        this.builders = {};
+        this.builders = [];
         this.name = "";
         this.name = name;
         this.router = new express_1.Router();
     }
     Routes.prototype.register = function () {
         var _a, _b, _c;
-        for (var endpoint in this.builders) {
-            var item = this.builders[endpoint];
+        for (var i in this.builders) {
+            var item = this.builders[i];
+            var endpoint = item.endpoint;
             var method = item.method.toLowerCase();
             var builder = item.builder;
             if (method == "list")
@@ -29,16 +29,17 @@ var Routes = /** @class */ (function () {
             else if (method == "post")
                 (_b = this.router).post.apply(_b, __spreadArrays([endpoint], builder.expose()));
             else
-                (_c = this.router)[method].apply(_c, __spreadArrays([endpoint + "/:id"], builder.expose()));
+                (_c = this.router)[method].apply(_c, __spreadArrays([endpoint + ":id"], builder.expose()));
         }
     };
     Routes.prototype.endpoint = function (endpoint, method, fresh) {
         if (fresh === void 0) { fresh = false; }
         var a = {
             builder: new builder_1.Builder(this.name),
-            method: method
+            method: method,
+            endpoint: endpoint
         };
-        this.builders[endpoint] = a;
+        this.builders.push(a);
         return a.builder;
     };
     Routes.prototype.expose = function () {
@@ -48,48 +49,48 @@ var Routes = /** @class */ (function () {
      * Default Builders
      */
     Routes.prototype.create = function () {
-        var builder = this.endpoint(this.name, "POST", false);
+        var builder = this.endpoint("/", "POST", false);
         builder
-            .model()
+            .model(this.name)
             .create()
             .sanitize()
             .assign()
             .save()
-            .success();
+            .show();
         return builder;
     };
     Routes.prototype.update = function () {
-        var builder = this.endpoint(this.name, "PUT", false);
+        var builder = this.endpoint("/", "PUT", false);
         builder
-            .model()
+            .model(this.name)
             .read()
             .sanitize()
             .assign()
             .save()
-            .success();
+            .show();
         return builder;
     };
     Routes.prototype.read = function () {
-        var builder = this.endpoint(this.name, "GET", false);
+        var builder = this.endpoint("/", "GET", false);
         builder
-            .model()
+            .model(this.name)
             .read()
             .show();
         return builder;
     };
     Routes.prototype.list = function () {
-        var builder = this.endpoint(this.name, "LIST", false);
+        var builder = this.endpoint("/", "LIST", false);
         builder
-            .model()
+            .model(this.name)
             .param()
             .list()
             .present();
         return builder;
     };
     Routes.prototype["delete"] = function () {
-        var builder = this.endpoint(this.name, "DELETE", false);
+        var builder = this.endpoint("/", "DELETE", false);
         builder
-            .model()
+            .model(this.name)
             .read()
             .remove()
             .success();
@@ -99,9 +100,8 @@ var Routes = /** @class */ (function () {
 }());
 exports.Routes = Routes;
 function RegisterRoute() {
-    var prefix = index_1.Tent.get("api prefix");
     var router = new express_1.Router();
-    router.use("/" + prefix, Middlewares.initTent);
+    router.use("/", Middlewares.initTent);
     return router;
 }
 exports.RegisterRoute = RegisterRoute;

@@ -1,6 +1,6 @@
 import { Routes, RegisterRoute } from "../../components/route";
 import { Builder } from "../../components/routes/builder";
-import * as Middlewares from "../../components/routes/middlewares";
+import { Middlewares } from "../../components/routes/middlewares";
 
 import { assert, expect } from "chai";
 import { todo } from "../util";
@@ -63,7 +63,7 @@ describe("Routes",function()
 
 		describe("#endpoint",function()
 		{
-			let builder;
+			let builder : Builder<any>;
 			it('should create new builder',function()
 			{
 				builder = route.endpoint("sample","GET");

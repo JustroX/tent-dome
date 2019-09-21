@@ -170,7 +170,7 @@ describe("Accessor", function () {
             chai_1.expect(accessor.document.isNew).to.be.equal(true);
         });
         it('should not be modified', function () {
-            chai_1.expect(accessor.document.modified).to.be.not.ok;
+            chai_1.expect(accessor.document.isModified()).to.be.not.ok;
         });
     });
     describe("#Read", function () {
@@ -246,7 +246,7 @@ describe("Accessor", function () {
             chai_1.expect(accessor.document.isNew).to.be.not.ok;
         });
         it('should not be modified', function () {
-            chai_1.expect(accessor.document.modified).to.be.not.ok;
+            chai_1.expect(accessor.document.isModified()).to.be.not.ok;
         });
     });
     describe("#Assign", function () {
@@ -451,7 +451,7 @@ describe("Accessor", function () {
         });
         it('should save the document in the database.', function () {
             return __awaiter(this, void 0, void 0, function () {
-                var doc;
+                var docs, doc;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, accessor.FreshDocument()];
@@ -464,9 +464,9 @@ describe("Accessor", function () {
                             _a.sent();
                             return [4 /*yield*/, accessor.collection.find({ name: "Sample test" }).exec()];
                         case 3:
-                            doc = (_a.sent());
-                            chai_1.expect(doc.length).to.be.gte(1);
-                            doc = doc[0];
+                            docs = (_a.sent());
+                            chai_1.expect(docs.length).to.be.gte(1);
+                            doc = docs[0];
                             chai_1.expect(doc.age).to.be.equal(20);
                             return [2 /*return*/];
                     }
@@ -511,7 +511,7 @@ describe("Accessor", function () {
                         case 1:
                             person = (_a.sent())[0];
                             if (!person) return [3 /*break*/, 3];
-                            return [4 /*yield*/, person["delete"]()];
+                            return [4 /*yield*/, person.remove()];
                         case 2:
                             _a.sent();
                             _a.label = 3;

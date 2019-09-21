@@ -1,9 +1,9 @@
 import { Server as HttpServer , createServer } 	from "http";
 
-import * as Express 	 from "express";
+import Express = require("express");
 import { Application } 	 from "express";
-import * as CookieParser from "cookie-parser";
-import * as BodyParser   from "body-parser";
+import CookieParser =  require("cookie-parser");
+import BodyParser   =  require("body-parser");
 
 import * as Mongoose 	 from "mongoose";
 

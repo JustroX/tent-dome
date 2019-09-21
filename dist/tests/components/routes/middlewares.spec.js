@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var Middlewares = require("../../../components/routes/middlewares");
+var middlewares_1 = require("../../../components/routes/middlewares");
 var accessor_1 = require("../../../components/routes/accessor");
 var node_mocks_http_1 = require("node-mocks-http");
 var model_1 = require("../../../components/model");
@@ -63,7 +63,7 @@ describe("Middlewares", function () {
     });
     describe("#initTent", function () {
         it('should assign accessor and dispatcher', function (done) {
-            Middlewares.initTent(req, res, function (err) {
+            middlewares_1.Middlewares.initTent(req, res, function (err) {
                 if (err)
                     return done(err);
                 chai_1.expect(req.tent).to.be.an["instanceof"](accessor_1.Accessor);
@@ -74,7 +74,7 @@ describe("Middlewares", function () {
     });
     describe("#model", function () {
         it('should assign a model', function (done) {
-            Middlewares.model("Person")(req, res, function (err) {
+            middlewares_1.Middlewares.model("Person")(req, res, function (err) {
                 if (err)
                     return done(err);
                 chai_1.expect(req.tent.model).to.be.equal(model_1.get("Person"));
@@ -89,7 +89,7 @@ describe("Middlewares", function () {
             req.tent.collection = undefined;
         });
         it('should throw if model is not yet called', function (done) {
-            util_1.promisify(Middlewares.create(), req, res).then(function () {
+            util_1.promisify(middlewares_1.Middlewares.create(), req, res).then(function () {
                 done(new Error("Should throw"));
             })["catch"](function (err) {
                 if (err.name == "AssertionError")
@@ -99,9 +99,9 @@ describe("Middlewares", function () {
             });
         });
         it('should not throw', function (done) {
-            util_1.promisify(Middlewares.model("Person"), req, res)
+            util_1.promisify(middlewares_1.Middlewares.model("Person"), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.create(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.create(), req, res)
                     .then(function () {
                     done();
                 })["catch"](function (err) {
@@ -145,7 +145,7 @@ describe("Middlewares", function () {
             });
         });
         it('should throw AssertionError if model is not yet called', function (done) {
-            util_1.promisify(Middlewares.read(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.read(), req, res)
                 .then(function () {
                 done(new Error("Does not throw."));
             })["catch"](function (err) {
@@ -156,9 +156,9 @@ describe("Middlewares", function () {
             });
         });
         it('should throw if document param id is nonexistent', function (done) {
-            util_1.promisify(Middlewares.model("Person"), req, res)
+            util_1.promisify(middlewares_1.Middlewares.model("Person"), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.read(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.read(), req, res)
                     .then(function () {
                     done(new Error("Does not throw."));
                 })["catch"](function (err) {
@@ -173,9 +173,9 @@ describe("Middlewares", function () {
         });
         it('should return 404 `Document not found` if document id is nonexistent', function (done) {
             req.params.id = "nonexistent document";
-            util_1.promisify(Middlewares.model("Person"), req, res)
+            util_1.promisify(middlewares_1.Middlewares.model("Person"), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.read(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.read(), req, res)
                     .then(function () {
                     try {
                         chai_1.expect(res._getStatusCode()).to.be.equal(404);
@@ -194,9 +194,9 @@ describe("Middlewares", function () {
         });
         it('should work properly', function (done) {
             req.params.id = _id;
-            util_1.promisify(Middlewares.model("Person"), req, res)
+            util_1.promisify(middlewares_1.Middlewares.model("Person"), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.read(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.read(), req, res)
                     .then(function () {
                     try {
                         chai_1.expect(req.tent.document).to.exist;
@@ -232,7 +232,7 @@ describe("Middlewares", function () {
                     name: "sample",
                     age: 12
                 };
-            util_1.promisify(Middlewares.sanitize(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.sanitize(), req, res)
                 .then(function () {
                 try {
                     chai_1.expect(req.tent.payload).to.be.eql({
@@ -257,7 +257,7 @@ describe("Middlewares", function () {
                         sublayer: 2
                     }
                 };
-            util_1.promisify(Middlewares.sanitize(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.sanitize(), req, res)
                 .then(function () {
                 try {
                     chai_1.expect(req.tent.payload).to.be.eql({
@@ -286,7 +286,7 @@ describe("Middlewares", function () {
         });
         it("should throw error if #Read or #FreshDocument is not yet called", function (done) {
             req.tent.document = undefined;
-            util_1.promisify(Middlewares.assign(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.assign(), req, res)
                 .then(function () {
                 done(new Error("Should throw"));
             })["catch"](function (err) {
@@ -299,9 +299,9 @@ describe("Middlewares", function () {
         it("should throw error if #sanitize is not yet called", function (done) {
             req.tent.document = undefined;
             req.tent.payload = undefined;
-            util_1.promisify(Middlewares.create(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.create(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.assign(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.assign(), req, res)
                     .then(function () {
                     done(new Error("Should throw"));
                 })["catch"](function (err) {
@@ -315,11 +315,11 @@ describe("Middlewares", function () {
             });
         });
         it("should assign value properly", function (done) {
-            util_1.promisify(Middlewares.create(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.create(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.sanitize(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.sanitize(), req, res)
                     .then(function () {
-                    util_1.promisify(Middlewares.assign(), req, res)
+                    util_1.promisify(middlewares_1.Middlewares.assign(), req, res)
                         .then(function () {
                         try {
                             var keys = ["name", "age"];
@@ -346,7 +346,7 @@ describe("Middlewares", function () {
     describe("#save", function () {
         it('should throw AssertionError when document is not yet defined', function (done) {
             req.tent.document = undefined;
-            util_1.promisify(Middlewares.save(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.save(), req, res)
                 .then(function () {
                 done(new Error("Should throw."));
             })["catch"](function (err) {
@@ -357,9 +357,9 @@ describe("Middlewares", function () {
             });
         });
         it('should not throw when document is defined', function (done) {
-            util_1.promisify(Middlewares.create(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.create(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.save(), req, res).then(function () {
+                util_1.promisify(middlewares_1.Middlewares.save(), req, res).then(function () {
                     done();
                 })["catch"](function (err) {
                     done(err);
@@ -375,11 +375,11 @@ describe("Middlewares", function () {
                 age: 20
             };
             req.tent.document = undefined;
-            util_1.promisify(Middlewares.create(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.create(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.sanitize(), req, res).then(function () {
-                    util_1.promisify(Middlewares.assign(), req, res).then(function () {
-                        util_1.promisify(Middlewares.save(), req, res).then(function () { return __awaiter(_this, void 0, void 0, function () {
+                util_1.promisify(middlewares_1.Middlewares.sanitize(), req, res).then(function () {
+                    util_1.promisify(middlewares_1.Middlewares.assign(), req, res).then(function () {
+                        util_1.promisify(middlewares_1.Middlewares.save(), req, res).then(function () { return __awaiter(_this, void 0, void 0, function () {
                             var doc, err_1;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
@@ -451,7 +451,7 @@ describe("Middlewares", function () {
                         case 1:
                             person = (_a.sent())[0];
                             if (!person) return [3 /*break*/, 3];
-                            return [4 /*yield*/, person["delete"]()];
+                            return [4 /*yield*/, person.remove()];
                         case 2:
                             _a.sent();
                             _a.label = 3;
@@ -461,7 +461,7 @@ describe("Middlewares", function () {
             });
         });
         it('should throw AssertionError when document is not yet defined', function (done) {
-            util_1.promisify(Middlewares.remove(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.remove(), req, res)
                 .then(function () {
                 done(new Error("Should throw."));
             })["catch"](function (err) {
@@ -472,9 +472,9 @@ describe("Middlewares", function () {
             });
         });
         it('should throw when document defined is new', function (done) {
-            util_1.promisify(Middlewares.create(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.create(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.remove(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.remove(), req, res)
                     .then(function () {
                     done(new Error("Should throw"));
                 })["catch"](function (err) {
@@ -489,9 +489,9 @@ describe("Middlewares", function () {
         });
         it('should not throw when old document is defined', function (done) {
             req.params.id = _id;
-            util_1.promisify(Middlewares.read(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.read(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.remove(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.remove(), req, res)
                     .then(function () {
                     done();
                 })["catch"](function (err) {
@@ -504,9 +504,9 @@ describe("Middlewares", function () {
         it('should delete data in the database', function (done) {
             var _this = this;
             req.params.id = _id;
-            util_1.promisify(Middlewares.read(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.read(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.remove(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.remove(), req, res)
                     .then(function () { return __awaiter(_this, void 0, void 0, function () {
                     var Person, persons, e_1;
                     return __generator(this, function (_a) {
@@ -545,7 +545,7 @@ describe("Middlewares", function () {
                 offset: "12",
                 expand: "bubble"
             };
-            util_1.promisify(Middlewares.param(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.param(), req, res)
                 .then(function () {
                 try {
                     chai_1.expect(req.tent.param).to.be.deep.equal({
@@ -611,7 +611,7 @@ describe("Middlewares", function () {
             });
         });
         it('should throw error if #Params is no yet called', function (done) {
-            util_1.promisify(Middlewares.list(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.list(), req, res)
                 .then(function () {
                 done(new Error("Should throw"));
             })["catch"](function (err) {
@@ -623,9 +623,9 @@ describe("Middlewares", function () {
         });
         it('should throw no error', function (done) {
             req.query = {};
-            util_1.promisify(Middlewares.param(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.param(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.list(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.list(), req, res)
                     .then(function () {
                     done();
                 })["catch"](function (err) {
@@ -637,9 +637,9 @@ describe("Middlewares", function () {
         });
         it('should work properly on basic query', function (done) {
             req.query = {};
-            util_1.promisify(Middlewares.param(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.param(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.list(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.list(), req, res)
                     .then(function () {
                     try {
                         chai_1.expect(req.tent.list).to.exist;
@@ -659,9 +659,9 @@ describe("Middlewares", function () {
         it('should work properly sort query', function (done) {
             var _this = this;
             req.query = { sort: "-age" };
-            util_1.promisify(Middlewares.param(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.param(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.list(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.list(), req, res)
                     .then(function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         try {
@@ -682,9 +682,9 @@ describe("Middlewares", function () {
         it('should work properly pagination query', function (done) {
             var _this = this;
             req.query = { limit: "1", offset: "1" };
-            util_1.promisify(Middlewares.param(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.param(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.list(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.list(), req, res)
                     .then(function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         try {
@@ -704,9 +704,9 @@ describe("Middlewares", function () {
         it('should work properly on filter query', function (done) {
             var _this = this;
             req.query = { age: "20" };
-            util_1.promisify(Middlewares.param(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.param(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.list(), req, res)
+                util_1.promisify(middlewares_1.Middlewares.list(), req, res)
                     .then(function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         try {
@@ -729,7 +729,7 @@ describe("Middlewares", function () {
     });
     describe("#success", function () {
         it('should respond 200', function (done) {
-            util_1.promisify(Middlewares.success(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.success(), req, res)
                 .then(function () {
                 try {
                     chai_1.expect(res._getStatusCode()).to.be.equal(200);
@@ -741,7 +741,7 @@ describe("Middlewares", function () {
             })["catch"](done);
         });
         it('should respond `success`', function (done) {
-            util_1.promisify(Middlewares.success(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.success(), req, res)
                 .then(function () {
                 try {
                     chai_1.expect(res._getData()).to.be.deep.equal({
@@ -795,7 +795,7 @@ describe("Middlewares", function () {
             });
         });
         it('should throw when #Read is not yet called.', function (done) {
-            util_1.promisify(Middlewares.show(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.show(), req, res)
                 .then(function () {
                 done(new Error("Should throw."));
             })["catch"](function (err) {
@@ -806,8 +806,8 @@ describe("Middlewares", function () {
             });
         });
         it('should throw when document is fresh.', function (done) {
-            util_1.promisify(Middlewares.create(), req, res).then(function () {
-                util_1.promisify(Middlewares.show(), req, res).then(function () {
+            util_1.promisify(middlewares_1.Middlewares.create(), req, res).then(function () {
+                util_1.promisify(middlewares_1.Middlewares.show(), req, res).then(function () {
                     done(new Error("Should throw."));
                 })["catch"](function (err) {
                     if (err.name == "AssertionError")
@@ -819,16 +819,16 @@ describe("Middlewares", function () {
         });
         it('should not throw when #Read is defined.', function (done) {
             req.params.id = _id;
-            util_1.promisify(Middlewares.read(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.read(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.show(), req, res).then(function () { done(); })["catch"](function (err) { done(err); });
+                util_1.promisify(middlewares_1.Middlewares.show(), req, res).then(function () { done(); })["catch"](function (err) { done(err); });
             })["catch"](function (err) { done(err); });
         });
         it('should properly return the document with status code of 200.', function (done) {
             req.params.id = _id;
-            util_1.promisify(Middlewares.read(), req, res)
+            util_1.promisify(middlewares_1.Middlewares.read(), req, res)
                 .then(function () {
-                util_1.promisify(Middlewares.show(), req, res).then(function () {
+                util_1.promisify(middlewares_1.Middlewares.show(), req, res).then(function () {
                     chai_1.expect(res._getStatusCode()).to.be.equal(200);
                     chai_1.expect(res._getData().toObject()).to.be.deep.equal(req.tent.document.toObject());
                     done();
@@ -875,7 +875,7 @@ describe("Middlewares", function () {
             });
         });
         it('should throw when list is not yet called', function (done) {
-            util_1.promisify(Middlewares.present(), req, res).then(function () { done(new Error("Should throw")); })["catch"](function (err) {
+            util_1.promisify(middlewares_1.Middlewares.present(), req, res).then(function () { done(new Error("Should throw")); })["catch"](function (err) {
                 if (err.name == "AssertionError")
                     done();
                 else
@@ -885,8 +885,8 @@ describe("Middlewares", function () {
         it('should not throw when list is called', function (done) {
             req.tent.Model("Person");
             req.tent.Param({});
-            util_1.promisify(Middlewares.list(), req, res).then(function () {
-                util_1.promisify(Middlewares.present(), req, res).then(function () {
+            util_1.promisify(middlewares_1.Middlewares.list(), req, res).then(function () {
+                util_1.promisify(middlewares_1.Middlewares.present(), req, res).then(function () {
                     done();
                 })["catch"](done);
             })["catch"](done);
@@ -895,8 +895,8 @@ describe("Middlewares", function () {
             var _this = this;
             req.tent.Model("Person");
             req.tent.Param({});
-            util_1.promisify(Middlewares.list(), req, res).then(function () {
-                util_1.promisify(Middlewares.present(), req, res).then(function () { return __awaiter(_this, void 0, void 0, function () {
+            util_1.promisify(middlewares_1.Middlewares.list(), req, res).then(function () {
+                util_1.promisify(middlewares_1.Middlewares.present(), req, res).then(function () { return __awaiter(_this, void 0, void 0, function () {
                     var list, trueList, err_2;
                     return __generator(this, function (_a) {
                         switch (_a.label) {

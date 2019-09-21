@@ -5,12 +5,12 @@ export function todo()
 	it('todo');
 }
 
-export function promisify( middleware : any , req, res)
+export function promisify( middleware : any , req : any, res: any)
 {
 	return new Promise(async(resolve,reject)=>
 	{
 		let called =false;
-		let next = function(err?)
+		let next = function(err? : Error)
 		{
 			if(called) return ;
 
@@ -20,7 +20,7 @@ export function promisify( middleware : any , req, res)
 		};
 
 		let _send = res.send;
-		let send = function(...args)
+		let send = function(...args : any[])
 		{
 			process.nextTick(()=>
 			{

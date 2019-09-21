@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var assign = require("object-assign");
-var Model = require("../model");
+var model_1 = require("../model");
 var flatten = require("flat");
 var Assert = require("assert");
 var params_1 = require("./params");
@@ -48,7 +48,7 @@ var Accessor = /** @class */ (function () {
         this.req = req;
     }
     Accessor.prototype.Model = function (name) {
-        this.model = Model.get(name);
+        this.model = model_1.get(name);
         this.collection = this.model.Schema.model;
     };
     Accessor.prototype.Sanitize = function (body) {
@@ -147,7 +147,7 @@ var Accessor = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.document["delete"]()];
+                        return [4 /*yield*/, this.document.remove()];
                     case 2:
                         _a.sent();
                         return [3 /*break*/, 4];

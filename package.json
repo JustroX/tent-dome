@@ -2,10 +2,11 @@
   "name": "tent-dome",
   "version": "0.0.1",
   "description": "REST Api framework",
-  "main": "index.js",
+  "main": "index",
   "scripts": {
-    "compile": "tsc index.ts --outDir dist --watch",
-    "test": "tsc ./tests/index.spec.ts --outDir dist  && cls && mocha ./dist/tests/index.spec.js --exit"
+    "compile": "tsc --outDir dist --watch",
+    "test": "cls && tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators && cls && mocha ./dist/tests/index.spec.js --exit",
+    "test-watch": "cls && tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators --watch "
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,10 @@
   },
   "homepage": "https://github.com/JustroX/tent-dome#readme",
   "devDependencies": {
+    "@types/express": "^4.17.1",
+    "@types/flat": "0.0.28",
+    "@types/object-assign": "^4.0.30",
+    "@types/pluralize": "0.0.29",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "chai-http": "^4.3.0",
@@ -38,8 +43,12 @@
   },
   "dependencies": {
     "@types/chai-as-promised": "^7.1.2",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/dotenv": "^6.1.1",
     "@types/mocha": "^5.2.7",
+    "@types/mongoose": "^5.5.17",
     "@types/node": "^12.7.4",
+    "@types/sinon": "^7.0.13",
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",

@@ -7,7 +7,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 exports.__esModule = true;
-var Middlewares = require("./routes/middlewares");
+var middlewares_1 = require("./routes/middlewares");
 var builder_1 = require("./routes/builder");
 var express_1 = require("express");
 var Routes = /** @class */ (function () {
@@ -15,7 +15,7 @@ var Routes = /** @class */ (function () {
         this.builders = [];
         this.name = "";
         this.name = name;
-        this.router = new express_1.Router();
+        this.router = express_1.Router();
     }
     Routes.prototype.register = function () {
         var _a, _b, _c;
@@ -100,8 +100,8 @@ var Routes = /** @class */ (function () {
 }());
 exports.Routes = Routes;
 function RegisterRoute() {
-    var router = new express_1.Router();
-    router.use("/", Middlewares.initTent);
+    var router = express_1.Router();
+    router.use("/", middlewares_1.Middlewares.initTent);
     return router;
 }
 exports.RegisterRoute = RegisterRoute;

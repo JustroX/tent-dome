@@ -1,15 +1,11 @@
 "use strict";
 exports.__esModule = true;
 var mongoose_1 = require("mongoose");
-;
-;
 var Schema = /** @class */ (function () {
     function Schema(name) {
         this.schema = {};
         this.virtuals = {};
         this.config = {};
-        this.model = {};
-        this.mongooseSchema = {};
         this.name = name;
     }
     Schema.prototype.define = function (schema, config) {

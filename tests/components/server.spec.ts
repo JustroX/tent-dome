@@ -37,7 +37,7 @@ describe("Server",()=>
 		{
 			expect(function()
 			{
-				server.initDatabase(process.env.TEST_MONGODB_URI);
+				server.initDatabase(process.env.TEST_MONGODB_URI as string);
 			}).to.not.throw();
 		});
 	});

@@ -1,9 +1,4 @@
-import { Mongoose , Schema as MongooseSchema, model as MongooseModel } from "mongoose";
-import { Model } from "./model";
-
-
-interface MongooseSchemaInterface extends MongooseSchema {};
-interface MongooseModelInterface  extends MongooseModel {};
+import { Schema as MongooseSchema, model as MongooseModel, Document, Model, SchemaDefinition as Definition } from "mongoose";
 
 interface VirtualInterface<T>
 {
@@ -23,20 +18,17 @@ export interface SchemaConfig
 	[ key : string ] : any;
 }
 
-export interface SchemaDefinition
-{
-	[ key : string ] : any;
-}
+export type SchemaDefinition<T> = T & Document;
 
-export class Schema
+export class Schema<T>
 {
-	private schema 	 : SchemaDefinition = {};
+	private schema 	 : Definition = {};
 	private virtuals : VirtualsStoreInterface = {};
 	private config	 : SchemaConfig = {};
 	private name     : string;
 	
-	model  		   : MongooseModel = {};
-	mongooseSchema : MongooseSchemaInterface = {};
+	model  		   : Model<SchemaDefinition<T>> | undefined;
+	mongooseSchema : MongooseSchema | undefined;
 	
 
 	constructor(name : string)
@@ -44,7 +36,7 @@ export class Schema
 		this.name = name;
 	}
 
-	define( schema: SchemaDefinition , config? : SchemaConfig ) : void
+	define( schema: Definition, config? : SchemaConfig ) : void
 	{
 		this.schema = schema;
 
@@ -70,7 +62,7 @@ export class Schema
 
 	register()
 	{
-		this.mongooseSchema = new MongooseSchema( this.schema , this.config );
-		this.model = MongooseModel(this.name , this.mongooseSchema);
+		this.mongooseSchema = new MongooseSchema( this.schema as Definition , this.config );
+		this.model = MongooseModel<SchemaDefinition<T>>(this.name , this.mongooseSchema);
 	}
 }

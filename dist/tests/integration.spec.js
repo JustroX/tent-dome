@@ -41,8 +41,8 @@ var chai = require("chai");
 var assert = chai.assert, expect = chai.expect, use = chai.use;
 var chaiHttp = require("chai-http");
 chai.use(chaiHttp);
-var dotenv = require("dotenv");
-dotenv.config();
+var dotenv_1 = require("dotenv");
+dotenv_1.config();
 describe("Tent integration run 1.", function () {
     var Tent = new index_1.TentDome();
     var entity;

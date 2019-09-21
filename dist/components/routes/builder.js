@@ -1,21 +1,7 @@
 "use strict";
 exports.__esModule = true;
-var Middlewares = require("./middlewares");
+var middlewares_1 = require("./middlewares");
 var Assert = require("assert");
-exports.BUILT_IN_FACTORIES = [
-    "model",
-    "create",
-    "save",
-    "read",
-    "remove",
-    "assign",
-    "sanitize",
-    "param",
-    "list",
-    "success",
-    "show",
-    "present" // return list
-];
 var Builder = /** @class */ (function () {
     function Builder(name, options) {
         if (options === void 0) { options = {
@@ -25,18 +11,19 @@ var Builder = /** @class */ (function () {
         this.head = 0;
         this.name = "";
         //Builtin functions
-        this.model = null;
-        this.create = null;
-        this.save = null;
-        this.read = null;
-        this.remove = null;
-        this.assign = null;
-        this.sanitize = null;
-        this.param = null;
-        this.list = null;
-        this.success = null;
-        this.show = null;
-        this.present = null;
+        this.model = undefined;
+        this.create = undefined;
+        this.save = undefined;
+        this.read = undefined;
+        this.remove = undefined;
+        this.assign = undefined;
+        this.sanitize = undefined;
+        this.param = undefined;
+        this.list = undefined;
+        this.success = undefined;
+        this.show = undefined;
+        this.present = undefined;
+        this.builds = {};
         this.name = name;
         if (options["import builtin"])
             this.importBuiltIn();
@@ -62,21 +49,41 @@ var Builder = /** @class */ (function () {
         this.pointHead(this.head + 1);
         return this;
     };
+    Builder.prototype.replaceHead = function (mw) {
+        this.middlewares[this.head] = mw;
+    };
+    Builder.prototype.pop = function () {
+        this.middlewares.pop();
+        this.head = Math.min(this.head, this.middlewares.length - 1);
+    };
     Builder.prototype.importBuiltIn = function () {
-        for (var _i = 0, BUILT_IN_FACTORIES_1 = exports.BUILT_IN_FACTORIES; _i < BUILT_IN_FACTORIES_1.length; _i++) {
-            var mw = BUILT_IN_FACTORIES_1[_i];
-            this.define(mw, Middlewares[mw](this.name));
-        }
+        this.define("model", middlewares_1.Middlewares.model(this.name));
+        this.define("create", middlewares_1.Middlewares.create());
+        this.define("save", middlewares_1.Middlewares.save());
+        this.define("read", middlewares_1.Middlewares.read());
+        this.define("remove", middlewares_1.Middlewares.remove());
+        this.define("assign", middlewares_1.Middlewares.assign());
+        this.define("sanitize", middlewares_1.Middlewares.sanitize());
+        this.define("param", middlewares_1.Middlewares.param());
+        this.define("list", middlewares_1.Middlewares.list());
+        this.define("success", middlewares_1.Middlewares.success());
+        this.define("show", middlewares_1.Middlewares.show());
+        this.define("present", middlewares_1.Middlewares.present());
     };
     Builder.prototype.define = function (name, mw) {
         Assert(!this[name], "Builder pipe is already defined");
         var _this = this;
-        this[name] = function () {
-            this.middlewares.splice(this.head, 0, mw);
-            this.head++;
-            return this;
+        this.builds[name] = function () {
+            _this.middlewares.splice(_this.head, 0, mw);
+            _this.head++;
+            return _this;
         };
-        this[name].tag = name;
+        this.builds[name].tag = name;
+        Object.defineProperty(this, name, {
+            get: function () {
+                return this.builds[name];
+            }
+        });
     };
     Builder.prototype.pre = function (name, mw) {
         for (var i = 0; i < this.middlewares.length; i++) {

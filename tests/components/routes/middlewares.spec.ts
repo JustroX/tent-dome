@@ -1,6 +1,6 @@
-import * as Middlewares from "../../../components/routes/middlewares";
+import { Middlewares } from "../../../components/routes/middlewares";
 
-import { Accessor , Dispatcher } from "../../../components/routes/accessor";
+import { Accessor , Dispatcher, Document } from "../../../components/routes/accessor";
 import { createRequest, createResponse } from "node-mocks-http";
 import { Model , get } from "../../../components/model";
 
@@ -22,7 +22,7 @@ import "./accessor.spec"
 describe("Middlewares",function()
 {
 	let app;
-	let req, res;
+	let req : any, res: any;
 
 	interface SampleSchema
 	{
@@ -53,7 +53,7 @@ describe("Middlewares",function()
 	{
 		it('should assign accessor and dispatcher',function(done)
 		{
-			Middlewares.initTent(req,res,function(err)
+			Middlewares.initTent(req,res,function(err : Error)
 			{
 				if(err) return done(err);
 
@@ -68,7 +68,7 @@ describe("Middlewares",function()
 	{
 		it('should assign a model',function(done)
 		{
-			Middlewares.model("Person")(req,res,function(err)
+			Middlewares.model("Person")(req,res,function(err : Error)
 			{
 				if(err) return done(err);
 
@@ -149,7 +149,7 @@ describe("Middlewares",function()
 
 			//add new Person
 			let Person = get("Person").Schema.model;
-			let person = new Person();
+			let person : Document<SampleSchema> = new Person();
 			
 			person.name = "Sample Person";
 			person.age  = 18;
@@ -552,7 +552,7 @@ describe("Middlewares",function()
 
 			//add new Person
 			let Person = get("Person").Schema.model;
-			let person = new Person();
+			let person : Document<SampleSchema>= new Person();
 			
 			person.name = SAMPLE_NAME;
 			person.age  = 99;
@@ -568,7 +568,7 @@ describe("Middlewares",function()
 			let person = (await Person.find({ _id: _id }).exec())[0];
 
 			if(person)
-				await person.delete();
+				await person.remove();
 		});
 
 
@@ -942,7 +942,7 @@ describe("Middlewares",function()
 
 			//add new Person
 			let Person = get("Person").Schema.model;
-			let person = new Person();
+			let person : Document<SampleSchema> = new Person();
 			
 			person.name = "Sample Person";
 			person.age  = 18;
@@ -1099,8 +1099,8 @@ describe("Middlewares",function()
 				promisify(Middlewares.present(),req,res).then(async()=>
 				{
 					try{
-						let list 	 = res._getData();
-						let trueList = await req.tent.collection.find({}).exec();
+						let list 	 : any[] = res._getData();
+						let trueList : any[] = await req.tent.collection.find({}).exec();
 
 						expect(list).to.exist;
 						expect(list.length).to.be.equal( trueList.length );

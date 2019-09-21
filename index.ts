@@ -1,7 +1,7 @@
 import { Model , RegisterModels  } from "./components/model";
 import { Server , HttpServerInterface } from "./components/server";
-import { SchemaDefinition , SchemaConfig } from "./components/schema"
-
+import { SchemaConfig } from "./components/schema"
+import { SchemaDefinition as Definition } from "mongoose";
 
 export interface TentOptionsInterface
 {
@@ -53,7 +53,7 @@ export class TentDome
 	 * Entity related
 	 */
 
-	Entity<T>( name: string, schema ?: SchemaDefinition , config : SchemaConfig = {} ) : Model<T>
+	Entity<T>( name: string, schema ?: Definition , config : SchemaConfig = {} ) : Model<T>
 	{
 		let model = new Model<T>(name);
 

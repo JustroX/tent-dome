@@ -1,13 +1,19 @@
 import { Schema } from "../../components/schema";
 import { assert, expect } from "chai";
 import { todo } from "../util";
+import { Document } from "mongoose";
 
 describe("Schema",function()
 {
-	var schema : Schema;
+	interface SampleSchema extends Document
+	{
+		name : string,
+		age  : number
+	}
+	var schema : Schema<SampleSchema>;
 	describe("#constructor",function()
 	{
-		schema = new Schema("sample");
+		schema = new Schema<SampleSchema>("sample");
 		it('should assign a name',function()
 		{
 			expect(schema["name"]).to.be.equal('sample');

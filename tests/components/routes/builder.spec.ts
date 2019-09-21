@@ -1,4 +1,4 @@
-import { Builder, BUILT_IN_FACTORIES } from "../../../components/routes/builder";
+import { Builder } from "../../../components/routes/builder";
 import { assert, expect } from "chai";
 import { todo } from "../../util";
 
@@ -8,9 +8,9 @@ import "./middlewares.spec";
 describe("Builder",function()
 {
 	const BUILDER_NAME = "Sample Builder";
-	let builder;
+	let builder : Builder<any>;
 
-	let sample_middleware = function(req,res,next)
+	let sample_middleware = function(req : any,res : any,next : any)
 	{
 		req.token = true;
 		next();
@@ -40,12 +40,12 @@ describe("Builder",function()
 
 		it('should create a class function',function()
 		{
-			expect(builder.sample).to.exist;
+			expect((builder as any).sample).to.exist;
 		});
 
 		it('should put tag on',function()
 		{
-			expect(builder.sample.tag).to.be.equal("sample");
+			expect((builder as any).sample.tag).to.be.equal("sample");
 		});
 
 		it('should throw when middleware is already defined',function()
@@ -61,14 +61,14 @@ describe("Builder",function()
 		{
 			it('the middlware should be inserted in the head',function()
 			{
-				builder.sample();
+				(builder as any).sample();
 				expect(typeof builder.middlewares[0]).to.be.equal("function");
 				expect(builder.middlewares[0] === sample_middleware).to.be.equal(true);
 			});
 
 			it('head should move',function()
 			{
-				builder.sample();
+				(builder as any).sample();
 				expect(builder.head).to.be.equal(2);
 				expect(typeof builder.middlewares[1]).to.be.equal("function");
 				expect(builder.middlewares[1] === sample_middleware).to.be.equal(true);
@@ -76,7 +76,7 @@ describe("Builder",function()
 
 			it('should return this to enable chaining',function()
 			{
-				let a = builder.sample();
+				let a = (builder as any).sample();
 				expect(a).to.be.equal(builder);
 			})
 
@@ -101,8 +101,18 @@ describe("Builder",function()
 
 		it('should import builtin factories',function()
 		{
-			for(let p of BUILT_IN_FACTORIES)
-				expect( builder[p] ).to.exist;
+			expect(builder.model).to.exist;
+			expect(builder.create).to.exist;
+			expect(builder.save).to.exist;
+			expect(builder.read).to.exist;
+			expect(builder.remove).to.exist;
+			expect(builder.assign).to.exist;
+			expect(builder.sanitize).to.exist;
+			expect(builder.param).to.exist;
+			expect(builder.list).to.exist;
+			expect(builder.success).to.exist;
+			expect(builder.show).to.exist;
+			expect(builder.present).to.exist;
 		});
 	});	
 
@@ -302,7 +312,7 @@ describe("Builder",function()
 
 		it('should add new middleware before the tagged one',function()
 		{
-			let sample = function sample(req,res,next){};
+			let sample = function sample(req : any,res : any,next: any){};
 			builder.pre("b",sample);
 			expect(builder.middlewares[1].name).to.be.equal("sample");
 			builder.pre("a",sample);
@@ -312,7 +322,7 @@ describe("Builder",function()
 		
 		it('should not do anything if tag is missing',function()
 		{
-			let sample = function sample(req,res,next){};
+			let sample = function sample(req : any,res : any,next: any){};
 			builder.pre("missing_tag",sample);
 
 			expect( builder.middlewares.length ).to.be.equal(7);
@@ -336,7 +346,7 @@ describe("Builder",function()
 
 		it('should add new middleware after the tagged one',function()
 		{
-			let sample = function sample(req,res,next){};
+			let sample = function sample(req : any,res : any,next: any){};
 			builder.post("b",sample);
 			expect(builder.middlewares[2].name).to.be.equal("sample");
 			builder.post("e",sample);
@@ -345,10 +355,59 @@ describe("Builder",function()
 
 		it('should not do anything if tag is missing',function()
 		{
-			let sample = function sample(req,res,next){};
+			let sample = function sample(req : any,res : any,next: any){};
 			builder.post("missing_tag",sample);
 
 			expect( builder.middlewares.length ).to.be.equal(7);
+		});
+	});
+
+	describe("#replaceHead",function()
+	{
+		before(function()
+		{
+			let a = ()=>{};
+			let b = function b(){};
+			let c = ()=>{};
+			let d = ()=>{};
+			let e = ()=>{};
+
+			builder.middlewares = [a,b,c,d,e];
+			builder.head = 4;
+		});
+
+		it('should replace value in the head',function()
+		{
+			let sample = function sample(req : any,res : any,next: any){};
+			builder.pointHead(2);
+			builder.replaceHead(sample);
+
+			expect(builder.middlewares[2]).to.be.equal(sample);
+		});
+
+	});
+	
+	describe("#pop",function()
+	{
+		before(function()
+		{
+			let a = ()=>{};
+			let b = function b(){};
+			let c = ()=>{};
+			let d = ()=>{};
+			let e = ()=>{};
+
+			(b as any).tag = "c";
+			builder.middlewares = [a,b,c,d,e];
+			builder.head = 4;
+		});
+
+		it('should remove the middleware in the end of `middlewares` array',function()
+		{
+			builder.pop();
+
+			expect(builder.middlewares.length).to.be.equal(4);
+			expect(builder.head).to.be.equal(3);
 		});
 	});
 
@@ -376,4 +435,6 @@ describe("Builder",function()
 			builder.head = 0;
 		});
 	});
+
+
 });

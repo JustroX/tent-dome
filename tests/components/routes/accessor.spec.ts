@@ -1,4 +1,4 @@
-import { Accessor, Dispatcher } from "../../../components/routes/accessor";
+import { Accessor, Dispatcher, Document } from "../../../components/routes/accessor";
 import { Model , get } from "../../../components/model";
 
 import { assert, expect, use } from "chai";
@@ -22,19 +22,20 @@ describe("Accessor",function()
 	let req = createRequest();
 	let res = createResponse();
 
-	let accessor 	: Accessor<any>;
-	let dispatcher  ;
-
 	interface SampleSchema
 	{
-		name : string,
-		age  : number,
-		date : Date,
+		name ?: string,
+		age  ?: number,
+		date ?: Date,
 		layer?: 
 		{
 			sublayer: number
-		}
+		},
+		not_field?: number
 	}
+
+	let accessor 	: Accessor<SampleSchema>;
+	let dispatcher  ;
 
 	before(function(done)
 	{
@@ -213,7 +214,7 @@ describe("Accessor",function()
 
 		it('should not be modified',function()
 		{
-			expect(accessor.document.modified).to.be.not.ok;
+			expect(accessor.document.isModified()).to.be.not.ok;
 		});
 
 	});
@@ -227,8 +228,8 @@ describe("Accessor",function()
 			accessor.collection = undefined;
 
 			//add new Person
-			let Person = get("Person").Schema.model;
-			let person = new Person();
+			let Person : any = get("Person").Schema.model;
+			let person : any = new Person();
 			
 			person.name = "Sample Person";
 			person.age  = 18;
@@ -301,7 +302,7 @@ describe("Accessor",function()
 
 		it('should not be modified',function()
 		{
-			expect(accessor.document.modified).to.be.not.ok;
+			expect(accessor.document.isModified()).to.be.not.ok;
 		});
 
 	});
@@ -513,9 +514,9 @@ describe("Accessor",function()
 			accessor.document.age  =  20;
 			await accessor.Save();
 
-			let  doc = (await accessor.collection.find({ name : "Sample test" }).exec());
-			expect(doc.length).to.be.gte(1);
-			doc = doc[0];
+			let  docs : Document<SampleSchema>[] = (await accessor.collection.find({ name : "Sample test" }).exec());
+			expect(docs.length).to.be.gte(1);
+			let doc : Document<SampleSchema>  = docs[0];
 			expect(doc.age).to.be.equal(20);
 		});
 	});
@@ -534,7 +535,7 @@ describe("Accessor",function()
 
 			//add new Person
 			let Person = get("Person").Schema.model;
-			let person = new Person();
+			let person : Document<SampleSchema> = new Person();
 			
 			person.name = SAMPLE_NAME;
 			person.age  = 99;
@@ -547,10 +548,10 @@ describe("Accessor",function()
 		afterEach(async function()
 		{
 			let Person = get("Person").Schema.model;
-			let person = (await Person.find({ _id: _id }).exec())[0];
+			let person : Document<SampleSchema>= (await Person.find({ _id: _id }).exec())[0];
 
 			if(person)
-				await person.delete();
+				await person.remove();
 		});
 
 
@@ -716,8 +717,8 @@ describe("Accessor",function()
 			{
 				try
 				{
-					let list 	 = accessor.Present();
-					let trueList = await accessor.collection.find({}).exec();
+					let list 	 : any[] = accessor.Present() as any[];
+					let trueList : any[] = await accessor.collection.find({}).exec();
 
 					expect(list).to.exist;
 					expect(list.length).to.be.equal( trueList.length );
@@ -749,7 +750,7 @@ describe("Accessor",function()
 
 			//add new Person
 			let Person = get("Person").Schema.model;
-			let person = new Person();
+			let person: Document<SampleSchema> = new Person();
 			
 			person.name = "Sample Person";
 			person.age  = 18;
@@ -833,7 +834,7 @@ describe("Dispatcher",function()
 {
 	let req = createRequest();
 	let res = createResponse();
-	let dispatcher : Dispatcher | undefined;
+	let dispatcher : Dispatcher;
 
 	describe("#constructor",function()
 	{

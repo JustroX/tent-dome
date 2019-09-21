@@ -1,20 +1,18 @@
 import { TentDome } from "../index";
+import { Model } from "../components/model"
 
-import * as log from 'why-is-node-running';
 import chai = require("chai");
 let {assert, expect,use } = chai;
 import chaiHttp = require("chai-http");
 chai.use(chaiHttp);
 
-import dotenv = require("dotenv");
-dotenv.config();
-
+import {config} from "dotenv";
+config();
 
 
 describe("Tent integration run 1.",function()
 {
 	var Tent = new TentDome();
-	var entity ;
 
 	//schema
 	interface SampleSchema
@@ -28,6 +26,8 @@ describe("Tent integration run 1.",function()
 			date   : Date
 		}[]
 	}
+
+	var entity : Model<SampleSchema>;
 
 	it("should initialize properly",function()
 	{

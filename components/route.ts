@@ -2,7 +2,7 @@ import { Tent } from "../index";
 
 import { Model } from "./model";
 
-import * as Middlewares from "./routes/middlewares";
+import { Middlewares } from "./routes/middlewares";
 import { Builder } from "./routes/builder";
 import { Router } from "express";
 
@@ -14,18 +14,20 @@ interface BuilderConfig<T>
 	endpoint : string
 }
 
+type Methods  = "GET" | "POST" | "PUT" | "DELETE" | "LIST";
+type MethodsFunc = "get" | "post" | "put" | "delete" | "list";
 
 
 export class Routes<T>
 {
-	router  : Router;
+	router  : Router ;
 	builders : BuilderConfig<T>[] = [];
 	name : string = "";
 
 	constructor( name : string )
 	{
 		this.name = name;
-		this.router = new Router();
+		this.router = Router();
 	}
 
 	register() : void
@@ -34,7 +36,7 @@ export class Routes<T>
 		{
 			let item 	: BuilderConfig<T> = this.builders[i];
 			let endpoint : string  = item.endpoint;
-			let method 	: string  = ( item.method as string ).toLowerCase();
+			let method 	: MethodsFunc  = ( item.method as Methods ).toLowerCase() as MethodsFunc;
 			let builder : Builder<T> = item.builder;
 
 			if( method == "list" )
@@ -47,7 +49,7 @@ export class Routes<T>
 		}
 	}
 
-	endpoint( endpoint : string , method: "GET" | "POST" | "PUT" | "DELETE" | "LIST"  , fresh : boolean = false) : Builder<T>
+	endpoint( endpoint : string , method: Methods , fresh : boolean = false) : Builder<T>
 	{
 		let a : BuilderConfig<T> = 
 		{
@@ -145,8 +147,8 @@ export class Routes<T>
 
 export function RegisterRoute() : Router
 {
-	let router = new Router();
+	let router = Router();
 
-	router.use( "/" , Middlewares.initTent );
+	router.use( "/" , Middlewares.initTent as any );
 	return router;
 }

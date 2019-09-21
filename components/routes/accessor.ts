@@ -1,23 +1,31 @@
 import { Request, Response } from "express";
-import * as assign from "object-assign";
-import * as Model from "../model";
-import * as flatten from "flat";
-import * as Assert from "assert";
+import assign = require("object-assign");
+import { Model , get } from "../model";
+import flatten  = require("flat");
+import Assert  = require("assert");
 import { Parse, QueryParams } from "./params";
 
 var { unflatten } = flatten;
 
-import { Document , MongooseModel } from "mongoose";
+import { Document as MongooseDocument , Model as MongooseModel, Schema } from "mongoose";
 
-export class Accessor<SchemaInterface>
+export type Document<T> = MongooseDocument & Partial<T>;
+type Collection<T> = MongooseModel<Document<T>>;
+
+interface Dictionary
 {
-	res 		: Request | undefined;
-	req 		: Response | undefined;
-	model 		: Model.Model<SchemaInterface> | undefined;
-	document 	: Document | undefined;
-	collection 	: MongooseModel | undefined;
-	payload 	: SchemaInterface | undefined;
-	list		: Document[] | undefined;
+	[ key : string ] : any;
+}
+
+export class Accessor<T>
+{
+	res 		: Response ;
+	req 		: Request  ;
+	model 		: Model<T> | undefined;
+	document 	: Document<T> | undefined ;
+	collection 	: Collection<Document<T>> | undefined;
+	payload 	: Dictionary | undefined;
+	list		: Document<T>[] | undefined;
 
 	param		: QueryParams | undefined;
 
@@ -29,17 +37,18 @@ export class Accessor<SchemaInterface>
 
 	Model( name : string )
 	{
-		this.model 		= Model.get(name);
+		this.model 		= get(name);
 		this.collection = this.model.Schema.model;
 	}
 
-	Sanitize(body : any)
+	Sanitize(body : T )
 	{
-		Assert(this.collection && this.model,"Sanitize can not be called without first calling Model");
-		let payload : SchemaInterface = {} as SchemaInterface;
+		Assert(this.collection && this.model ,"Sanitize can not be called without first calling Model");
 
-		let paths = this.collection.schema.paths;
-		let _body = flatten(body,{safe: true})
+		let payload : Dictionary = {} as Dictionary;
+
+		let paths : Dictionary = ((this.collection as Collection<T>).schema as Schema & { paths: Dictionary}).paths ;
+		let _body : Dictionary = flatten(body,{safe: true})
 		for( let i in _body )
 		{
 			if(paths[i])
@@ -54,13 +63,13 @@ export class Accessor<SchemaInterface>
 		Assert(this.payload,"Assign can not be called without first calling Sanitize");
 		Assert(this.document,"Assign can not be called without first calling Read or FreshDocument");
 		for(let i in this.payload)
-			this.document.set( i , this.payload[i] );
+			(this.document as Document<T> ).set( i , this.payload[i] );
 	}
 
 	async Read( id : string ) : Promise<void>
 	{
 		Assert(this.collection,"Read cannot be used when model is not yet called.")
-		this.document = (await this.collection.find({ _id : id }).exec())[0];
+		this.document = (await (this.collection as Collection<T>).find({ _id : id }).exec())[0];
 		Assert(this.document, "Document not found");
 		
 	}
@@ -71,7 +80,7 @@ export class Accessor<SchemaInterface>
 		{
 			let { sort, filters, populate, pagination } = this.param as QueryParams; 
 
-			let query = this.collection.find(filters);
+			let query = (this.collection as Collection<T>).find(filters);
 
 			query.sort(sort)
 				 .limit(pagination.limit)
@@ -93,7 +102,7 @@ export class Accessor<SchemaInterface>
 		Assert(this.document,"Save can not be called without first calling Read or FreshDocument");
 		try
 		{
-			await this.document.save();
+			await (this.document as Document<T>).save();
 		}
 		catch(e)
 		{
@@ -104,10 +113,10 @@ export class Accessor<SchemaInterface>
 	async Delete() : Promise< void >
 	{
 		Assert(this.document,"Delete can not be called without first calling Read");
-		Assert(!this.document.isNew,"Delete can not be called when Fresh Document is called.");
+		Assert(!(this.document as Document<T>).isNew,"Delete can not be called when Fresh Document is called.");
 		try
 		{
-			await this.document.delete();
+			await (this.document as Document<T>).remove();
 		}
 		catch(e)
 		{
@@ -128,7 +137,7 @@ export class Accessor<SchemaInterface>
 	async FreshDocument()
 	{
 		Assert(this.collection,"`Model` should be called first before calling `FreshDocument`");
-		this.document = new this.collection();
+		this.document = new (this.collection as Collection<T>)();
 	}
 
 
@@ -146,7 +155,7 @@ export class Accessor<SchemaInterface>
 	Show()
 	{
 		Assert(this.document,"Show can not be called without first calling Read");
-		Assert(!this.document.isNew,"Show can not be called when FreshDocument is called.");
+		Assert(!(this.document as Document<T>).isNew,"Show can not be called when FreshDocument is called.");
 	
 		/**
 		* @Todo sanitize output
@@ -158,8 +167,8 @@ export class Accessor<SchemaInterface>
 
 export class Dispatcher
 {
-	res : Request;
-	req : Response;
+	req : Request	;
+	res : Response	;
 
 	constructor( req : Request , res : Response )
 	{

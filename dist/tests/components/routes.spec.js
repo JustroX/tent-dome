@@ -2,7 +2,7 @@
 exports.__esModule = true;
 var route_1 = require("../../components/route");
 var builder_1 = require("../../components/routes/builder");
-var Middlewares = require("../../components/routes/middlewares");
+var middlewares_1 = require("../../components/routes/middlewares");
 var chai_1 = require("chai");
 var sinon_1 = require("sinon");
 //precondition
@@ -96,12 +96,12 @@ describe("Routes", function () {
                     var builder = route.create();
                     chai_1.expect(endpiontSpy.calledWith(route.name, "POST", false));
                     chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
-                        Middlewares.model("endpoint"),
-                        Middlewares.create(),
-                        Middlewares.sanitize(),
-                        Middlewares.assign(),
-                        Middlewares.save(),
-                        Middlewares.show()
+                        middlewares_1.Middlewares.model("endpoint"),
+                        middlewares_1.Middlewares.create(),
+                        middlewares_1.Middlewares.sanitize(),
+                        middlewares_1.Middlewares.assign(),
+                        middlewares_1.Middlewares.save(),
+                        middlewares_1.Middlewares.show()
                     ].map(function (x) { return x.name; }));
                 });
             });
@@ -111,12 +111,12 @@ describe("Routes", function () {
                     var builder = route.update();
                     chai_1.expect(endpiontSpy.calledWith(route.name, "PUT", false));
                     chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
-                        Middlewares.model("endpoint"),
-                        Middlewares.read(),
-                        Middlewares.sanitize(),
-                        Middlewares.assign(),
-                        Middlewares.save(),
-                        Middlewares.show()
+                        middlewares_1.Middlewares.model("endpoint"),
+                        middlewares_1.Middlewares.read(),
+                        middlewares_1.Middlewares.sanitize(),
+                        middlewares_1.Middlewares.assign(),
+                        middlewares_1.Middlewares.save(),
+                        middlewares_1.Middlewares.show()
                     ].map(function (x) { return x.name; }));
                 });
             });
@@ -126,9 +126,9 @@ describe("Routes", function () {
                     var builder = route.read();
                     chai_1.expect(endpiontSpy.calledWith(route.name, "GET", false));
                     chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
-                        Middlewares.model("endpoint"),
-                        Middlewares.read(),
-                        Middlewares.show()
+                        middlewares_1.Middlewares.model("endpoint"),
+                        middlewares_1.Middlewares.read(),
+                        middlewares_1.Middlewares.show()
                     ].map(function (x) { return x.name; }));
                 });
             });
@@ -138,10 +138,10 @@ describe("Routes", function () {
                     var builder = route.list();
                     chai_1.expect(endpiontSpy.calledWith(route.name, "LIST", false));
                     chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
-                        Middlewares.model("endpoint"),
-                        Middlewares.param(),
-                        Middlewares.list(),
-                        Middlewares.present()
+                        middlewares_1.Middlewares.model("endpoint"),
+                        middlewares_1.Middlewares.param(),
+                        middlewares_1.Middlewares.list(),
+                        middlewares_1.Middlewares.present()
                     ].map(function (x) { return x.name; }));
                 });
             });
@@ -151,10 +151,10 @@ describe("Routes", function () {
                     var builder = route["delete"]();
                     chai_1.expect(endpiontSpy.calledWith(route.name, "DELETE", false));
                     chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
-                        Middlewares.model("endpoint"),
-                        Middlewares.read(),
-                        Middlewares.remove(),
-                        Middlewares.success()
+                        middlewares_1.Middlewares.model("endpoint"),
+                        middlewares_1.Middlewares.read(),
+                        middlewares_1.Middlewares.remove(),
+                        middlewares_1.Middlewares.success()
                     ].map(function (x) { return x.name; }));
                 });
             });

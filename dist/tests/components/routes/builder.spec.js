@@ -64,10 +64,18 @@ describe("Builder", function () {
             }).to.not["throw"]();
         });
         it('should import builtin factories', function () {
-            for (var _i = 0, BUILT_IN_FACTORIES_1 = builder_1.BUILT_IN_FACTORIES; _i < BUILT_IN_FACTORIES_1.length; _i++) {
-                var p = BUILT_IN_FACTORIES_1[_i];
-                chai_1.expect(builder[p]).to.exist;
-            }
+            chai_1.expect(builder.model).to.exist;
+            chai_1.expect(builder.create).to.exist;
+            chai_1.expect(builder.save).to.exist;
+            chai_1.expect(builder.read).to.exist;
+            chai_1.expect(builder.remove).to.exist;
+            chai_1.expect(builder.assign).to.exist;
+            chai_1.expect(builder.sanitize).to.exist;
+            chai_1.expect(builder.param).to.exist;
+            chai_1.expect(builder.list).to.exist;
+            chai_1.expect(builder.success).to.exist;
+            chai_1.expect(builder.show).to.exist;
+            chai_1.expect(builder.present).to.exist;
         });
     });
     describe("#custom", function () {
@@ -240,6 +248,40 @@ describe("Builder", function () {
             var sample = function sample(req, res, next) { };
             builder.post("missing_tag", sample);
             chai_1.expect(builder.middlewares.length).to.be.equal(7);
+        });
+    });
+    describe("#replaceHead", function () {
+        before(function () {
+            var a = function () { };
+            var b = function b() { };
+            var c = function () { };
+            var d = function () { };
+            var e = function () { };
+            builder.middlewares = [a, b, c, d, e];
+            builder.head = 4;
+        });
+        it('should replace value in the head', function () {
+            var sample = function sample(req, res, next) { };
+            builder.pointHead(2);
+            builder.replaceHead(sample);
+            chai_1.expect(builder.middlewares[2]).to.be.equal(sample);
+        });
+    });
+    describe("#pop", function () {
+        before(function () {
+            var a = function () { };
+            var b = function b() { };
+            var c = function () { };
+            var d = function () { };
+            var e = function () { };
+            b.tag = "c";
+            builder.middlewares = [a, b, c, d, e];
+            builder.head = 4;
+        });
+        it('should remove the middleware in the end of `middlewares` array', function () {
+            builder.pop();
+            chai_1.expect(builder.middlewares.length).to.be.equal(4);
+            chai_1.expect(builder.head).to.be.equal(3);
         });
     });
     describe("#expose", function () {

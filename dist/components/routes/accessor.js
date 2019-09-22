@@ -167,13 +167,8 @@ var Accessor = /** @class */ (function () {
         this.param = params_1.Parse(str);
     };
     Accessor.prototype.FreshDocument = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                Assert(this.collection, "`Model` should be called first before calling `FreshDocument`");
-                this.document = new this.collection();
-                return [2 /*return*/];
-            });
-        });
+        Assert(this.collection, "`Model` should be called first before calling `FreshDocument`");
+        this.document = new this.collection();
     };
     Accessor.prototype.Present = function () {
         Assert(this.list, "Present can not be called without first calling List");

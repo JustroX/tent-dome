@@ -142,26 +142,17 @@ describe("Accessor", function () {
             accessor.model = undefined;
             accessor.collection = undefined;
         });
-        it('should throw if model is not yet called', function (done) {
-            accessor.FreshDocument()
-                .then(function () {
-                done(new Error("Should throw"));
-            })["catch"](function (err) {
-                if (err.name == "AssertionError")
-                    done();
-                else
-                    done(err);
-            });
+        it('should throw if model is not yet called', function () {
+            chai_1.expect(function () {
+                accessor.FreshDocument();
+            }).to["throw"]().property("name", "AssertionError");
         });
-        it('should not throw', function (done) {
+        it('should not throw', function () {
             accessor.document = undefined;
             accessor.Model("Person");
-            accessor.FreshDocument()
-                .then(function () {
-                done();
-            })["catch"](function (err) {
-                done(err);
-            });
+            chai_1.expect(function () {
+                accessor.FreshDocument();
+            }).to.not["throw"]();
         });
         it('should work properly', function () {
             chai_1.expect(accessor.document).to.be.an["instanceof"](model_1.get("Person").Schema.model);
@@ -439,12 +430,9 @@ describe("Accessor", function () {
             });
         });
         it('should not throw when document is defined', function (done) {
-            accessor.FreshDocument().then(function () {
-                accessor.Save().then(function () {
-                    done();
-                })["catch"](function (err) {
-                    done(err);
-                });
+            accessor.FreshDocument();
+            accessor.Save().then(function () {
+                done();
             })["catch"](function (err) {
                 done(err);
             });
@@ -454,16 +442,15 @@ describe("Accessor", function () {
                 var docs, doc;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, accessor.FreshDocument()];
-                        case 1:
-                            _a.sent();
+                        case 0:
+                            accessor.FreshDocument();
                             accessor.document.name = "Sample test";
                             accessor.document.age = 20;
                             return [4 /*yield*/, accessor.Save()];
-                        case 2:
+                        case 1:
                             _a.sent();
                             return [4 /*yield*/, accessor.collection.find({ name: "Sample test" }).exec()];
-                        case 3:
+                        case 2:
                             docs = (_a.sent());
                             chai_1.expect(docs.length).to.be.gte(1);
                             doc = docs[0];
@@ -532,17 +519,14 @@ describe("Accessor", function () {
             });
         });
         it('should throw when document defined is new', function (done) {
-            accessor.FreshDocument().then(function () {
-                accessor.Delete().then(function () {
-                    done(new Error("Should throw"));
-                })["catch"](function (err) {
-                    if (err.name == "AssertionError")
-                        done();
-                    else
-                        done(err);
-                });
+            accessor.FreshDocument();
+            accessor.Delete().then(function () {
+                done(new Error("Should throw"));
             })["catch"](function (err) {
-                done(err);
+                if (err.name == "AssertionError")
+                    done();
+                else
+                    done(err);
             });
         });
         it('should not throw when old document is defined', function (done) {
@@ -721,16 +705,11 @@ describe("Accessor", function () {
                 accessor.Show();
             }).to["throw"]().property("name", "AssertionError");
         });
-        it('should throw when document is fresh.', function (done) {
-            accessor.FreshDocument()
-                .then(function () {
-                chai_1.expect(function () {
-                    accessor.Show();
-                }).to["throw"]().property("name", "AssertionError");
-                done();
-            })["catch"](function (err) {
-                done(err);
-            });
+        it('should throw when document is fresh.', function () {
+            accessor.FreshDocument();
+            chai_1.expect(function () {
+                accessor.Show();
+            }).to["throw"]().property("name", "AssertionError");
         });
         it('should not throw when #Read is defined.', function (done) {
             accessor.Read(_id)

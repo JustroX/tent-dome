@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 exports.__esModule = true;
 var model_1 = require("../../components/model");
+var sinon_1 = require("sinon");
 var route_1 = require("../../components/route");
 var expand_1 = require("../../components/expand");
 var schema_1 = require("../../components/schema");
@@ -69,13 +70,6 @@ describe("Model", function () {
                     }, {
                         "test config": "test value"
                     });
-                }).to.not["throw"]();
-            });
-        });
-        describe('#register', function () {
-            it('should not throw error', function () {
-                chai_1.expect(function () {
-                    model.register();
                 }).to.not["throw"]();
             });
         });
@@ -145,8 +139,6 @@ describe("Model", function () {
             });
             it('.plugins.pluginName must be exposed.', function () {
                 delete model.plugins["sample"];
-                if (!model["sample"])
-                    model["sample"] = undefined;
                 var SamplePlugin = /** @class */ (function () {
                     function SamplePlugin() {
                     }
@@ -161,6 +153,37 @@ describe("Model", function () {
                 }());
                 model.install(new SamplePlugin());
                 chai_1.expect(model.plugins["sample"]).to.be.an["instanceof"](SamplePlugin);
+            });
+        });
+        describe('#register', function () {
+            var InitSpy;
+            before(function () {
+                delete model.plugins["sample"];
+                var SamplePlugin = /** @class */ (function () {
+                    function SamplePlugin() {
+                    }
+                    SamplePlugin.prototype.init = function () { };
+                    SamplePlugin = __decorate([
+                        plugin_1.Plugin({
+                            name: "sample",
+                            dependencies: []
+                        })
+                    ], SamplePlugin);
+                    return SamplePlugin;
+                }());
+                model.install(new SamplePlugin());
+                InitSpy = sinon_1.spy(model.plugins["sample"], "init");
+            });
+            it('should not throw error', function () {
+                chai_1.expect(function () {
+                    model.register();
+                }).to.not["throw"]();
+            });
+            it('should call plugin init', function () {
+                chai_1.expect(InitSpy.called).to.be.equal(true);
+            });
+            it('should give reference to model', function () {
+                chai_1.expect(model.plugins.sample.model).to.be.equal(model);
             });
         });
     });

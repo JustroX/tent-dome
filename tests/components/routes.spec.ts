@@ -53,6 +53,24 @@ describe("Routes",function()
 			});
 
 		});
+
+		describe("#builder",function()
+		{
+			let builder : Builder<any>;
+			it("should return the builder",function()
+			{
+				builder = route.endpoint("sample1","GET");
+				expect(route.builder("sample1","GET")).to.be.equal(builder);	
+			})
+			it("should throw when builder is missing",function()
+			{
+				expect(function()
+				{
+					route.builder("sample3","GET")
+				}).to.throw().property("name","AssertionError");	
+			})
+		});
+
 		describe("#expose",function()
 		{
 			it("should expose the router",function()
@@ -79,6 +97,8 @@ describe("Routes",function()
 				expect(builder).to.be.an.instanceof(Builder);
 			});
 		});
+
+
 
 		describe("#register",function()
 		{
@@ -148,7 +168,7 @@ describe("Routes",function()
 					let endpiontSpy = spy( route, "endpoint" );
 
 					let builder = route.create();
-					expect(endpiontSpy.calledWith(route.name, "POST", false));
+					expect(endpiontSpy.calledWith(route.name, "POST"));
 					expect(builder.expose().map(x=>x.name)).to.be.deep.equal([
 						Middlewares.model("endpoint"),
 						Middlewares.create(),
@@ -166,7 +186,7 @@ describe("Routes",function()
 					let endpiontSpy = spy( route, "endpoint" );
 
 					let builder = route.update();
-					expect(endpiontSpy.calledWith(route.name, "PUT", false));
+					expect(endpiontSpy.calledWith(route.name, "PUT"));
 					expect(builder.expose().map(x=>x.name)).to.be.deep.equal([
 						Middlewares.model("endpoint"),
 						Middlewares.read(),
@@ -184,7 +204,7 @@ describe("Routes",function()
 					let endpiontSpy = spy( route, "endpoint" );
 
 					let builder = route.read();
-					expect(endpiontSpy.calledWith(route.name, "GET", false));
+					expect(endpiontSpy.calledWith(route.name, "GET"));
 					expect(builder.expose().map(x=>x.name)).to.be.deep.equal([
 						Middlewares.model("endpoint"),
 						Middlewares.read(),
@@ -199,7 +219,7 @@ describe("Routes",function()
 					let endpiontSpy = spy( route, "endpoint" );
 
 					let builder = route.list();
-					expect(endpiontSpy.calledWith(route.name, "LIST", false));
+					expect(endpiontSpy.calledWith(route.name, "LIST"));
 					expect(builder.expose().map(x=>x.name)).to.be.deep.equal([
 						Middlewares.model("endpoint"),
 						Middlewares.param(),
@@ -216,7 +236,7 @@ describe("Routes",function()
 					let endpiontSpy = spy( route, "endpoint" );
 
 					let builder = route.delete();
-					expect(endpiontSpy.calledWith(route.name, "DELETE", false));
+					expect(endpiontSpy.calledWith(route.name, "DELETE"));
 					expect(builder.expose().map(x=>x.name)).to.be.deep.equal([
 						Middlewares.model("endpoint"),
 						Middlewares.read(),
@@ -226,6 +246,8 @@ describe("Routes",function()
 				});
 			});
 		});
+
+
 
 	});
 });

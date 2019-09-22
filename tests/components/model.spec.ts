@@ -1,5 +1,7 @@
 import { Model, get, RegisterModels } from "../../components/model";
 
+import { spy } from "sinon";
+
 import { Routes } from "../../components/route";
 import { Expand } from "../../components/expand";
 import { Schema } from "../../components/schema";
@@ -111,17 +113,6 @@ describe("Model",function()
 			});
 		});
 
-		describe('#register',function()
-		{
-			it('should not throw error',()=>
-			{
-				expect(function()
-				{
-					model.register()
-				}).to.not.throw();
-			});
-		});
-
 		describe("#install",function()
 		{
 			it('should throw if invalid plugin',function()
@@ -187,9 +178,6 @@ describe("Model",function()
 			it('.plugins.pluginName must be exposed.',function()
 			{
 				delete model.plugins["sample"];
-
-				if(!model["sample"])
-					model["sample"] = undefined;
 				
 				@Plugin({
 					name : "sample",
@@ -201,6 +189,44 @@ describe("Model",function()
 				}
 				model.install(new SamplePlugin());
 				expect( model.plugins["sample"] ).to.be.an.instanceof(SamplePlugin);
+			});
+		});
+
+		describe('#register',function()
+		{
+			let InitSpy : any;
+			before(function()
+			{
+				delete model.plugins["sample"];
+				
+				@Plugin({
+					name : "sample",
+					dependencies: []
+				})
+				class SamplePlugin{
+					constructor() {}
+					init(){}
+				}
+				model.install(new SamplePlugin());
+
+				InitSpy = spy(model.plugins["sample"],"init");
+			});
+			it('should not throw error',()=>
+			{
+				expect(function()
+				{
+					model.register()
+				}).to.not.throw();
+			});
+
+			it('should call plugin init',function()
+			{				
+				expect(InitSpy.called).to.be.equal(true);		
+			});
+
+			it('should give reference to model',function()
+			{				
+				expect(model.plugins.sample.model).to.be.equal(model);		
 			});
 		});
 	});

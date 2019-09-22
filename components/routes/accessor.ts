@@ -10,7 +10,7 @@ var { unflatten } = flatten;
 import { Document as MongooseDocument , Model as MongooseModel, Schema } from "mongoose";
 
 export type Document<T> = MongooseDocument & Partial<T>;
-type Collection<T> = MongooseModel<Document<T>>;
+type Collection<T> = MongooseModel<  Document<T>  >;
 
 interface Dictionary
 {
@@ -23,7 +23,7 @@ export class Accessor<T>
 	req 		: Request  ;
 	model 		: Model<T> | undefined;
 	document 	: Document<T> | undefined ;
-	collection 	: Collection<Document<T>> | undefined;
+	collection 	: Collection<T> | undefined;
 	payload 	: Dictionary | undefined;
 	list		: Document<T>[] | undefined;
 
@@ -134,7 +134,7 @@ export class Accessor<T>
 		this.param = Parse( str );
 	}
 	
-	async FreshDocument()
+	FreshDocument()
 	{
 		Assert(this.collection,"`Model` should be called first before calling `FreshDocument`");
 		this.document = new (this.collection as Collection<T>)();

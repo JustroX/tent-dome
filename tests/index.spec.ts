@@ -145,4 +145,8 @@ describe("Tent",function()
 
 });
 
+//integration without plugins
 import "./integration.spec";
+
+
+import "./components/plugins/sanitation.spec";

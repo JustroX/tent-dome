@@ -34,6 +34,18 @@ describe("Routes", function () {
                 chai_1.expect(route.router.name).to.be.equal("router");
             });
         });
+        describe("#builder", function () {
+            var builder;
+            it("should return the builder", function () {
+                builder = route.endpoint("sample1", "GET");
+                chai_1.expect(route.builder("sample1", "GET")).to.be.equal(builder);
+            });
+            it("should throw when builder is missing", function () {
+                chai_1.expect(function () {
+                    route.builder("sample3", "GET");
+                }).to["throw"]().property("name", "AssertionError");
+            });
+        });
         describe("#expose", function () {
             it("should expose the router", function () {
                 chai_1.expect(route.expose()).to.be.equal(route.router);
@@ -94,7 +106,7 @@ describe("Routes", function () {
                 it('should create the proper endpoint', function () {
                     var endpiontSpy = sinon_1.spy(route, "endpoint");
                     var builder = route.create();
-                    chai_1.expect(endpiontSpy.calledWith(route.name, "POST", false));
+                    chai_1.expect(endpiontSpy.calledWith(route.name, "POST"));
                     chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
                         middlewares_1.Middlewares.model("endpoint"),
                         middlewares_1.Middlewares.create(),
@@ -109,7 +121,7 @@ describe("Routes", function () {
                 it('should create the proper endpoint', function () {
                     var endpiontSpy = sinon_1.spy(route, "endpoint");
                     var builder = route.update();
-                    chai_1.expect(endpiontSpy.calledWith(route.name, "PUT", false));
+                    chai_1.expect(endpiontSpy.calledWith(route.name, "PUT"));
                     chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
                         middlewares_1.Middlewares.model("endpoint"),
                         middlewares_1.Middlewares.read(),
@@ -124,7 +136,7 @@ describe("Routes", function () {
                 it('should create the proper endpoint', function () {
                     var endpiontSpy = sinon_1.spy(route, "endpoint");
                     var builder = route.read();
-                    chai_1.expect(endpiontSpy.calledWith(route.name, "GET", false));
+                    chai_1.expect(endpiontSpy.calledWith(route.name, "GET"));
                     chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
                         middlewares_1.Middlewares.model("endpoint"),
                         middlewares_1.Middlewares.read(),
@@ -136,7 +148,7 @@ describe("Routes", function () {
                 it('should create the proper endpoint', function () {
                     var endpiontSpy = sinon_1.spy(route, "endpoint");
                     var builder = route.list();
-                    chai_1.expect(endpiontSpy.calledWith(route.name, "LIST", false));
+                    chai_1.expect(endpiontSpy.calledWith(route.name, "LIST"));
                     chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
                         middlewares_1.Middlewares.model("endpoint"),
                         middlewares_1.Middlewares.param(),
@@ -149,7 +161,7 @@ describe("Routes", function () {
                 it('should create the proper endpoint', function () {
                     var endpiontSpy = sinon_1.spy(route, "endpoint");
                     var builder = route["delete"]();
-                    chai_1.expect(endpiontSpy.calledWith(route.name, "DELETE", false));
+                    chai_1.expect(endpiontSpy.calledWith(route.name, "DELETE"));
                     chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
                         middlewares_1.Middlewares.model("endpoint"),
                         middlewares_1.Middlewares.read(),

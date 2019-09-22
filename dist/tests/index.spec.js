@@ -91,4 +91,6 @@ describe("Tent", function () {
         });
     });
 });
+//integration without plugins
 require("./integration.spec");
+require("./components/plugins/sanitation.spec");

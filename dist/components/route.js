@@ -10,6 +10,7 @@ exports.__esModule = true;
 var middlewares_1 = require("./routes/middlewares");
 var builder_1 = require("./routes/builder");
 var express_1 = require("express");
+var assert = require("assert");
 var Routes = /** @class */ (function () {
     function Routes(name) {
         this.builders = [];
@@ -32,8 +33,7 @@ var Routes = /** @class */ (function () {
                 (_c = this.router)[method].apply(_c, __spreadArrays([endpoint + ":id"], builder.expose()));
         }
     };
-    Routes.prototype.endpoint = function (endpoint, method, fresh) {
-        if (fresh === void 0) { fresh = false; }
+    Routes.prototype.endpoint = function (endpoint, method) {
         var a = {
             builder: new builder_1.Builder(this.name),
             method: method,
@@ -42,6 +42,11 @@ var Routes = /** @class */ (function () {
         this.builders.push(a);
         return a.builder;
     };
+    Routes.prototype.builder = function (endpoint, method) {
+        var builder = this.builders.filter(function (x) { return x.endpoint == endpoint && x.method == method; })[0];
+        assert(builder, "Builder endpoint is not yet defined.");
+        return builder.builder;
+    };
     Routes.prototype.expose = function () {
         return this.router;
     };
@@ -49,7 +54,7 @@ var Routes = /** @class */ (function () {
      * Default Builders
      */
     Routes.prototype.create = function () {
-        var builder = this.endpoint("/", "POST", false);
+        var builder = this.endpoint("/", "POST");
         builder
             .model(this.name)
             .create()
@@ -60,7 +65,7 @@ var Routes = /** @class */ (function () {
         return builder;
     };
     Routes.prototype.update = function () {
-        var builder = this.endpoint("/", "PUT", false);
+        var builder = this.endpoint("/", "PUT");
         builder
             .model(this.name)
             .read()
@@ -71,7 +76,7 @@ var Routes = /** @class */ (function () {
         return builder;
     };
     Routes.prototype.read = function () {
-        var builder = this.endpoint("/", "GET", false);
+        var builder = this.endpoint("/", "GET");
         builder
             .model(this.name)
             .read()
@@ -79,7 +84,7 @@ var Routes = /** @class */ (function () {
         return builder;
     };
     Routes.prototype.list = function () {
-        var builder = this.endpoint("/", "LIST", false);
+        var builder = this.endpoint("/", "LIST");
         builder
             .model(this.name)
             .param()
@@ -88,7 +93,7 @@ var Routes = /** @class */ (function () {
         return builder;
     };
     Routes.prototype["delete"] = function () {
-        var builder = this.endpoint("/", "DELETE", false);
+        var builder = this.endpoint("/", "DELETE");
         builder
             .model(this.name)
             .read()

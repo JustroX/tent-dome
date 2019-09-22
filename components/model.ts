@@ -73,6 +73,12 @@ export class Model<T>
 		(this.Method as Method).register();
 		(this.Routes as Routes<T>).register();
 
+		for(let i in this.plugins)
+		{
+			this.plugins[i].model = this;
+			this.plugins[i].init();
+		}
+
 		Models[ this.name ] = this;
 	}
 

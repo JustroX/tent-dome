@@ -6,6 +6,8 @@ import { Middlewares } from "./routes/middlewares";
 import { Builder } from "./routes/builder";
 import { Router } from "express";
 
+import assert = require("assert");
+
 
 interface BuilderConfig<T>
 {
@@ -49,7 +51,7 @@ export class Routes<T>
 		}
 	}
 
-	endpoint( endpoint : string , method: Methods , fresh : boolean = false) : Builder<T>
+	endpoint( endpoint : string , method: Methods ) : Builder<T>
 	{
 		let a : BuilderConfig<T> = 
 		{
@@ -60,6 +62,13 @@ export class Routes<T>
 
 		this.builders.push(a);
 		return a.builder;
+	}
+
+	builder( endpoint: string , method: Methods ) : Builder<T>
+	{
+		let builder = this.builders.filter( ( x: BuilderConfig<T> )=> x.endpoint == endpoint && x.method == method  )[0];
+		assert(builder,"Builder endpoint is not yet defined.");
+		return builder.builder;
 	}
 
 	expose() : Router
@@ -75,7 +84,7 @@ export class Routes<T>
 
 	create() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( "/" , "POST" , false );
+		let builder : Builder<T> = this.endpoint( "/" , "POST"  );
 		
 		builder
 		 .model(this.name)
@@ -91,7 +100,7 @@ export class Routes<T>
 
 	update() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( "/" , "PUT" , false );
+		let builder : Builder<T> = this.endpoint( "/" , "PUT"  );
 		
 		builder
 		 .model(this.name)
@@ -106,7 +115,7 @@ export class Routes<T>
 
 	read() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( "/" , "GET" , false );
+		let builder : Builder<T> = this.endpoint( "/" , "GET"  );
 		
 		builder
 		 .model(this.name)
@@ -118,7 +127,7 @@ export class Routes<T>
 	
 	list() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( "/" , "LIST" , false );
+		let builder : Builder<T> = this.endpoint( "/" , "LIST"  );
 		builder
 		 .model(this.name)
 		 .param()
@@ -129,7 +138,7 @@ export class Routes<T>
 	
 	delete() : Builder<T>
 	{
-		let builder : Builder<T> = this.endpoint( "/" , "DELETE" , false );
+		let builder : Builder<T> = this.endpoint( "/" , "DELETE"  );
 		
 		builder
 		 .model(this.name)

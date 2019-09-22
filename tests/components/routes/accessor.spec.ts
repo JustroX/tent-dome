@@ -169,36 +169,24 @@ describe("Accessor",function()
 			accessor.collection = undefined;
 		});
 
-		it('should throw if model is not yet called',function(done)
+		it('should throw if model is not yet called',function()
 		{
-			accessor.FreshDocument()
-			.then(()=>
+			expect(function()
 			{
-				done(new Error("Should throw"));
-			})
-			.catch((err)=>
-			{
-				if(err.name=="AssertionError")
-					done();
-				else
-					done(err);
-			});
+				accessor.FreshDocument();
+			}).to.throw().property("name","AssertionError");
 		});
 
-		it('should not throw', function(done)
+		it('should not throw', function()
 		{
 			accessor.document = undefined;
 			accessor.Model("Person");
 
-			accessor.FreshDocument()
-			.then(()=>
+			
+			expect(function()
 			{
-				done();
-			})
-			.catch((err)=>
-			{
-				done(err);
-			});
+				accessor.FreshDocument();
+			}).to.not.throw()
 
 		});
 
@@ -491,25 +479,19 @@ describe("Accessor",function()
 
 		it('should not throw when document is defined',function(done)
 		{
-			accessor.FreshDocument().then(()=>
+			accessor.FreshDocument();
+			accessor.Save().then(()=>
 			{
-				accessor.Save().then(()=>
-				{
-					done();
-				}).catch((err)=>
-				{
-					done(err);
-				});
-			})
-			.catch((err)=>
+				done();
+			}).catch((err)=>
 			{
-				done(err)
+				done(err);
 			});
 		});
 
 		it('should save the document in the database.',async function()
 		{
-			await accessor.FreshDocument();
+			accessor.FreshDocument();
 			accessor.document.name = "Sample test";
 			accessor.document.age  =  20;
 			await accessor.Save();
@@ -573,23 +555,17 @@ describe("Accessor",function()
 		
 		it('should throw when document defined is new',function(done)
 		{
-			accessor.FreshDocument().then(()=>
+			accessor.FreshDocument();
+			accessor.Delete().then(()=>
 			{
-				accessor.Delete().then(()=>
-				{
-					done(new Error("Should throw"));
-				})
-				.catch((err)=>
-				{
-					if(err.name=="AssertionError")
-						done();
-					else
-						done(err);
-				});
+				done(new Error("Should throw"));
 			})
 			.catch((err)=>
 			{
-				done(err);
+				if(err.name=="AssertionError")
+					done();
+				else
+					done(err);
 			});
 		});
 
@@ -777,22 +753,13 @@ describe("Accessor",function()
 			}).to.throw().property("name","AssertionError");
 		});
 
-		it('should throw when document is fresh.',function(done)
+		it('should throw when document is fresh.',function()
 		{
-			accessor.FreshDocument()
-			.then(()=>
+			accessor.FreshDocument();
+			expect(function()
 			{
-				expect(function()
-				{
-					accessor.Show()
-				}).to.throw().property("name","AssertionError");
-
-				done();
-			})
-			.catch((err)=>
-			{
-				done(err);
-			});
+				accessor.Show()
+			}).to.throw().property("name","AssertionError");
 		});
 
 		it('should not throw when #Read is defined.',function(done)

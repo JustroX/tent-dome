@@ -38,6 +38,10 @@ var Model = /** @class */ (function () {
         this.Schema.register();
         this.Method.register();
         this.Routes.register();
+        for (var i in this.plugins) {
+            this.plugins[i].model = this;
+            this.plugins[i].init();
+        }
         Models[this.name] = this;
     };
     Model.prototype.install = function (plugin) {

@@ -1,4 +1,7 @@
 "use strict";
+/**
+* @module Accessor
+*/
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -41,16 +44,31 @@ var model_1 = require("../model");
 var flatten = require("flat");
 var Assert = require("assert");
 var params_1 = require("./params");
-var unflatten = flatten.unflatten;
+/** Accessor class. This would be binded to `req.tent` for the middlewares to access.
+* @typeparam T Schema interface
+*/
 var Accessor = /** @class */ (function () {
+    /**
+    * Returns a new accessor instance.
+    * @param req Express request
+    * @param res Express response
+    */
     function Accessor(req, res) {
         this.res = res;
         this.req = req;
     }
+    /**
+    * Assigns value for `Accessor.model` and `Accessor.collection`.
+    * @param name Name of the model
+    */
     Accessor.prototype.Model = function (name) {
         this.model = model_1.get(name);
         this.collection = this.model.Schema.model;
     };
+    /**
+    * Assigns value for `Accessor.payload`. Removes fields that are not defined in the schema.
+    * @param body Request body
+    */
     Accessor.prototype.Sanitize = function (body) {
         Assert(this.collection && this.model, "Sanitize can not be called without first calling Model");
         var payload = {};
@@ -62,12 +80,19 @@ var Accessor = /** @class */ (function () {
         }
         this.payload = payload;
     };
+    /**
+    * Assigns `Accessor.payload` to `Accessor.document`.
+    */
     Accessor.prototype.Assign = function () {
         Assert(this.payload, "Assign can not be called without first calling Sanitize");
         Assert(this.document, "Assign can not be called without first calling Read or FreshDocument");
         for (var i in this.payload)
             this.document.set(i, this.payload[i]);
     };
+    /**
+    * Fetches the document with an `_id` of `id` from the database and assigns it in `Accessor.document`.
+    * @param id _id of the document.
+    */
     Accessor.prototype.Read = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var _a;
@@ -85,6 +110,10 @@ var Accessor = /** @class */ (function () {
             });
         });
     };
+    /**
+    * Fetches the a query of Documents from the database and assigns them to `Accessor.list`.
+    * @param id _id of the document.
+    */
     Accessor.prototype.List = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _a, sort, filters, populate, pagination, query, _i, populate_1, field, _b, e_1;
@@ -114,6 +143,9 @@ var Accessor = /** @class */ (function () {
             });
         });
     };
+    /**
+    * Save changes of `Accessor.document` to the database.
+    */
     Accessor.prototype.Save = function () {
         return __awaiter(this, void 0, void 0, function () {
             var e_2;
@@ -136,6 +168,9 @@ var Accessor = /** @class */ (function () {
             });
         });
     };
+    /**
+    * Deletes `Accessor.document` from the database.
+    */
     Accessor.prototype.Delete = function () {
         return __awaiter(this, void 0, void 0, function () {
             var e_3;
@@ -159,6 +194,10 @@ var Accessor = /** @class */ (function () {
             });
         });
     };
+    /**
+    * Parses request query and assigns them to `Accessor.param` .
+    * @param params Req.query instance
+    */
     Accessor.prototype.Param = function (params) {
         var str = "";
         for (var i in params)
@@ -166,35 +205,40 @@ var Accessor = /** @class */ (function () {
         str = str.slice(0, str.length - 1);
         this.param = params_1.Parse(str);
     };
+    /**
+    * Assigns a new Mongoose Document at `Accessor.document` .
+    */
     Accessor.prototype.FreshDocument = function () {
         Assert(this.collection, "`Model` should be called first before calling `FreshDocument`");
         this.document = new this.collection();
     };
+    /**
+    *  Returns `Accessor.list`
+    */
     Accessor.prototype.Present = function () {
         Assert(this.list, "Present can not be called without first calling List");
-        /**
-        * @Todo sanitize output
-        */
         return this.list;
     };
+    /**
+    *  Returns `Accessor.document`
+    */
     Accessor.prototype.Show = function () {
         Assert(this.document, "Show can not be called without first calling Read");
         Assert(!this.document.isNew, "Show can not be called when FreshDocument is called.");
-        /**
-        * @Todo sanitize output
-        */
         return this.document;
     };
     return Accessor;
 }());
 exports.Accessor = Accessor;
+/** Dispatcher class. This would be binded to `res.tent` for the middlewares to access.
+*/
 var Dispatcher = /** @class */ (function () {
     function Dispatcher(req, res) {
         this.res = res;
         this.req = req;
     }
     /**
-    * From KeystoneJS
+    * sends an error response to the client.
     */
     Dispatcher.prototype.apiError = function (statusCode, error, detail) {
         if (typeof statusCode !== 'number' && detail === undefined) {

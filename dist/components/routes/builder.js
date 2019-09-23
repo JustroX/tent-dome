@@ -1,61 +1,116 @@
 "use strict";
+/**
+* ### Builder Module
+* This module is used for intuitive construction of route enpoints via chaining middlewares
+*
+* Example:
+*
+* ```
+* let builder = new Builder("Builder");
+* builder
+*    .parseBody()
+*    .parseCookie()
+*    .getDatabaseDocument()
+*    .custom((req,res,next)=>
+*    {
+*      	console.log("Hello");
+*      	next();
+*    })
+*    .userDefined1()
+*    .userDefined2()
+*    .success();
+*
+*
+* let middlewares = builder.expose();
+* ```
+*
+* @module Builder
+*/
 exports.__esModule = true;
 var middlewares_1 = require("./middlewares");
 var Assert = require("assert");
+/**
+* Route endpoint builder. A class for intuitive construction of route enpoints by chaining middlewares.
+*
+* @typeparam T Schema interface.
+*
+*/
 var Builder = /** @class */ (function () {
+    /**
+    * @param name Name of the builder.
+    * @param options builder options.
+    */
     function Builder(name, options) {
         if (options === void 0) { options = {
             "import builtin": true
         }; }
+        /** Current middleware sequence*/
         this.middlewares = [];
+        /** Current head index*/
         this.head = 0;
+        /** Name of the builder */
         this.name = "";
-        //Builtin functions
-        this.model = undefined;
-        this.create = undefined;
-        this.save = undefined;
-        this.read = undefined;
-        this.remove = undefined;
-        this.assign = undefined;
-        this.sanitize = undefined;
-        this.param = undefined;
-        this.list = undefined;
-        this.success = undefined;
-        this.show = undefined;
-        this.present = undefined;
+        /** Dictionary for defined middleware factories*/
         this.builds = {};
         this.name = name;
         if (options["import builtin"])
             this.importBuiltIn();
     }
+    /**
+    * Adds a custom middleware after the current head. Moves head by one.
+    * @param mw Middleware to add.
+    */
     Builder.prototype.custom = function (mw) {
         this.middlewares.splice(this.head, 0, mw);
         this.head++;
         return this;
     };
+    /**
+    * Points head to another index.
+    * @param index New head index.
+    */
     Builder.prototype.pointHead = function (index) {
         Assert(index >= 0 && index < this.middlewares.length, "Head index out of range");
         this.head = index;
         return this;
     };
+    /**
+    * Returns the current middleware pointed by the head.
+    */
     Builder.prototype.lookHead = function () {
         return this.middlewares[this.head];
     };
+    /**
+    * Points head to the previous middleware.
+    */
     Builder.prototype.prevHead = function () {
         this.pointHead(this.head - 1);
         return this;
     };
+    /**
+    * Points head to the next middleware.
+    */
     Builder.prototype.nextHead = function () {
         this.pointHead(this.head + 1);
         return this;
     };
+    /**
+    * Replaces middleware on the head by another middleware.
+    * @param mw Middlware to replace.
+    */
     Builder.prototype.replaceHead = function (mw) {
         this.middlewares[this.head] = mw;
     };
+    /**
+    * Removes the last middleware on the sequence. Moves the head to the previous one if the head is pointing to the last element.
+    */
     Builder.prototype.pop = function () {
         this.middlewares.pop();
         this.head = Math.min(this.head, this.middlewares.length - 1);
     };
+    /**
+    * Import built in middlewares.
+    */
     Builder.prototype.importBuiltIn = function () {
         this.define("model", middlewares_1.Middlewares.model(this.name));
         this.define("create", middlewares_1.Middlewares.create());
@@ -70,6 +125,11 @@ var Builder = /** @class */ (function () {
         this.define("show", middlewares_1.Middlewares.show());
         this.define("present", middlewares_1.Middlewares.present());
     };
+    /**
+    * Defines a reusable middleware inside the builder. Chainable middleware factory will be available once called.
+    * @param name Name of the middleware
+    * @param mw Middleware
+    */
     Builder.prototype.define = function (name, mw) {
         Assert(!this[name], "Builder pipe is already defined");
         var _this = this;
@@ -85,6 +145,11 @@ var Builder = /** @class */ (function () {
             }
         });
     };
+    /**
+    * Inserts a middleware before a reusable middleware.
+    * @param name Name of the reusable middleware
+    * @param mw Middleware
+    */
     Builder.prototype.pre = function (name, mw) {
         for (var i = 0; i < this.middlewares.length; i++) {
             if (this.middlewares[i].tag == name) {
@@ -93,6 +158,11 @@ var Builder = /** @class */ (function () {
             }
         }
     };
+    /**
+    * Inserts a middleware after a reusable middleware.
+    * @param name Name of the reusable middleware
+    * @param mw Middleware
+    */
     Builder.prototype.post = function (name, mw) {
         for (var i = 0; i < this.middlewares.length; i++) {
             if (this.middlewares[i].tag == name) {
@@ -101,6 +171,9 @@ var Builder = /** @class */ (function () {
             }
         }
     };
+    /**
+    * Returns the sequence of middlewares.
+    */
     Builder.prototype.expose = function () {
         return this.middlewares;
     };

@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "tsc --outDir dist --watch",
     "test": "cls && tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators && cls && mocha ./dist/tests/index.spec.js --exit",
-    "test-watch": "cls && tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators --watch "
+    "test-watch": "cls && tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators --watch ",
+    "create-docs": "typedoc --readme README.md --out docs/ index.ts --mode modules --name Tent"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,7 @@
     "crud"
   ],
   "author": "Justine Che T. Romero",
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/JustroX/tent-dome/issues"
   },
@@ -56,6 +57,8 @@
     "mongoose": "^5.6.12",
     "object-assign": "^4.1.1",
     "pluralize": "^8.0.0",
-    "query-string": "^6.8.3"
+    "query-string": "^6.8.3",
+    "typedoc": "^0.14.2",
+    "typedoc-plugin-external-module-name": "^2.1.0"
   }
 }

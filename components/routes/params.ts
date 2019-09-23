@@ -1,6 +1,33 @@
+/**
+* @module Params
+*/
+
+
+/*******
+*
+*	Copyright (C) 2019  Justine Che T. Romero
+*
+*    This program is free software: you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation, either version 3 of the License, or
+*    any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*
+********/
+
+
+
 import { parse } from "query-string";
 
 
+/** Object definition for query parameters. */
 export interface QueryParams
 {
 	sort 	   : 
@@ -19,11 +46,15 @@ export interface QueryParams
 	populate   : string[];
 }
 
+/** Object definition for unprocessed queries`. */
 export interface RawQuery
 {
 	[ key : string ] : string | number | boolean;
 }
 
+/** Returns a processed query from string url parameters
+ * @param param parameters from url string. e.g. `limit=120&offset=0`
+ */
 export function Parse( param : string ) : QueryParams 
 {
 	let raw : RawQuery = parse(param,{
@@ -40,6 +71,11 @@ export function Parse( param : string ) : QueryParams
 	return output;
 }
 
+/**
+* Parses the sort part of the query and assigns them properly to `result`
+* @param result processed query param reference
+* @param raw unprocessed query param reference
+*/
 export function Sort( result : QueryParams , raw : RawQuery )
 {
 	let extractField = ( fieldValue : string ) : { val: string , orientation : number } =>
@@ -48,10 +84,6 @@ export function Sort( result : QueryParams , raw : RawQuery )
 		return { val : fieldValue.slice( indexOfDash, ) , orientation : 1 - 2*Number(fieldValue[0]=='-') };
 	};
 
-	/**
-	 * @todo Validate if field has read permissions 
-	 */
-
 	if(raw.sort)
 	{
 		let { val , orientation } = extractField(raw.sort as string);
@@ -59,18 +91,33 @@ export function Sort( result : QueryParams , raw : RawQuery )
 	}
 }
 
+/**
+* Parses the pagination part of the query and assigns them properly to `result`
+* @param result processed query param reference
+* @param raw unprocessed query param reference
+*/
 export function Pagination( result : QueryParams , raw : RawQuery )
 {
 	if(raw.limit)  result.pagination.limit  = raw.limit  as number;
 	if(raw.offset) result.pagination.offset = raw.offset as number;
 }
 
+/**
+* Parses the filter part of the query and assigns them properly to `result`
+* @param result processed query param reference
+* @param raw unprocessed query param reference
+*/
 export function Filters(  result : QueryParams , raw : RawQuery  )
 {
 	FilterSanitize( result, raw );
 	FilterParse( result );
 }
 
+/**
+* Removes reserved keywords from the the query and assigns remaining fields `result`
+* @param result processed query param reference
+* @param raw unprocessed query param reference
+*/
 export function FilterSanitize(   result : QueryParams , raw : RawQuery   )
 {
 	const BLACKLIST = [ "sort"  , "limit", "offset" , "expand" ];
@@ -87,6 +134,13 @@ export function FilterSanitize(   result : QueryParams , raw : RawQuery   )
 
 }
 
+
+/**
+* Parses the filter part of the query and assigns them properly to `result`.
+* Parses special data types tokens.
+* @param result processed query param reference
+* @param raw unprocessed query param reference
+*/
 export function FilterParse( result : QueryParams )
 {
 	for(let key in result.filters)
@@ -136,6 +190,10 @@ export function FilterParse( result : QueryParams )
 	}
 }
 
+/**
+* Parses a string to a certain structure and data type.
+* @param value string to be parsed.
+*/
 export function ValueParse( value : string ) : any
 {
 	let prefix : string = value.slice( 0, 4 );
@@ -160,6 +218,12 @@ export function ValueParse( value : string ) : any
 	return prefix + unparsedValue;
 }
 
+
+/**
+* Parses the expand part of the query and assigns them properly to `result`.
+* @param result processed query param reference
+* @param raw unprocessed query param reference
+*/
 export function Expand(  result : QueryParams , raw : RawQuery  )
 {
 	if(!raw.expand) return;		

@@ -1,6 +1,30 @@
 "use strict";
+/**
+* @module Params
+*/
 exports.__esModule = true;
+/*******
+*
+*	Copyright (C) 2019  Justine Che T. Romero
+*
+*    This program is free software: you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation, either version 3 of the License, or
+*    any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*
+********/
 var query_string_1 = require("query-string");
+/** Returns a processed query from string url parameters
+ * @param param parameters from url string. e.g. `limit=120&offset=0`
+ */
 function Parse(param) {
     var raw = query_string_1.parse(param, {
         parseNumbers: true,
@@ -14,20 +38,27 @@ function Parse(param) {
     return output;
 }
 exports.Parse = Parse;
+/**
+* Parses the sort part of the query and assigns them properly to `result`
+* @param result processed query param reference
+* @param raw unprocessed query param reference
+*/
 function Sort(result, raw) {
     var extractField = function (fieldValue) {
         var indexOfDash = fieldValue.indexOf('-') + 1;
         return { val: fieldValue.slice(indexOfDash), orientation: 1 - 2 * Number(fieldValue[0] == '-') };
     };
-    /**
-     * @todo Validate if field has read permissions
-     */
     if (raw.sort) {
         var _a = extractField(raw.sort), val = _a.val, orientation_1 = _a.orientation;
         result.sort[val] = orientation_1;
     }
 }
 exports.Sort = Sort;
+/**
+* Parses the pagination part of the query and assigns them properly to `result`
+* @param result processed query param reference
+* @param raw unprocessed query param reference
+*/
 function Pagination(result, raw) {
     if (raw.limit)
         result.pagination.limit = raw.limit;
@@ -35,11 +66,21 @@ function Pagination(result, raw) {
         result.pagination.offset = raw.offset;
 }
 exports.Pagination = Pagination;
+/**
+* Parses the filter part of the query and assigns them properly to `result`
+* @param result processed query param reference
+* @param raw unprocessed query param reference
+*/
 function Filters(result, raw) {
     FilterSanitize(result, raw);
     FilterParse(result);
 }
 exports.Filters = Filters;
+/**
+* Removes reserved keywords from the the query and assigns remaining fields `result`
+* @param result processed query param reference
+* @param raw unprocessed query param reference
+*/
 function FilterSanitize(result, raw) {
     var BLACKLIST = ["sort", "limit", "offset", "expand"];
     for (var i in raw) {
@@ -52,6 +93,12 @@ function FilterSanitize(result, raw) {
     }
 }
 exports.FilterSanitize = FilterSanitize;
+/**
+* Parses the filter part of the query and assigns them properly to `result`.
+* Parses special data types tokens.
+* @param result processed query param reference
+* @param raw unprocessed query param reference
+*/
 function FilterParse(result) {
     for (var key in result.filters) {
         var filterValue = result.filters[key];
@@ -85,6 +132,10 @@ function FilterParse(result) {
     }
 }
 exports.FilterParse = FilterParse;
+/**
+* Parses a string to a certain structure and data type.
+* @param value string to be parsed.
+*/
 function ValueParse(value) {
     var prefix = value.slice(0, 4);
     var unparsedValue = value.slice(4);
@@ -107,6 +158,11 @@ function ValueParse(value) {
     return prefix + unparsedValue;
 }
 exports.ValueParse = ValueParse;
+/**
+* Parses the expand part of the query and assigns them properly to `result`.
+* @param result processed query param reference
+* @param raw unprocessed query param reference
+*/
 function Expand(result, raw) {
     if (!raw.expand)
         return;

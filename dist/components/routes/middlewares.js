@@ -1,4 +1,7 @@
 "use strict";
+/**
+* @module Middlewares
+*/
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -38,21 +41,34 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var accessor_1 = require("./accessor");
 var Assert = require("assert");
+/** Collection of built-in middlewares.*/
 var Middleware = /** @class */ (function () {
     function Middleware() {
     }
     ;
+    /** Middleware that initializes tent.
+    * @param req Express request
+    * @param res Express response
+    * @param next Express next function
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.initTent = function (req, res, next) {
         req.tent = new accessor_1.Accessor(req, res);
         res.tent = new accessor_1.Dispatcher(req, res);
         next();
     };
+    /** Returns a middleware that makes the Model available in the request object.
+    * @param name Name of the tent model.
+    */
     Middleware.prototype.model = function (name) {
         return function modelMiddleware(req, res, next) {
             req.tent.Model(name);
             next();
         };
     };
+    /** Returns a middleware that fetches a document from the database. The document id will be from `req.params.id` and will be saved at `req.tent.document`.
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.read = function () {
         return function readMiddleware(req, res, next) {
             return __awaiter(this, void 0, void 0, function () {
@@ -81,6 +97,10 @@ var Middleware = /** @class */ (function () {
             });
         };
     };
+    /** Returns a middleware that generates a new database document.
+    * The new document is accessible via `req.tent.document`
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.create = function () {
         return function createMiddleware(req, res, next) {
             Assert(req.tent.collection, "'create' middleware can not be called without calling 'model' middleware first.");
@@ -88,6 +108,9 @@ var Middleware = /** @class */ (function () {
             next();
         };
     };
+    /** Returns a middleware that assigns `req.body` to `req.tent.payload` while removing the fields which were not defined in the schema of the model.
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.sanitize = function () {
         return function sanitizeMiddleware(req, res, next) {
             Assert(req.tent.collection, "'sanitize' middleware can not be called without calling 'model' middleware first.");
@@ -96,6 +119,9 @@ var Middleware = /** @class */ (function () {
             next();
         };
     };
+    /** Returns a middleware that sets `req.tent.document` to `req.tent.payload`.
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.assign = function () {
         return function assignMiddleware(req, res, next) {
             Assert(req.tent.collection, "'assign' middleware can not be called without calling 'model' middleware first.");
@@ -105,6 +131,9 @@ var Middleware = /** @class */ (function () {
             next();
         };
     };
+    /** Returns a middleware that saves `req.tent.document` to the database.
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.save = function () {
         return function saveMiddleware(req, res, next) {
             return __awaiter(this, void 0, void 0, function () {
@@ -132,6 +161,9 @@ var Middleware = /** @class */ (function () {
             });
         };
     };
+    /** Returns a middleware that removes `req.tent.document` from the database.
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.remove = function () {
         return function removeMiddleware(req, res, next) {
             return __awaiter(this, void 0, void 0, function () {
@@ -159,6 +191,9 @@ var Middleware = /** @class */ (function () {
             });
         };
     };
+    /** Returns a middleware that would query `req.tent.param` from the database and assigns the result to `req.tent.list`.
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.list = function () {
         return function listMiddleware(req, res, next) {
             return __awaiter(this, void 0, void 0, function () {
@@ -186,12 +221,18 @@ var Middleware = /** @class */ (function () {
             });
         };
     };
+    /** Returns a middleware that would parse `req.query` into a tent-readable format and saves it at `req.tent.param`.
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.param = function () {
         return function paramMiddleware(req, res, next) {
             req.tent.Param(req.query);
             next();
         };
     };
+    /** Returns a middleware that would respond a status code of 200.
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.success = function () {
         return function successMiddleware(req, res, next) {
             res.status(200).send({
@@ -200,12 +241,18 @@ var Middleware = /** @class */ (function () {
             });
         };
     };
+    /** Returns a middleware that would respond a status code of 200 and `req.tent.document`
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.show = function () {
         return function showMiddleware(req, res, next) {
             Assert(req.tent.document, "'show' middleware can not be called without calling 'read' or 'create' middleware first.");
             res.status(200).send(req.tent.Show());
         };
     };
+    /** Returns a middleware that would respond a status code of 200 and `req.tent.list`
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.present = function () {
         return function presentMiddleware(req, res, next) {
             res.status(200).send(req.tent.Present());

@@ -13,6 +13,7 @@ npm install https://github.com/JustroX/tent-dome.git
 ```
 
 
+
 ## Quickstart - Tent application in 26 lines.
 ```js
 import { Tent } from "tent-dome";
@@ -65,6 +66,8 @@ GET :3000/api/books
 DELETE :3000/api/books/{id}
 ```
 
+## Documentation
+See this [link](https://justrox.github.io/tent-dome/) for the documentation.
 
 
 ## Roadmap Core

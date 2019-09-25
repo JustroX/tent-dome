@@ -112,7 +112,7 @@ export class Model<T>
 	/**
 	* Expand definitions of the Model.
 	*/
-	Expand 		: Expand | undefined;
+	Expand 		: Expand ;
 
 
 	/**

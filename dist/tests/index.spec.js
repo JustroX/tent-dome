@@ -93,4 +93,6 @@ describe("Tent", function () {
 });
 //integration without plugins
 require("./integration.spec");
+//built-in plugins
 require("./components/plugins/sanitation.spec");
+require("./components/plugins/validation.spec");

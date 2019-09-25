@@ -28,7 +28,8 @@ describe("Middlewares",function()
 	{
 		name : string,
 		age  : number,
-		date : Date
+		date : Date,
+		bubble? : any
 	}
 
 
@@ -347,13 +348,6 @@ describe("Middlewares",function()
 			});
 
 		});
-
-		it("should remove forbidden keys");
-	});
-
-	describe("#validate",function()
-	{
-		todo();
 	});
 
 	describe("#assign",function()
@@ -672,8 +666,8 @@ describe("Middlewares",function()
 		it("should parse params properly",function(done)
 		{
 			req.query = {
-				key1  : "a",
-				key2  : "12..15",
+				name  : "a",
+				age  : "12..15",
 				sort  : "-name",
 				limit : "1",
 				offset: "12",
@@ -688,7 +682,7 @@ describe("Middlewares",function()
 					expect(req.tent.param).to.be.deep.equal({ 
 						sort: { name: -1 },
 						pagination: { limit: 1, offset: 12 },
-						filters: { key1 : "a" , key2 : { $gte: "12", $lte: "15" } },
+						filters: { name : "a" , age : { $gte: "12", $lte: "15" } },
 						populate : ["bubble"]
 					});
 					done();
@@ -707,10 +701,16 @@ describe("Middlewares",function()
 
 	describe("#list",function()
 	{
-		before(function(done)
+		before(async function()
 		{
 			req.tent.param = undefined;
 
+			let Bubble = (get("Bubble") as Model<any>).Schema.model;
+			
+			let bubbleDoc = new Bubble();
+			bubbleDoc.name = "HELLO";
+			await bubbleDoc.save();
+			
 			//create test documents
 			const docs : SampleSchema[] = 
 			[
@@ -727,14 +727,15 @@ describe("Middlewares",function()
 				{
 					name: "Person 3",
 					age : 100,
-					date: new Date()
+					date: new Date(),
+					bubble: bubbleDoc._id
 				},
 			];
-			(async()=>
-			{
-				await req.tent.collection.deleteMany({});
-				req.tent.collection.insertMany(docs,done);
-			})();
+
+
+			await req.tent.collection.deleteMany({});
+			await req.tent.collection.insertMany(docs);
+			
 		});
 
 		after(async function()
@@ -885,9 +886,54 @@ describe("Middlewares",function()
 		});
 
 
-		describe('should work properly on expand',function()
+		it('should work properly on expand',function(done)
 		{
-			todo();
+			req.query = { expand: ["bubble"] };
+			promisify(Middlewares.param(),req,res)
+			.then(()=>
+			{
+				promisify(Middlewares.list(),req,res)
+				.then(()=>
+				{
+					try
+					{
+						expect(req.tent.list).to.exist;
+						expect(req.tent.list.length).to.be.equal(3);
+						expect(req.tent.list[2].age).to.be.equal(100);
+						expect((req.tent.list[2].bubble as any).name).to.be.equal("HELLO");
+						done();
+					}
+					catch(err)
+					{
+						done(err)
+					}
+				}).catch((err)=>{done(err);});
+			}).catch((err)=>{done(err);})
+		});
+
+		it('should work properly on expand - remove expand',function(done)
+		{
+			req.query = { expand: [] };
+			promisify(Middlewares.param(),req,res)
+			.then(()=>
+			{
+				promisify(Middlewares.list(),req,res)
+				.then(()=>
+				{
+					try
+					{
+						expect(req.tent.list).to.exist;
+						expect(req.tent.list.length).to.be.equal(3);
+						expect(req.tent.list[2].age).to.be.equal(100);
+						expect((req.tent.list[2].bubble as any).name).to.not.exist;
+						done();
+					}
+					catch(err)
+					{
+						done(err)
+					}
+				}).catch((err)=>{done(err);});
+			}).catch((err)=>{done(err);})
 		});
 	});
 
@@ -1024,7 +1070,6 @@ describe("Middlewares",function()
 			.catch((err)=>{done(err)});
 		});
 
-		it('should sanitize output.');
 	});
 
 
@@ -1116,7 +1161,6 @@ describe("Middlewares",function()
 			})
 			.catch(done);
 		});
-		it('should sanitize list');
 
 	});
 

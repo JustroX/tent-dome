@@ -46,10 +46,22 @@
 *
 */
 
-
-import { Request, Response, NextFunction } from "express";
 import { Middlewares } from "./middlewares";
+import { Accessor, Dispatcher } from "./accessor";
+
 import Assert = require("assert");
+import { Request as ExpressRequest, Response  as ExpressResponse,NextFunction } from "express";
+
+
+interface Request extends ExpressRequest
+{
+	tent: Accessor<any>
+}
+interface Response extends ExpressResponse
+{
+	tent: Dispatcher
+}
+
 
 /** Builder options */
 export interface BuilderOptions

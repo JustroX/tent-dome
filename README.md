@@ -72,8 +72,8 @@ See this [link](https://justrox.github.io/tent-dome/) for the documentation.
 
 ## Roadmap Core
 - [x] Sanitation
-- [ ] Validation
-- [ ] Expand Query
+- [x] Validation
+- [x] Expand Query
 - [ ] Authentication Plugin
 - [ ] Permissions Plugin
 - [ ] Rate Limiting

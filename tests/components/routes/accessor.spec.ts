@@ -9,8 +9,6 @@ import { createRequest, createResponse } from "node-mocks-http";
 
 import chaiAsPromised = require("chai-as-promised");
 import mongoose = require("mongoose");
-
-
 use(chaiAsPromised);
 
 //precondition
@@ -31,11 +29,13 @@ describe("Accessor",function()
 		{
 			sublayer: number
 		},
-		not_field?: number
+		not_field?: number,
+		bubble ?: any
 	}
 
 	let accessor 	: Accessor<SampleSchema>;
 	let dispatcher  ;
+	let  bubble : Model<any> ;
 
 	before(function(done)
 	{
@@ -48,15 +48,26 @@ describe("Accessor",function()
 			layer :
 			{
 				sublayer: Number
-			}
+			},
+			bubble : { type: mongoose.Schema.Types.ObjectId, ref: "Bubble"}
 		});
+
+		bubble = new Model<any>("Bubble");
+		bubble.define({
+			name : String
+		});
+
+		model.Expand.add("bubble","name _id");
+
 		model.register();
-		
+		bubble.register();
+
 		process.nextTick(function()
 		{
 			mongoose.connection.dropDatabase(done);
 		});
 	});
+
 
 	describe("#constructor",function()
 	{
@@ -67,6 +78,11 @@ describe("Accessor",function()
 				accessor = new Accessor<any>(req,res);
 			}).to.not.throw();
 		});
+
+		it('should have a scope `plugins` for plugins',function()
+		{
+			expect(accessor.plugins).to.exist;
+		})
 	});
 
 	describe("#Model",function()
@@ -154,11 +170,6 @@ describe("Accessor",function()
 				name : "sample"
 			});
 		});
-	});
-
-	describe("#Validate",function()
-	{
-		todo();
 	});
 
 	describe("#FreshDocument",function()
@@ -340,21 +351,34 @@ describe("Accessor",function()
 
 	describe("#Param",function()
 	{
+		before(function()
+		{
+			// name : String,
+			// age  : Number,
+			// date : {  type: Date, default : Date.now },
+			// layer :
+			// {
+			// 	sublayer: Number
+			// }
+		});
+
 		it("should parse params properly",function()
 		{
 			accessor.Param({
-				key1  : "a",
-				key2  : "12..15",
+				name  : "a",
+				age  : "12..15",
+				"layer.sublayer": "2",
+				"unicorns": "12",
 				sort  : "-name",
 				limit : "1",
 				offset: "12",
-				expand: "bubble"
+				expand: "bubble,buttercup,blossom"
 			});
-			// accessor.Param("key1=a&key2=12..15&sort=-name&limit=1&offset=12&expand=bubble");
+			// accessor.Param("name=a&age=12..15&sort=-name&limit=1&offset=12&expand=bubble");
 			expect(accessor.param).to.be.deep.equal({ 
 				sort: { name: -1 },
 				pagination: { limit: 1, offset: 12 },
-				filters: { key1 : "a" , key2 : { $gte: "12", $lte: "15" } },
+				filters: { name : "a" , age : { $gte: "12", $lte: "15" }, "layer.sublayer" : 2 },
 				populate : ["bubble"]
 			});
 		});
@@ -363,9 +387,14 @@ describe("Accessor",function()
 
 	describe("#List",function()
 	{
-		before(function(done)
+		before(async function()
 		{
 			accessor.param = undefined;
+
+			let Bubble = (bubble as Model<any>).Schema.model;
+			let bubbleDoc = new Bubble();
+			bubbleDoc.name = "HELLO";
+			await bubbleDoc.save();
 
 			//create test documents
 			const docs : SampleSchema[] = 
@@ -383,14 +412,13 @@ describe("Accessor",function()
 				{
 					name: "Person 3",
 					age : 100,
-					date: new Date()
+					date: new Date(),
+					bubble : bubbleDoc._id
 				},
 			];
-			(async()=>
-			{
-				await accessor.collection.deleteMany({});
-				accessor.collection.insertMany(docs,done);
-			})();
+
+			await accessor.collection.deleteMany({});
+			await accessor.collection.insertMany(docs);
 		});
 
 		after(async function()
@@ -448,9 +476,26 @@ describe("Accessor",function()
 			expect(accessor.list[0].age).to.be.equal(20);
 		});
 
-		describe('should work properly on expand',function()
+		it('should work properly on expand',function(done)
 		{
-			todo();
+			accessor.Param({ expand: "bubble" });
+			accessor.List().then(()=>
+			{
+				try
+				{
+					expect(accessor.list).to.exist;
+					expect(accessor.list.length).to.be.equal(3);
+					expect(accessor.list[2].age).to.be.equal(100);
+					expect((accessor.list[2].bubble as any).name).to.be.equal("HELLO");
+					done();
+				}
+				catch(err)
+				{
+					done(err)
+				}
+			})
+			.catch(done);
+
 		});
 	});
 
@@ -711,7 +756,6 @@ describe("Accessor",function()
 				done(err);
 			});
 		});
-		it('should sanitize list');
 
 	});
 

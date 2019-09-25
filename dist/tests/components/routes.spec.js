@@ -57,8 +57,6 @@ describe("Routes", function () {
                 builder = route.endpoint("sample", "GET");
                 chai_1.expect(route.builders.map(function (x) { return x.builder; })).to.include(builder);
             });
-            it('should create fresh builder');
-            it('should create non-fresh builder');
             it('should return the builder', function () {
                 chai_1.expect(builder).to.be.an["instanceof"](builder_1.Builder);
             });

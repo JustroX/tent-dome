@@ -72,6 +72,9 @@ export class Accessor<T>
 	/** Parsed url parameters. Value is undefined untial Param() is called */
 	param		: QueryParams | undefined;
 
+	/** Scope reserved for plugins. */
+	plugins 	: Dictionary = {};
+
 	/** 
 	* Returns a new accessor instance.
 	* @param req Express request
@@ -210,9 +213,29 @@ export class Accessor<T>
 		let str : string= "";
 		for(let i in params)
 			str += i + "=" + params[i] + '&';
-		str = str.slice(0,str.length-1);
 
-		this.param = Parse( str );
+		str = str.slice(0,str.length-1);
+		let param = Parse( str);
+
+		//schema keys
+		let paths : string[] = Object.keys(((this.collection as Collection<T>).schema as Schema & { paths: Dictionary}).paths) ;
+
+		//remove fields that are not expandable
+		param.populate = param.populate.filter((x : string)=>(this.model as Model<T>).Expand.isExpandable(x)); 
+		//remove fields that are not defined
+		param.populate = param.populate.filter((x : string)=>(this.model as Model<T>).Expand.isExpandable(x)); 
+		
+		//sort
+		for( let i in param.sort )
+			if( paths.indexOf(i) == -1 )
+				delete param.sort[i];
+
+		//filters
+		for( let i in param.filters )
+			if( paths.indexOf(i) == -1 )
+				delete param.filters[i];
+		
+		this.param  = param;
 	}
 	
 	/**

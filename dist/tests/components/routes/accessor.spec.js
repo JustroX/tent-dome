@@ -39,7 +39,6 @@ exports.__esModule = true;
 var accessor_1 = require("../../../components/routes/accessor");
 var model_1 = require("../../../components/model");
 var chai_1 = require("chai");
-var util_1 = require("../../util");
 var node_mocks_http_1 = require("node-mocks-http");
 var chaiAsPromised = require("chai-as-promised");
 var mongoose = require("mongoose");
@@ -51,6 +50,7 @@ describe("Accessor", function () {
     var res = node_mocks_http_1.createResponse();
     var accessor;
     var dispatcher;
+    var bubble;
     before(function (done) {
         var model = {};
         model = new model_1.Model("Person");
@@ -60,9 +60,16 @@ describe("Accessor", function () {
             date: { type: Date, "default": Date.now },
             layer: {
                 sublayer: Number
-            }
+            },
+            bubble: { type: mongoose.Schema.Types.ObjectId, ref: "Bubble" }
         });
+        bubble = new model_1.Model("Bubble");
+        bubble.define({
+            name: String
+        });
+        model.Expand.add("bubble", "name _id");
         model.register();
+        bubble.register();
         process.nextTick(function () {
             mongoose.connection.dropDatabase(done);
         });
@@ -72,6 +79,9 @@ describe("Accessor", function () {
             chai_1.expect(function () {
                 accessor = new accessor_1.Accessor(req, res);
             }).to.not["throw"]();
+        });
+        it('should have a scope `plugins` for plugins', function () {
+            chai_1.expect(accessor.plugins).to.exist;
         });
     });
     describe("#Model", function () {
@@ -133,9 +143,6 @@ describe("Accessor", function () {
                 name: "sample"
             });
         });
-    });
-    describe("#Validate", function () {
-        util_1.todo();
     });
     describe("#FreshDocument", function () {
         before(function () {
@@ -271,57 +278,77 @@ describe("Accessor", function () {
         });
     });
     describe("#Param", function () {
+        before(function () {
+            // name : String,
+            // age  : Number,
+            // date : {  type: Date, default : Date.now },
+            // layer :
+            // {
+            // 	sublayer: Number
+            // }
+        });
         it("should parse params properly", function () {
             accessor.Param({
-                key1: "a",
-                key2: "12..15",
+                name: "a",
+                age: "12..15",
+                "layer.sublayer": "2",
+                "unicorns": "12",
                 sort: "-name",
                 limit: "1",
                 offset: "12",
-                expand: "bubble"
+                expand: "bubble,buttercup,blossom"
             });
-            // accessor.Param("key1=a&key2=12..15&sort=-name&limit=1&offset=12&expand=bubble");
+            // accessor.Param("name=a&age=12..15&sort=-name&limit=1&offset=12&expand=bubble");
             chai_1.expect(accessor.param).to.be.deep.equal({
                 sort: { name: -1 },
                 pagination: { limit: 1, offset: 12 },
-                filters: { key1: "a", key2: { $gte: "12", $lte: "15" } },
+                filters: { name: "a", age: { $gte: "12", $lte: "15" }, "layer.sublayer": 2 },
                 populate: ["bubble"]
             });
         });
     });
     describe("#List", function () {
-        before(function (done) {
-            var _this = this;
-            accessor.param = undefined;
-            //create test documents
-            var docs = [
-                {
-                    name: "Person 1",
-                    age: 2,
-                    date: new Date()
-                },
-                {
-                    name: "Person 2",
-                    age: 20,
-                    date: new Date()
-                },
-                {
-                    name: "Person 3",
-                    age: 100,
-                    date: new Date()
-                },
-            ];
-            (function () { return __awaiter(_this, void 0, void 0, function () {
+        before(function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var Bubble, bubbleDoc, docs;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, accessor.collection.deleteMany({})];
+                        case 0:
+                            accessor.param = undefined;
+                            Bubble = bubble.Schema.model;
+                            bubbleDoc = new Bubble();
+                            bubbleDoc.name = "HELLO";
+                            return [4 /*yield*/, bubbleDoc.save()];
                         case 1:
                             _a.sent();
-                            accessor.collection.insertMany(docs, done);
+                            docs = [
+                                {
+                                    name: "Person 1",
+                                    age: 2,
+                                    date: new Date()
+                                },
+                                {
+                                    name: "Person 2",
+                                    age: 20,
+                                    date: new Date()
+                                },
+                                {
+                                    name: "Person 3",
+                                    age: 100,
+                                    date: new Date(),
+                                    bubble: bubbleDoc._id
+                                },
+                            ];
+                            return [4 /*yield*/, accessor.collection.deleteMany({})];
+                        case 2:
+                            _a.sent();
+                            return [4 /*yield*/, accessor.collection.insertMany(docs)];
+                        case 3:
+                            _a.sent();
                             return [2 /*return*/];
                     }
                 });
-            }); })();
+            });
         });
         after(function () {
             return __awaiter(this, void 0, void 0, function () {
@@ -410,8 +437,20 @@ describe("Accessor", function () {
                 });
             });
         });
-        describe('should work properly on expand', function () {
-            util_1.todo();
+        it('should work properly on expand', function (done) {
+            accessor.Param({ expand: "bubble" });
+            accessor.List().then(function () {
+                try {
+                    chai_1.expect(accessor.list).to.exist;
+                    chai_1.expect(accessor.list.length).to.be.equal(3);
+                    chai_1.expect(accessor.list[2].age).to.be.equal(100);
+                    chai_1.expect(accessor.list[2].bubble.name).to.be.equal("HELLO");
+                    done();
+                }
+                catch (err) {
+                    done(err);
+                }
+            })["catch"](done);
         });
     });
     describe("#Save", function () {
@@ -660,7 +699,6 @@ describe("Accessor", function () {
                 done(err);
             });
         });
-        it('should sanitize list');
     });
     describe("#Show", function () {
         var _id = "";

@@ -372,7 +372,6 @@ describe("Params",function()
 			expect(output.populate).to.be.deep.equal(["key1","key2"]);
 		});
 
-		it("should not expand fields that are not expandable")
 	});
 
 	describe("#Parse",function()

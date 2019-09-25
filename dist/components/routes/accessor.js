@@ -54,6 +54,8 @@ var Accessor = /** @class */ (function () {
     * @param res Express response
     */
     function Accessor(req, res) {
+        /** Scope reserved for plugins. */
+        this.plugins = {};
         this.res = res;
         this.req = req;
     }
@@ -199,11 +201,27 @@ var Accessor = /** @class */ (function () {
     * @param params Req.query instance
     */
     Accessor.prototype.Param = function (params) {
+        var _this = this;
         var str = "";
         for (var i in params)
             str += i + "=" + params[i] + '&';
         str = str.slice(0, str.length - 1);
-        this.param = params_1.Parse(str);
+        var param = params_1.Parse(str);
+        //schema keys
+        var paths = Object.keys(this.collection.schema.paths);
+        //remove fields that are not expandable
+        param.populate = param.populate.filter(function (x) { return _this.model.Expand.isExpandable(x); });
+        //remove fields that are not defined
+        param.populate = param.populate.filter(function (x) { return _this.model.Expand.isExpandable(x); });
+        //sort
+        for (var i in param.sort)
+            if (paths.indexOf(i) == -1)
+                delete param.sort[i];
+        //filters
+        for (var i in param.filters)
+            if (paths.indexOf(i) == -1)
+                delete param.filters[i];
+        this.param = param;
     };
     /**
     * Assigns a new Mongoose Document at `Accessor.document` .

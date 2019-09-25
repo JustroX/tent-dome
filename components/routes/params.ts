@@ -227,9 +227,7 @@ export function ValueParse( value : string ) : any
 export function Expand(  result : QueryParams , raw : RawQuery  )
 {
 	if(!raw.expand) return;		
-	/**
-	*  @todo Validate if field has read permissions 
-	*/
+	
 	for(let field of ( raw.expand  as string ).split(",") )
 		result.populate.push( field  );
 }

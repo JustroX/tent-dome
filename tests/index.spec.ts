@@ -148,5 +148,6 @@ describe("Tent",function()
 //integration without plugins
 import "./integration.spec";
 
-
+//built-in plugins
 import "./components/plugins/sanitation.spec";
+import "./components/plugins/validation.spec";

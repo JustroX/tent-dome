@@ -166,9 +166,6 @@ exports.ValueParse = ValueParse;
 function Expand(result, raw) {
     if (!raw.expand)
         return;
-    /**
-    *  @todo Validate if field has read permissions
-    */
     for (var _i = 0, _a = raw.expand.split(","); _i < _a.length; _i++) {
         var field = _a[_i];
         result.populate.push(field);

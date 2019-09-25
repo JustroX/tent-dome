@@ -5,26 +5,22 @@
 * @module Tent
 */
 exports.__esModule = true;
-/**
-*
-*	Copyright (C) 2019  Justine Che T. Romero
-*
-*    This program is free software: you can redistribute it and/or modify
-*    it under the terms of the GNU General Public License as published by
-*    the Free Software Foundation, either version 3 of the License, or
-*    any later version.
-*
-*    This program is distributed in the hope that it will be useful,
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*    GNU General Public License for more details.
-*
-*    You should have received a copy of the GNU General Public License
-*    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*
-********/
 var model_1 = require("./components/model");
 var server_1 = require("./components/server");
+//Expose Plugin Module
+var PluginModule = require("./components/plugin");
+/** Expose Plugin Class */
+exports.Plugin = PluginModule.Plugin;
+;
+//Expose Route Module
+var RouteModule = require("./components/route");
+/** Expose Route Class */
+exports.Route = RouteModule.Routes;
+//Expose Prebuilt Plugins
+var SanitationPluginModule = require("./components/plugins/sanitation");
+exports.Sanitation = SanitationPluginModule.Sanitation;
+var ValidationModule = require("./components/plugins/validation");
+exports.Validation = ValidationModule.Validation;
 /**
 * Tent-Dome module.
 */

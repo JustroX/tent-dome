@@ -1,5 +1,5 @@
 /**
-* @module PrebuiltPlugins
+* @module ValidationPlugin
 */
 
 /*******

@@ -69,11 +69,26 @@ DELETE :3000/api/books/{id}
 ## Documentation
 See this [link](https://justrox.github.io/tent-dome/) for the documentation.
 
+## Usage
+1. [Models](modules/model.html)
+ - Expand
+2. REST URLs
+ - Filters
+ - 
+3. Routes
+ - Builders
+ - Accessors
+ - Dispatchers
+ - Prebuilt Middlewares
+4. [Plugins](modules/plugin.html)
+ - [Sanitation Plugin](modules/sanitationplugin.html) 
 
 ## Roadmap Core
 - [x] Sanitation
 - [x] Validation
 - [x] Expand Query
+- [ ] Virtual fields
+- [ ] Methods and Statics
 - [ ] Authentication Plugin
 - [ ] Permissions Plugin
 - [ ] Rate Limiting

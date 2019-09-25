@@ -25,10 +25,35 @@
 ********/
 
 
+import { SchemaDefinition as Definition } from "mongoose";
 import { Model , RegisterModels  } from "./components/model";
 import { Server , HttpServerInterface } from "./components/server";
 import { SchemaConfig } from "./components/schema"
-import { SchemaDefinition as Definition } from "mongoose";
+
+
+
+
+
+//Expose Plugin Module
+import * as PluginModule from "./components/plugin";
+/** Expose Plugin Class */
+export var Plugin 			= PluginModule.Plugin;
+/** Expose Plugin Interface */
+export interface PluginInterface  extends PluginModule.PluginInterface {};
+
+//Expose Route Module
+import * as RouteModule from "./components/route";
+/** Expose Route Class */
+export var Route = RouteModule.Routes;
+
+//Expose Prebuilt Plugins
+
+import * as SanitationPluginModule from "./components/plugins/sanitation";
+export var Sanitation = SanitationPluginModule.Sanitation;
+
+import * as ValidationModule from "./components/plugins/validation";
+export var Validation = ValidationModule.Validation;
+
 
 /**
 * Configuration options for Tent

@@ -1,4 +1,7 @@
 /**
+* ### Model Module
+* This module is the parent class of all entities for the tent app.
+*
 * @module Model
 */
 

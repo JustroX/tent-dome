@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>PluginInterface | Tent</title>
+	<title>SanitationPlugin | Tent</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/plugin.html">Plugin</a>
-				</li>
-				<li>
-					<a href="plugin.plugininterface.html">PluginInterface</a>
+					<a href="sanitationplugin.html">SanitationPlugin</a>
 				</li>
 			</ul>
-			<h1>Interface PluginInterface</h1>
+			<h1>External module SanitationPlugin</h1>
 		</div>
 	</div>
 </header>
@@ -72,33 +69,36 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Plugin interface.</p>
+						<h2 id="sanitation-plugin">Sanitation Plugin</h2>
 					</div>
-				</div>
-			</section>
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">PluginInterface</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<a href="../classes/sanitationplugin.sanitation.html" class="tsd-signature-type">Sanitation</a>
-							</li>
-							<li>
-								<a href="tent.plugininterface.html" class="tsd-signature-type">PluginInterface</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-				<h3 class="tsd-before-signature">Indexable</h3>
-				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></div>
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Other plugin declarations.</p>
-					</div>
+					<p>This plugin will attach middlewares that would whitelist / blacklist inbound and outbound data of a <code>Model</code>.</p>
+					<h3 id="definition">Definition</h3>
+					<ul>
+						<li><strong>Inbound Data</strong>  - this is the request body for <code>PUT</code> and <code>POST</code> - <code>req.body</code></li>
+						<li><strong>Outbound Data</strong> - this is the <code>req.tent.document</code> and <code>req.tent.list</code> before <code>present</code> or <code>show</code> middleware is called.</li>
+					</ul>
+					<h3 id="motivation">Motivation</h3>
+					<p>Sanitize requests so users can&#39;t alter model fields that are readonly for <code>user</code>.
+					Also, sanitize responses so users can&#39;t read sensitive information.</p>
+					<h3 id="installation">Installation</h3>
+					<p>Sanitation module comes prebuilt to tent.</p>
+					<pre><code class="language-js"><span class="hljs-keyword">import</span> { Sanitation } <span class="hljs-keyword">from</span> <span class="hljs-string">"tent-dome"</span>;
+
+<span class="hljs-keyword">var</span> BooksEntity = tent.Entity(<span class="hljs-string">"Book"</span>,{
+    <span class="hljs-attr">name</span>                : <span class="hljs-built_in">String</span>,
+    <span class="hljs-attr">date</span>               : { <span class="hljs-attr">type</span>: <span class="hljs-built_in">Date</span>, <span class="hljs-attr">default</span>: <span class="hljs-built_in">Date</span>.now },
+    <span class="hljs-attr">writeonlyField</span>   : <span class="hljs-built_in">String</span>,
+    <span class="hljs-attr">readonlyField</span>    : <span class="hljs-built_in">String</span>
+});
+BooksEntity.install(<span class="hljs-keyword">new</span> Sanitation());
+</code></pre>
+					<h3 id="usage">Usage</h3>
+					<p>Define access rules.</p>
+					<pre><code class="language-js">
+    <span class="hljs-keyword">var</span> rules = BooksEntity.plugins.sanitation;
+    rules.inbound.blacklist(<span class="hljs-string">"readonlyField"</span>);
+    rules.outbound.whitelist([<span class="hljs-string">"readonlyField"</span>, <span class="hljs-string">"name"</span>, <span class="hljs-string">"date"</span>]);
+</code></pre>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -106,91 +106,56 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
-							<h3>Properties</h3>
+							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="plugin.plugininterface.html#dependencies" class="tsd-kind-icon">dependencies</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="plugin.plugininterface.html#model" class="tsd-kind-icon">model</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="plugin.plugininterface.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external tsd-is-not-exported"><a href="../classes/sanitationplugin.bound.html" class="tsd-kind-icon">Bound</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external"><a href="../classes/sanitationplugin.sanitation.html" class="tsd-kind-icon">Sanitation</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-external">
-							<h3>Methods</h3>
+						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
+							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-external"><a href="plugin.plugininterface.html#init" class="tsd-kind-icon">init</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported"><a href="../interfaces/sanitationplugin.dictionary.html" class="tsd-kind-icon">Dictionary</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external tsd-is-not-exported"><a href="../interfaces/sanitationplugin.request.html" class="tsd-kind-icon">Request</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external tsd-is-not-exported"><a href="sanitationplugin.html#iskey" class="tsd-kind-icon">is<wbr>Key</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="dependencies" class="tsd-anchor"></a>
-					<h3>dependencies</h3>
-					<div class="tsd-signature tsd-kind-icon">dependencies<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in components/plugin.ts:153</li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Dependencies of the Plugin</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="model" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> model</h3>
-					<div class="tsd-signature tsd-kind-icon">model<span class="tsd-signature-symbol">:</span> <a href="../classes/accessor.accessor-1.html#model-1" class="tsd-signature-type">Model</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in components/plugin.ts:159</li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Model which plugin instance is installed.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="name" class="tsd-anchor"></a>
-					<h3>name</h3>
-					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in components/plugin.ts:150</li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Name of the Plugin</p>
-						</div>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-external">
-					<a name="init" class="tsd-anchor"></a>
-					<h3>init</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">init<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external tsd-is-not-exported">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external tsd-is-not-exported">
+					<a name="iskey" class="tsd-anchor"></a>
+					<h3>is<wbr>Key</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Key&lt;T&gt;<span class="tsd-signature-symbol">(</span>field<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">keyof T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">keyof T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in components/plugin.ts:156</li>
+									<li>Defined in components/plugins/sanitation.ts:76</li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Initialization function.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>field: <span class="tsd-signature-type">keyof T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">keyof T</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -206,80 +171,65 @@
 						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/tent.html">Tent</a>
+						<a href="tent.html">Tent</a>
 					</li>
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/accessor.html">Accessor</a>
+						<a href="accessor.html">Accessor</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/builder.html">Builder</a>
+						<a href="builder.html">Builder</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/expand.html">Expand</a>
+						<a href="expand.html">Expand</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/middlewares.html">Middlewares</a>
+						<a href="middlewares.html">Middlewares</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/model.html">Model</a>
+						<a href="model.html">Model</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/params.html">Params</a>
+						<a href="params.html">Params</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="plugin.html">Plugin</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="routes.html">Routes</a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="../modules/plugin.html">Plugin</a>
+						<a href="sanitationplugin.html">Sanitation<wbr>Plugin</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/routes.html">Routes</a>
+						<a href="schema.html">Schema</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/sanitationplugin.html">Sanitation<wbr>Plugin</a>
+						<a href="server.html">Server</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/schema.html">Schema</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/server.html">Server</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/validationplugin.html">Validation<wbr>Plugin</a>
+						<a href="validationplugin.html">Validation<wbr>Plugin</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="plugin.plugininterface.html" class="tsd-kind-icon">Plugin<wbr>Interface</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="plugin.plugininterface.html#dependencies" class="tsd-kind-icon">dependencies</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="plugin.plugininterface.html#model" class="tsd-kind-icon">model</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="plugin.plugininterface.html#name" class="tsd-kind-icon">name</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-external">
-								<a href="plugin.plugininterface.html#init" class="tsd-kind-icon">init</a>
-							</li>
-						</ul>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external tsd-is-not-exported">
+						<a href="../classes/sanitationplugin.bound.html" class="tsd-kind-icon">Bound</a>
 					</li>
-				</ul>
-				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="plugin.pluginoptions.html" class="tsd-kind-icon">Plugin<wbr>Options</a>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external">
+						<a href="../classes/sanitationplugin.sanitation.html" class="tsd-kind-icon">Sanitation</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external tsd-is-not-exported">
-						<a href="../modules/plugin.html#constructor" class="tsd-kind-icon">Constructor</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="../interfaces/sanitationplugin.dictionary.html" class="tsd-kind-icon">Dictionary</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/plugin.html#plugin-1" class="tsd-kind-icon">Plugin</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external tsd-is-not-exported">
+						<a href="../interfaces/sanitationplugin.request.html" class="tsd-kind-icon">Request</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external tsd-is-not-exported">
+						<a href="sanitationplugin.html#iskey" class="tsd-kind-icon">is<wbr>Key</a>
 					</li>
 				</ul>
 			</nav>

@@ -1,5 +1,44 @@
 /**
-* @module PrebuiltPlugins
+* ## Sanitation Plugin
+* 
+* This plugin will attach middlewares that would whitelist / blacklist inbound and outbound data of a `Model`.
+*
+* ### Definition
+* - **Inbound Data**  - this is the request body for `PUT` and `POST` - `req.body`
+* - **Outbound Data** - this is the `req.tent.document` and `req.tent.list` before `present` or `show` middleware is called.
+*
+* ### Motivation
+* Sanitize requests so users can't alter model fields that are readonly for `user`.
+* Also, sanitize responses so users can't read sensitive information.
+*
+* ### Installation
+* Sanitation module comes prebuilt to tent.
+*
+* ```js
+* import { Sanitation } from "tent-dome";
+*
+* var BooksEntity = tent.Entity("Book",{
+* 	name 		  	 : String,
+* 	date 		 	 : { type: Date, default: Date.now },
+* 	writeonlyField   : String,
+* 	readonlyField    : String 
+* });
+* BooksEntity.install(new Sanitation());
+*
+* ```
+*
+* ### Usage
+*
+* Define access rules.
+* ```js
+* 
+* 	var rules = BooksEntity.plugins.sanitation;
+* 	rules.inbound.blacklist("readonlyField");
+* 	rules.outbound.whitelist(["readonlyField", "name", "date"]);
+* 
+* ```
+*
+* @module SanitationPlugin
 */
 
 /*******

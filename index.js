@@ -1,0 +1,1 @@
+var Tent = module.exports = require("./dist/index");

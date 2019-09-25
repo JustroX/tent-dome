@@ -68,6 +68,83 @@
 		<div class="col-8 col-content">
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<h3 id="plugins">Plugins</h3>
+					</div>
+					<p>Sometimes there is a need to extend the funcionality of a certain Model entity.
+						An instance of this would be to add caching capabilities, user-defined sanitation, rate-limiting and etc.
+					Hence, Tent-Dome provide ways to implement plugins.</p>
+					<h2 id="defining-a-plugin-">Defining a plugin.</h2>
+					<p>The three requirements for having a valid plugin would be <code>name</code> and <code>dependecy</code> property and an <code>init()</code> method.</p>
+					<pre><code class="language-js">
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SamplePlugin</span>
+</span>{
+    <span class="hljs-keyword">constructor</span>()
+    {
+        <span class="hljs-keyword">this</span>.name         = <span class="hljs-string">"sample-plugin"</span>;
+        <span class="hljs-keyword">this</span>.dependency = [ <span class="hljs-string">"dependency-1"</span>, <span class="hljs-string">"dependency-2"</span> ];
+    }
+  init() {}
+}
+</code></pre>
+					<p>or using Typescript decorators.</p>
+					<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Plugin, PluginInterface } <span class="hljs-keyword">from</span> <span class="hljs-string">"tent-dome"</span>;
+
+<span class="hljs-meta">@Plugin</span>({
+  name        : <span class="hljs-string">"sample-plugin"</span>,
+  dependency :  [ <span class="hljs-string">"dependency-1"</span>, <span class="hljs-string">"dependency-2"</span> ]
+})
+<span class="hljs-keyword">class</span> SamplePlugin()
+{
+    <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span>) {}
+  init() {}
+}
+
+<span class="hljs-keyword">interface</span> SamplePlugin <span class="hljs-keyword">extends</span> PluginInterface{}
+</code></pre>
+					<ul>
+						<li><code>name</code>         - name of the plugin.</li>
+						<li><code>dependecy</code> - list of the names of the dependency plugins.</li>
+						<li><code>init</code>        - this function will be called whenever the model is registered.</li>
+					</ul>
+					<h2 id="installing-a-plugin">Installing a plugin</h2>
+					<p>To install a plugin in a given model, call <code>model.install()</code> and pass the instance of the plugin.</p>
+					<pre><code class="language-js">
+    <span class="hljs-comment">//Model definition</span>
+
+    <span class="hljs-keyword">var</span> UserEntity = tent.Entity(<span class="hljs-string">"User"</span>,{
+        <span class="hljs-attr">name</span> : <span class="hljs-built_in">String</span>,
+        <span class="hljs-attr">password</span> : <span class="hljs-built_in">String</span>
+    });
+
+    UserEntity.Routes.create();
+    UserEntity.Routes.update();
+    UserEntity.Routes.read();
+    UserEntity.Routes.list();
+    UserEntity.Routes.delete();
+
+    <span class="hljs-comment">//install plugin</span>
+  UserEntity.install( <span class="hljs-keyword">new</span> SamplePlugin() ) ;
+
+    <span class="hljs-comment">//Register model</span>
+    UserEntity.register();
+</code></pre>
+					<p>When the <code>Model.register()</code> is called, the plugin will be initialized.</p>
+					<h2 id="defining-the-plugin">Defining the plugin</h2>
+					<p>Once the <code>Model.register()</code> is called, <code>this.model</code> will be available to the plugin.
+					Model customization can now be done via <code>init()</code>.</p>
+					<pre><code class="language-js">
+init()
+{
+
+    <span class="hljs-comment">//add encryption middleware before the tagged `save` middleware.</span>
+
+    <span class="hljs-keyword">this</span>.model.Routes.builder(<span class="hljs-string">"/"</span>,<span class="hljs-string">"POST"</span>).pre(<span class="hljs-string">"save"</span>, encryptionMiddleware );
+    <span class="hljs-keyword">this</span>.model.Routes.builder(<span class="hljs-string">"/"</span>,<span class="hljs-string">"PUT"</span> ).pre(<span class="hljs-string">"save"</span>, encryptionMiddleware );
+
+}
+</code></pre>
+					<p>The plugin is now ready and can now be used into multiple models.</p>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -104,7 +181,7 @@
 					<div class="tsd-signature tsd-kind-icon">Constructor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in components/plugin.ts:65</li>
+							<li>Defined in components/plugin.ts:166</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -124,7 +201,7 @@
 									<li class="tsd-description">
 										<aside class="tsd-sources">
 											<ul>
-												<li>Defined in components/plugin.ts:65</li>
+												<li>Defined in components/plugin.ts:166</li>
 											</ul>
 										</aside>
 										<h4 class="tsd-parameters-title">Parameters</h4>
@@ -152,7 +229,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in components/plugin.ts:72</li>
+									<li>Defined in components/plugin.ts:173</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -215,10 +292,16 @@
 						<a href="routes.html">Routes</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="sanitationplugin.html">Sanitation<wbr>Plugin</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="schema.html">Schema</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="server.html">Server</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="validationplugin.html">Validation<wbr>Plugin</a>
 					</li>
 				</ul>
 			</nav>

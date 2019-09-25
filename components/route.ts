@@ -103,11 +103,11 @@ export class Routes<T>
 			let builder : Builder<T> = item.builder;
 
 			if( method == "list" )
-				this.router.get(endpoint , ...builder.expose() as any );
+				this.router.get(endpoint , ...builder.expose() as ((...args : any[])=>void)[] );
 			else if(method == "post")
-				this.router.post(endpoint , ...builder.expose() as any );
+				this.router.post(endpoint , ...builder.expose() as ((...args : any[])=>void)[] );
 			else
-				this.router[method](endpoint + ":id", ...builder.expose() as any );
+				this.router[method](endpoint + ":id", ...builder.expose() as ((...args : any[])=>void)[] );
 
 		}
 	}

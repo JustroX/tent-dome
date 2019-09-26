@@ -61,7 +61,7 @@ export var Validation = ValidationModule.Validation;
 export interface TentOptionsInterface
 {
 	"api prefix"   ?: string,
-	"mongoose uri" ?: string,
+	"mongodb uri" ?: string,
 	[ key : string ]: any
 }
 
@@ -154,7 +154,7 @@ export class TentDome
 	start( port : number = 7072 ) : Promise<void>
 	{
 		RegisterModels(this.app());
-		this.AppServer.initDatabase( this.get<string>("mongoose uri") );
+		this.AppServer.initDatabase( this.get<string>("mongodb uri") );
 		return this.AppServer.start( port );
 	}
 

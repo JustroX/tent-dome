@@ -34,6 +34,8 @@ import CookieParser =  require("cookie-parser");
 import BodyParser   =  require("body-parser");
 
 import * as Mongoose 	 from "mongoose";
+import morgan = require("morgan");
+
 
 var urlencodedParser = BodyParser.urlencoded({extended: true});
 
@@ -60,6 +62,7 @@ export class Server
 	*/
 	initDefaultMiddlewares()
 	{
+		this.app.use(morgan('combined'))
 		this.app.use(urlencodedParser);
 		this.app.use(BodyParser.json());
 		this.app.use(CookieParser());

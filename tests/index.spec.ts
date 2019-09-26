@@ -105,7 +105,7 @@ describe("Tent",function()
 		let model = Tent.Entity<any>( "sample" , { name : String });
 
 		Tent.init({
-			"mongoose uri" :process.env.TEST_MONGODB_URI
+			"mongodb uri" :process.env.TEST_MONGODB_URI
 		});
 
 		it('should not throw any error',function()

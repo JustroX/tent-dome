@@ -67,7 +67,7 @@ describe("Tent", function () {
         var Tent = new index_1.TentDome();
         var model = Tent.Entity("sample", { name: String });
         Tent.init({
-            "mongoose uri": process.env.TEST_MONGODB_URI
+            "mongodb uri": process.env.TEST_MONGODB_URI
         });
         it('should not throw any error', function () {
             chai_1.expect(function () {

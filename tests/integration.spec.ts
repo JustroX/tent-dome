@@ -34,7 +34,7 @@ describe("Tent integration run 1.",function()
 		expect(function()
 		{
 			Tent.init({
-				"mongoose uri": process.env.TEST_MONGODB_URI
+				"mongodb uri": process.env.TEST_MONGODB_URI
 			});
 		}).to.not.throw();
 	});

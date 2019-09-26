@@ -87,7 +87,7 @@ var TentDome = /** @class */ (function () {
     TentDome.prototype.start = function (port) {
         if (port === void 0) { port = 7072; }
         model_1.RegisterModels(this.app());
-        this.AppServer.initDatabase(this.get("mongoose uri"));
+        this.AppServer.initDatabase(this.get("mongodb uri"));
         return this.AppServer.start(port);
     };
     /**

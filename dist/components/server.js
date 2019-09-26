@@ -27,6 +27,7 @@ var Express = require("express");
 var CookieParser = require("cookie-parser");
 var BodyParser = require("body-parser");
 var Mongoose = require("mongoose");
+var morgan = require("morgan");
 var urlencodedParser = BodyParser.urlencoded({ extended: true });
 ;
 /**
@@ -42,6 +43,7 @@ var Server = /** @class */ (function () {
     *	Initializes default middlewares
     */
     Server.prototype.initDefaultMiddlewares = function () {
+        this.app.use(morgan('combined'));
         this.app.use(urlencodedParser);
         this.app.use(BodyParser.json());
         this.app.use(CookieParser());

@@ -43,7 +43,7 @@ var Server = /** @class */ (function () {
     *	Initializes default middlewares
     */
     Server.prototype.initDefaultMiddlewares = function () {
-        this.app.use(morgan('combined'));
+        this.app.use(morgan('dev'));
         this.app.use(urlencodedParser);
         this.app.use(BodyParser.json());
         this.app.use(CookieParser());
@@ -54,7 +54,7 @@ var Server = /** @class */ (function () {
     *	@param databaseURI URI of the database
     */
     Server.prototype.initDatabase = function (databaseURI) {
-        Mongoose.connect(databaseURI, { useNewUrlParser: true });
+        Mongoose.connect(databaseURI, { useNewUrlParser: true, useUnifiedTopology: true });
     };
     /**
     *	Start the Server

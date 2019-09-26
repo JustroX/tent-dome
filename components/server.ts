@@ -76,7 +76,7 @@ export class Server
 	*/
 	initDatabase( databaseURI : string )
 	{
-		Mongoose.connect( databaseURI , { useNewUrlParser: true });
+		Mongoose.connect( databaseURI , { useNewUrlParser: true, useUnifiedTopology: true });
 	}
 
 	/**

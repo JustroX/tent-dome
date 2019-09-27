@@ -23,10 +23,10 @@ exports.__esModule = true;
 *
 ********/
 var http_1 = require("http");
+var Mongoose = require("mongoose");
 var Express = require("express");
 var CookieParser = require("cookie-parser");
 var BodyParser = require("body-parser");
-var Mongoose = require("mongoose");
 var morgan = require("morgan");
 var urlencodedParser = BodyParser.urlencoded({ extended: true });
 ;
@@ -65,9 +65,14 @@ var Server = /** @class */ (function () {
     Server.prototype.start = function (port) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            _this.server.listen(port, function () {
-                resolve();
-            });
+            try {
+                _this.server.listen(port, function () {
+                    resolve();
+                });
+            }
+            catch (err) {
+                reject(err);
+            }
         });
     };
     /**

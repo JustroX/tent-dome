@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -63,6 +74,18 @@ describe("Tent integration run 1.", function () {
                         text: String,
                         date: { type: Date, "default": Date.now }
                     }]
+            }, {
+                toObject: { virtuals: true },
+                toJSON: { virtuals: true },
+                id: false
+            });
+            entity.Schema.virtual("virtual", {
+                get: function () {
+                    return "Get " + this.name;
+                },
+                set: function (val) {
+                    this.name = "Set " + val;
+                }
             });
             //expose routes
             entity.Routes.create();
@@ -117,7 +140,7 @@ describe("Tent integration run 1.", function () {
                             delete res.body.list[0]._id;
                             expect(res.body.list[0].date).to.exist;
                             delete res.body.list[0].date;
-                            expect(res.body).to.be.eql(sample_body);
+                            expect(res.body).to.be.eql(__assign(__assign({}, sample_body), { virtual: "Get First Client" }));
                             done();
                         }
                         catch (err) {
@@ -146,7 +169,7 @@ describe("Tent integration run 1.", function () {
                             delete res.body.list[0]._id;
                             expect(res.body.list[0].date).to.exist;
                             delete res.body.list[0].date;
-                            expect(res.body).to.be.eql(sample_body);
+                            expect(res.body).to.be.eql(__assign(__assign({}, sample_body), { virtual: "Get First Client" }));
                             done();
                         }
                         catch (err) {
@@ -171,6 +194,30 @@ describe("Tent integration run 1.", function () {
                         try {
                             expect(res).to.have.status(200);
                             expect(res.body.name).to.be.eql(sample_body.name);
+                            done();
+                        }
+                        catch (err) {
+                            done(err);
+                        }
+                        return [2 /*return*/];
+                    });
+                }); })["catch"](function (err) {
+                    done(err);
+                });
+            });
+        });
+        describe("UPDATE Request with virtuals", function () {
+            it("should return proper value", function (done) {
+                var _this = this;
+                var sample_body = { virtual: "Person" };
+                chai.request(Tent.app())
+                    .put("/api/clients/" + _id)
+                    .send(sample_body)
+                    .then(function (res) { return __awaiter(_this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        try {
+                            expect(res).to.have.status(200);
+                            expect(res.body.name).to.be.equal("Set Person");
                             done();
                         }
                         catch (err) {

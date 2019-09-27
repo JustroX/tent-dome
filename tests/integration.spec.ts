@@ -54,6 +54,22 @@ describe("Tent integration run 1.",function()
 					text: String,
 					date: { type: Date, default: Date.now }
 				}]
+			},
+			{
+				toObject : { virtuals: true },
+				toJSON : { virtuals: true },
+				id : false
+			});
+
+			entity.Schema.virtual<string>("virtual",{
+				get: function()
+				{
+					return "Get " + this.name;
+				},
+				set: function(val)
+				{
+					this.name = "Set "+val;
+				}
 			});
 
 			//expose routes
@@ -133,7 +149,10 @@ describe("Tent integration run 1.",function()
 						delete res.body.list[0].date;
 
 
-						expect(res.body).to.be.eql( sample_body );
+						expect(res.body).to.be.eql({
+							...sample_body,
+							virtual : "Get First Client"
+						});
 						done();
 					}
 					catch(err)
@@ -167,7 +186,10 @@ describe("Tent integration run 1.",function()
 						delete res.body.list[0]._id;
 						expect(res.body.list[0].date).to.exist;
 						delete res.body.list[0].date;
-						expect(res.body).to.be.eql( sample_body );
+						expect(res.body).to.be.eql( {
+							...sample_body,
+							virtual : "Get First Client"
+						} );
 						done();
 					}
 					catch(err)
@@ -197,6 +219,35 @@ describe("Tent integration run 1.",function()
 					{
 						expect(res).to.have.status(200);
 						expect(res.body.name).to.be.eql( sample_body.name );
+						done();
+					}
+					catch(err)
+					{
+						done(err);
+					}
+				})
+				.catch((err)=>
+				{
+					done(err);
+				})
+			})
+		});
+
+		describe("UPDATE Request with virtuals",function()
+		{
+			it("should return proper value",function(done)
+			{
+				let sample_body = { virtual : "Person" };
+
+				chai.request(Tent.app())
+				.put("/api/clients/"+_id)
+				.send(sample_body)
+				.then(async(res)=>
+				{
+					try
+					{
+						expect(res).to.have.status(200);
+						expect(res.body.name).to.be.equal( "Set Person" );
 						done();
 					}
 					catch(err)

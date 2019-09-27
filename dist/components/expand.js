@@ -15,7 +15,7 @@ var Expand = /** @class */ (function () {
     Expand.prototype.add = function (key, fields) {
         this.populate[key] = fields;
     };
-    /** Returns the populated dictionary*/
+    /** Returns the populated dictionary */
     Expand.prototype.expose = function () {
         return this.populate;
     };
@@ -23,8 +23,9 @@ var Expand = /** @class */ (function () {
     * @param key name of the property
     */
     Expand.prototype.isExpandable = function (key) {
-        if (this.populate[key])
+        if (this.populate[key]) {
             return true;
+        }
         return false;
     };
     return Expand;

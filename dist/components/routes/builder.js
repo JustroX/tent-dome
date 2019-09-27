@@ -60,19 +60,20 @@ var Builder = /** @class */ (function () {
     */
     function Builder(name, options) {
         if (options === void 0) { options = {
-            "import builtin": true
+            'import builtin': true
         }; }
-        /** Current middleware sequence*/
+        /** Current middleware sequence */
         this.middlewares = [];
-        /** Current head index*/
+        /** Current head index */
         this.head = 0;
         /** Name of the builder */
-        this.name = "";
-        /** Dictionary for defined middleware factories*/
+        this.name = '';
+        /** Dictionary for defined middleware factories */
         this.builds = {};
         this.name = name;
-        if (options["import builtin"])
+        if (options['import builtin']) {
             this.importBuiltIn();
+        }
     }
     /**
     * Adds a custom middleware after the current head. Moves head by one.
@@ -88,7 +89,7 @@ var Builder = /** @class */ (function () {
     * @param index New head index.
     */
     Builder.prototype.pointHead = function (index) {
-        Assert(index >= 0 && index < this.middlewares.length, "Head index out of range");
+        Assert(index >= 0 && index < this.middlewares.length, 'Head index out of range');
         this.head = index;
         return this;
     };
@@ -130,18 +131,18 @@ var Builder = /** @class */ (function () {
     * Import built in middlewares.
     */
     Builder.prototype.importBuiltIn = function () {
-        this.define("model", middlewares_1.Middlewares.model(this.name));
-        this.define("create", middlewares_1.Middlewares.create());
-        this.define("save", middlewares_1.Middlewares.save());
-        this.define("read", middlewares_1.Middlewares.read());
-        this.define("remove", middlewares_1.Middlewares.remove());
-        this.define("assign", middlewares_1.Middlewares.assign());
-        this.define("sanitize", middlewares_1.Middlewares.sanitize());
-        this.define("param", middlewares_1.Middlewares.param());
-        this.define("list", middlewares_1.Middlewares.list());
-        this.define("success", middlewares_1.Middlewares.success());
-        this.define("show", middlewares_1.Middlewares.show());
-        this.define("present", middlewares_1.Middlewares.present());
+        this.define('model', middlewares_1.Middlewares.model(this.name));
+        this.define('create', middlewares_1.Middlewares.create());
+        this.define('save', middlewares_1.Middlewares.save());
+        this.define('read', middlewares_1.Middlewares.read());
+        this.define('remove', middlewares_1.Middlewares.remove());
+        this.define('assign', middlewares_1.Middlewares.assign());
+        this.define('sanitize', middlewares_1.Middlewares.sanitize());
+        this.define('param', middlewares_1.Middlewares.param());
+        this.define('list', middlewares_1.Middlewares.list());
+        this.define('success', middlewares_1.Middlewares.success());
+        this.define('show', middlewares_1.Middlewares.show());
+        this.define('present', middlewares_1.Middlewares.present());
     };
     /**
     * Defines a reusable middleware inside the builder. Chainable middleware factory will be available once called.
@@ -149,7 +150,7 @@ var Builder = /** @class */ (function () {
     * @param mw Middleware
     */
     Builder.prototype.define = function (name, mw) {
-        Assert(!this[name], "Builder pipe is already defined");
+        Assert(!this[name], 'Builder pipe is already defined');
         var _this = this;
         this.builds[name] = function () {
             _this.middlewares.splice(_this.head, 0, mw);
@@ -170,7 +171,7 @@ var Builder = /** @class */ (function () {
     */
     Builder.prototype.pre = function (name, mw) {
         for (var i = 0; i < this.middlewares.length; i++) {
-            if (this.middlewares[i].tag == name) {
+            if (this.middlewares[i].tag === name) {
                 this.middlewares.splice(i, 0, mw);
                 return;
             }
@@ -183,7 +184,7 @@ var Builder = /** @class */ (function () {
     */
     Builder.prototype.post = function (name, mw) {
         for (var i = 0; i < this.middlewares.length; i++) {
-            if (this.middlewares[i].tag == name) {
+            if (this.middlewares[i].tag === name) {
                 this.middlewares.splice(i + 1, 0, mw);
                 return;
             }

@@ -1,10 +1,10 @@
 /**
 * ### Plugins
 *
-* Sometimes there is a need to extend the funcionality of a certain Model entity. 
+* Sometimes there is a need to extend the funcionality of a certain Model entity.
 * An instance of this would be to add caching capabilities, user-defined sanitation, rate-limiting and etc.
-* Hence, Tent-Dome provide ways to implement plugins. 
-* 
+* Hence, Tent-Dome provide ways to implement plugins.
+*
 * ## Defining a plugin.
 *
 * The three requirements for having a valid plugin would be `name` and `dependecy` property and an `init()` method.
@@ -13,12 +13,12 @@
 *
 * class SamplePlugin
 * {
-*	constructor() 
+*	constructor()
 *	{
 *		this.name 		= "sample-plugin";
 *		this.dependency = [ "dependency-1", "dependency-2" ];
 *	}
-*   init() {} 
+*   init() {}
 * }
 *
 * ```
@@ -44,15 +44,15 @@
 *
 * - `name` 		- name of the plugin.
 * - `dependecy` - list of the names of the dependency plugins.
-* - `init`		- this function will be called whenever the model is registered. 
+* - `init`		- this function will be called whenever the model is registered.
 *
 *
 * ## Installing a plugin
 *
-* To install a plugin in a given model, call `model.install()` and pass the instance of the plugin. 
-*  
+* To install a plugin in a given model, call `model.install()` and pass the instance of the plugin.
+*
 * ```js
-* 
+*
 *	//Model definition
 *
 *	var UserEntity = tent.Entity("User",{
@@ -72,13 +72,13 @@
 *	//Register model
 * 	UserEntity.register();
 *
-* ``` 
-* 
+* ```
+*
 * When the `Model.register()` is called, the plugin will be initialized.
-* 
+*
 * ## Defining the plugin
 *
-* Once the `Model.register()` is called, `this.model` will be available to the plugin. 
+* Once the `Model.register()` is called, `this.model` will be available to the plugin.
 * Model customization can now be done via `init()`.
 *
 * ```js
@@ -90,22 +90,20 @@
 *
 *	this.model.Routes.builder("/","POST").pre("save", encryptionMiddleware );
 *	this.model.Routes.builder("/","PUT" ).pre("save", encryptionMiddleware );
-*	
+*
 * }
 *
 * ```
-* 
+*
 * The plugin is now ready and can now be used into multiple models.
-* 
 *
-* 
 *
-*  
+*
+*
+*
 *
 * @module Plugin
 */
-
- 
 
 /*******
 *
@@ -126,8 +124,7 @@
 *
 ********/
 
-
- import { Model } from "./model";
+import { Model } from './model'
 
 /**
 * Plugin Options for creating new plugins via Plugin decorator.
@@ -140,47 +137,42 @@ export interface PluginOptions
 	dependencies : string[],
 }
 
-
 /**
 * Plugin interface.
 */
 export interface PluginInterface
 {
-	/** Name of the Plugin*/
+	/** Name of the Plugin */
 	name : string,
 
-	/** Dependencies of the Plugin*/
+	/** Dependencies of the Plugin */
 	dependencies: string[],
 
-	/** Initialization function.*/
+	/** Initialization function. */
 	init() : void,
 
-	/** Model which plugin instance is installed.*/
+	/** Model which plugin instance is installed. */
 	model ?: Model<any>,
 
-	/** Other plugin declarations.*/
+	/** Other plugin declarations. */
 	[ key : string ] : any
 }
 
 /** Plugin constructor function */
 type Constructor<T> = { new(...args: any[]) : T }
 
-
-/** 
+/**
 * Plugin decorator factory
 * @param options Plugin options
 */
-export function Plugin( options : PluginOptions ) 
-{
-	/**
+export function Plugin (options : PluginOptions) {
+  /**
 	* Plugin Decorator
 	* @param constructorFn Constructor function of the class
 	*/
-	return function( constructorFn : Constructor<any> )
-	{
-		if(!constructorFn.prototype.init)
-			throw "Plugins should have an init() method.";
-		constructorFn.prototype.name = options.name;
-		constructorFn.prototype.dependencies = options.dependencies;
-	} 
+  return function (constructorFn : Constructor<any>) {
+    if (!constructorFn.prototype.init) { throw new Error('Plugins should have an init() method.') }
+    constructorFn.prototype.name = options.name
+    constructorFn.prototype.dependencies = options.dependencies
+  }
 }

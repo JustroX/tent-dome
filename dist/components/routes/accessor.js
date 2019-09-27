@@ -2,6 +2,17 @@
 /**
 * @module Accessor
 */
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,11 +50,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var assign = require("object-assign");
 var model_1 = require("../model");
+var params_1 = require("./params");
+var assign = require("object-assign");
 var flatten = require("flat");
 var Assert = require("assert");
-var params_1 = require("./params");
 /** Accessor class. This would be binded to `req.tent` for the middlewares to access.
 * @typeparam T Schema interface
 */
@@ -72,13 +83,17 @@ var Accessor = /** @class */ (function () {
     * @param body Request body
     */
     Accessor.prototype.Sanitize = function (body) {
-        Assert(this.collection && this.model, "Sanitize can not be called without first calling Model");
+        Assert(this.collection && this.model, 'Sanitize can not be called without first calling Model');
+        if (!this.model)
+            return;
         var payload = {};
         var paths = this.collection.schema.paths;
+        paths = __assign(__assign({}, paths), this.model.Schema.virtuals);
         var _body = flatten(body, { safe: true });
         for (var i in _body) {
-            if (paths[i])
+            if (paths[i]) {
                 payload[i] = _body[i];
+            }
         }
         this.payload = payload;
     };
@@ -86,10 +101,11 @@ var Accessor = /** @class */ (function () {
     * Assigns `Accessor.payload` to `Accessor.document`.
     */
     Accessor.prototype.Assign = function () {
-        Assert(this.payload, "Assign can not be called without first calling Sanitize");
-        Assert(this.document, "Assign can not be called without first calling Read or FreshDocument");
-        for (var i in this.payload)
+        Assert(this.payload, 'Assign can not be called without first calling Sanitize');
+        Assert(this.document, 'Assign can not be called without first calling Read or FreshDocument');
+        for (var i in this.payload) {
             this.document.set(i, this.payload[i]);
+        }
     };
     /**
     * Fetches the document with an `_id` of `id` from the database and assigns it in `Accessor.document`.
@@ -101,12 +117,12 @@ var Accessor = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        Assert(this.collection, "Read cannot be used when model is not yet called.");
+                        Assert(this.collection, 'Read cannot be used when model is not yet called.');
                         _a = this;
                         return [4 /*yield*/, this.collection.find({ _id: id }).exec()];
                     case 1:
                         _a.document = (_b.sent())[0];
-                        Assert(this.document, "Document not found");
+                        Assert(this.document, 'Document not found');
                         return [2 /*return*/];
                 }
             });
@@ -118,11 +134,10 @@ var Accessor = /** @class */ (function () {
     */
     Accessor.prototype.List = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, sort, filters, populate, pagination, query, _i, populate_1, field, _b, e_1;
+            var _a, sort, filters, populate, pagination, query, _i, populate_1, field, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        _c.trys.push([0, 2, , 3]);
                         _a = this.param, sort = _a.sort, filters = _a.filters, populate = _a.populate, pagination = _a.pagination;
                         query = this.collection.find(filters);
                         query.sort(sort)
@@ -136,11 +151,7 @@ var Accessor = /** @class */ (function () {
                         return [4 /*yield*/, query.exec()];
                     case 1:
                         _b.list = _c.sent();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        e_1 = _c.sent();
-                        throw e_1;
-                    case 3: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
@@ -150,22 +161,14 @@ var Accessor = /** @class */ (function () {
     */
     Accessor.prototype.Save = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        Assert(this.document, "Save can not be called without first calling Read or FreshDocument");
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        Assert(this.document, 'Save can not be called without first calling Read or FreshDocument');
                         return [4 /*yield*/, this.document.save()];
-                    case 2:
+                    case 1:
                         _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_2 = _a.sent();
-                        throw e_2;
-                    case 4: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
@@ -175,23 +178,15 @@ var Accessor = /** @class */ (function () {
     */
     Accessor.prototype.Delete = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        Assert(this.document, "Delete can not be called without first calling Read");
-                        Assert(!this.document.isNew, "Delete can not be called when Fresh Document is called.");
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        Assert(this.document, 'Delete can not be called without first calling Read');
+                        Assert(!this.document.isNew, 'Delete can not be called when Fresh Document is called.');
                         return [4 /*yield*/, this.document.remove()];
-                    case 2:
+                    case 1:
                         _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_3 = _a.sent();
-                        throw e_3;
-                    case 4: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
@@ -202,47 +197,52 @@ var Accessor = /** @class */ (function () {
     */
     Accessor.prototype.Param = function (params) {
         var _this = this;
-        var str = "";
-        for (var i in params)
-            str += i + "=" + params[i] + '&';
+        var str = '';
+        for (var i in params) {
+            str += i + '=' + params[i] + '&';
+        }
         str = str.slice(0, str.length - 1);
         var param = params_1.Parse(str);
-        //schema keys
+        // schema keys
         var paths = Object.keys(this.collection.schema.paths);
-        //remove fields that are not expandable
+        // remove fields that are not expandable
         param.populate = param.populate.filter(function (x) { return _this.model.Expand.isExpandable(x); });
-        //remove fields that are not defined
+        // remove fields that are not defined
         param.populate = param.populate.filter(function (x) { return _this.model.Expand.isExpandable(x); });
-        //sort
-        for (var i in param.sort)
-            if (paths.indexOf(i) == -1)
+        // sort
+        for (var i in param.sort) {
+            if (paths.indexOf(i) === -1) {
                 delete param.sort[i];
-        //filters
-        for (var i in param.filters)
-            if (paths.indexOf(i) == -1)
+            }
+        }
+        // filters
+        for (var i in param.filters) {
+            if (paths.indexOf(i) === -1) {
                 delete param.filters[i];
+            }
+        }
         this.param = param;
     };
     /**
     * Assigns a new Mongoose Document at `Accessor.document` .
     */
     Accessor.prototype.FreshDocument = function () {
-        Assert(this.collection, "`Model` should be called first before calling `FreshDocument`");
+        Assert(this.collection, '`Model` should be called first before calling `FreshDocument`');
         this.document = new this.collection();
     };
     /**
     *  Returns `Accessor.list`
     */
     Accessor.prototype.Present = function () {
-        Assert(this.list, "Present can not be called without first calling List");
+        Assert(this.list, 'Present can not be called without first calling List');
         return this.list;
     };
     /**
     *  Returns `Accessor.document`
     */
     Accessor.prototype.Show = function () {
-        Assert(this.document, "Show can not be called without first calling Read");
-        Assert(!this.document.isNew, "Show can not be called when FreshDocument is called.");
+        Assert(this.document, 'Show can not be called without first calling Read');
+        Assert(!this.document.isNew, 'Show can not be called when FreshDocument is called.');
         return this.document;
     };
     return Accessor;
@@ -267,9 +267,9 @@ var Dispatcher = /** @class */ (function () {
         if (statusCode) {
             this.res.status(statusCode);
         }
-        if (!detail && typeof error === 'object'
-            && error.toString() === '[object Object]'
-            && error.error && error.detail) {
+        if (!detail && typeof error === 'object' &&
+            error.toString() === '[object Object]' &&
+            error.error && error.detail) {
             detail = error.detail;
             error = error.error;
         }

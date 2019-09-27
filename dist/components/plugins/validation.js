@@ -51,10 +51,12 @@ var ConstraintUtility = /** @class */ (function () {
         var list = [];
         for (var _a = 0, args_1 = args; _a < args_1.length; _a++) {
             var arg = args_1[_a];
-            if (typeof arg == "string")
+            if (typeof arg === 'string') {
                 list.push(arg);
-            else
+            }
+            else {
                 this.parent.constraints.and.options = arg;
+            }
         }
         this.parent.constraints.and.peers.push(list);
     };
@@ -70,10 +72,12 @@ var ConstraintUtility = /** @class */ (function () {
         var list = [];
         for (var _a = 0, args_2 = args; _a < args_2.length; _a++) {
             var arg = args_2[_a];
-            if (typeof arg == "string")
+            if (typeof arg === 'string') {
                 list.push(arg);
-            else
+            }
+            else {
                 this.parent.constraints.nand.options = arg;
+            }
         }
         this.parent.constraints.nand.peers.push(list);
     };
@@ -89,10 +93,12 @@ var ConstraintUtility = /** @class */ (function () {
         var list = [];
         for (var _a = 0, args_3 = args; _a < args_3.length; _a++) {
             var arg = args_3[_a];
-            if (typeof arg == "string")
+            if (typeof arg === 'string') {
                 list.push(arg);
-            else
+            }
+            else {
                 this.parent.constraints.or.options = arg;
+            }
         }
         this.parent.constraints.or.peers.push(list);
     };
@@ -108,10 +114,12 @@ var ConstraintUtility = /** @class */ (function () {
         var list = [];
         for (var _a = 0, args_4 = args; _a < args_4.length; _a++) {
             var arg = args_4[_a];
-            if (typeof arg == "string")
+            if (typeof arg === 'string') {
                 list.push(arg);
-            else
+            }
+            else {
                 this.parent.constraints.oxor.options = arg;
+            }
         }
         this.parent.constraints.oxor.peers.push(list);
     };
@@ -126,16 +134,20 @@ var ConstraintUtility = /** @class */ (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
         }
-        if (this.parent.constraints["with"][field] == undefined)
+        if (this.parent.constraints["with"][field] === undefined) {
             this.parent.constraints["with"][field] = { peers: [], options: {} };
+        }
         for (var _b = 0, args_5 = args; _b < args_5.length; _b++) {
             var arg = args_5[_b];
-            if (typeof arg == "string")
+            if (typeof arg === 'string') {
                 this.parent.constraints["with"][field].peers.push(arg);
-            else if (arg instanceof Array)
+            }
+            else if (arg instanceof Array) {
                 (_a = this.parent.constraints["with"][field].peers).push.apply(_a, arg);
-            else
+            }
+            else {
                 this.parent.constraints["with"][field].options = arg;
+            }
         }
     };
     /**
@@ -149,16 +161,20 @@ var ConstraintUtility = /** @class */ (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
         }
-        if (this.parent.constraints.without[field] == undefined)
+        if (this.parent.constraints.without[field] === undefined) {
             this.parent.constraints.without[field] = { peers: [], options: {} };
+        }
         for (var _b = 0, args_6 = args; _b < args_6.length; _b++) {
             var arg = args_6[_b];
-            if (typeof arg == "string")
+            if (typeof arg === 'string') {
                 this.parent.constraints.without[field].peers.push(arg);
-            else if (arg instanceof Array)
+            }
+            else if (arg instanceof Array) {
                 (_a = this.parent.constraints.without[field].peers).push.apply(_a, arg);
-            else
+            }
+            else {
                 this.parent.constraints.without[field].options = arg;
+            }
         }
     };
     /**
@@ -173,10 +189,12 @@ var ConstraintUtility = /** @class */ (function () {
         var list = [];
         for (var _a = 0, args_7 = args; _a < args_7.length; _a++) {
             var arg = args_7[_a];
-            if (typeof arg == "string")
+            if (typeof arg === 'string') {
                 list.push(arg);
-            else
+            }
+            else {
                 this.parent.constraints.xor.options = arg;
+            }
         }
         this.parent.constraints.xor.peers.push(list);
     };
@@ -218,53 +236,55 @@ var Validation = /** @class */ (function () {
             // Set up validation schema
             var validation = _this;
             var schema = Joi.object(validation.definition);
-            var isRequired = req.method == "POST";
+            var isRequired = req.method === 'POST';
             if (!isRequired) {
                 schema = schema.optionalKeys(Object.keys(validation.definition));
             }
             var constraints = validation.constraints;
             for (var i in constraints) {
                 switch (i) {
-                    case "and":
+                    case 'and':
                         for (var _i = 0, _a = constraints.and.peers; _i < _a.length; _i++) {
                             var peer = _a[_i];
                             schema.and.apply(schema, peer);
                         }
                         break;
-                    case "nand":
+                    case 'nand':
                         for (var _b = 0, _c = constraints.nand.peers; _b < _c.length; _b++) {
                             var peer = _c[_b];
                             schema.nand.apply(schema, peer);
                         }
                         break;
-                    case "oxor":
+                    case 'oxor':
                         for (var _d = 0, _e = constraints.oxor.peers; _d < _e.length; _d++) {
                             var peer = _e[_d];
                             schema.oxor.apply(schema, peer);
                         }
                         break;
-                    case "or":
+                    case 'or':
                         for (var _f = 0, _g = constraints.or.peers; _f < _g.length; _f++) {
                             var peer = _g[_f];
                             schema.or.apply(schema, peer);
                         }
                         break;
-                    case "xor":
+                    case 'xor':
                         for (var _h = 0, _j = constraints.xor.peers; _h < _j.length; _h++) {
                             var peer = _j[_h];
                             schema.xor.apply(schema, peer);
                         }
                         break;
-                    //with and withouts
+                    // with and withouts
                 }
             }
             var _k = schema.validate(req.tent.payload), value = _k.value, error = _k.error;
             req.tent.plugins.validation.value = value;
             req.tent.plugins.validation.error = error;
-            if (error)
+            if (error) {
                 onFailMiddleware(req, res, next);
-            else
+            }
+            else {
                 next();
+            }
         };
     };
     /** This function will replace the current `onFailMiddlewareFactory` by the parameter. */
@@ -274,18 +294,18 @@ var Validation = /** @class */ (function () {
     /** Default on fail middleware factory */
     Validation.prototype.onFailMiddlewareFactory = function () {
         /** On fail middleware */
-        return function (req, res, next) {
-            res.tent.apiError(400, "Request validation failed.");
+        return function (req, res) {
+            res.tent.apiError(400, 'Request validation failed.');
         };
     };
     /** Plugin initialization */
     Validation.prototype.init = function () {
-        this.model.Routes.builder("/", "POST").post("sanitize", this.validationMiddleware());
-        this.model.Routes.builder("/", "PUT").post("sanitize", this.validationMiddleware());
+        this.model.Routes.builder('/', 'POST').post('sanitize', this.validationMiddleware());
+        this.model.Routes.builder('/', 'PUT').post('sanitize', this.validationMiddleware());
     };
     Validation = __decorate([
         plugin_1.Plugin({
-            name: "validation",
+            name: 'validation',
             dependencies: []
         })
     ], Validation);

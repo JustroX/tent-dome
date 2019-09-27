@@ -5,7 +5,6 @@
 * @module Model
 */
 
-
 /*******
 *
 *	Copyright (C) 2019  Justine Che T. Romero
@@ -25,22 +24,17 @@
 *
 ********/
 
+import { Tent } from '../index'
+import { SchemaDefinition } from 'mongoose'
 
+import { Schema, SchemaConfig } from './schema'
+import { Routes, RegisterRoute } from './route'
+import { Expand } from './expand'
+import { PluginInterface } from './plugin'
 
-
-
-import { TentDome, Tent } from "../index";
-import { Document, SchemaDefinition } from "mongoose";
-
-import { Schema , SchemaConfig } from "./schema"
-import { Routes	, RegisterRoute } from "./route";
-import { Expand } from "./expand";
-import { PluginInterface } from "./plugin";
-
-
-import { Application as ExpressApp } from "express";
-import pluralize = require("pluralize");
-import Assert 	 = require("assert");
+import { Application as ExpressApp } from 'express'
+import pluralize = require('pluralize');
+import Assert 	 = require('assert');
 
 /**
 * Dictionary interface for storing Models
@@ -50,45 +44,36 @@ interface ModelStore<T>
 	[ key : string ] : Model<T>
 }
 
-
 /**
 * Dictionary for storing Models
 */
-var Models : ModelStore<any> = {};
-
-
-
+var Models : ModelStore<any> = {}
 
 /**
 * Returns a specified Model.
 * @param name  Name of the model
 */
-export function get<T>( name : string ) : Model<T>
-{
-	return Models[name];
+export function get<T> (name : string) : Model<T> {
+  return Models[name]
 }
 
 /**
 * Registers all the model to the express app.
 * @param app  Express application
 */
-export function RegisterModels( app : ExpressApp )
-{
-	app.use( "/" + Tent.get<string>("api prefix") , RegisterRoute() );
-	for(let name in Models)
-	{
-		let model : Model<any> = Models[name]; 
-		app.use(  "/" + Tent.get<string>("api prefix") + "/" + model.dbname , model.Routes.expose());
-
-	}
+export function RegisterModels (app : ExpressApp) {
+  app.use('/' + Tent.get<string>('api prefix'), RegisterRoute())
+  for (const name in Models) {
+    const model : Model<any> = Models[name]
+    app.use('/' + Tent.get<string>('api prefix') + '/' + model.dbname, model.Routes.expose())
+  }
 }
 
 /**
 * This is the Model class used for defining database entities.
-* @typeparam T Schema interface of the model 
+* @typeparam T Schema interface of the model
 */
-export class Model<T> 
-{
+export class Model<T> {
 	/**
 	* Name of the model
 	*/
@@ -98,101 +83,81 @@ export class Model<T>
 	* Pluralized name of the model.
 	*/
 	dbname : string;
-	
 
 	/**
 	* Schema of the Model.
 	*/
 	Schema 		: Schema<T>;
 
-
 	/**
 	* Routes of the Model.
 	*/
 	Routes		: Routes<T>;
-
 
 	/**
 	* Expand definitions of the Model.
 	*/
 	Expand 		: Expand ;
 
-
 	/**
 	* Dictionary to store the plugins.
 	*/
-	plugins : 
+	plugins :
 	{
-		[ pluginName : string  ] : PluginInterface
+		[ pluginName : string ] : PluginInterface
 	} = {};
-	
-
 
 	/**
 	* @param name  name of the model
 	*/
-	constructor(name : string)
-	{
-		this.name = name;
-		this.dbname = pluralize(name);
+	constructor (name : string) {
+	  this.name = name
+	  this.dbname = pluralize(name)
 
-		this.Routes = new Routes<T>( this.name );
-		this.Schema = new Schema<T>( name );
-		this.Expand = new Expand();
+	  this.Routes = new Routes<T>(this.name)
+	  this.Schema = new Schema<T>(name)
+	  this.Expand = new Expand()
 	}
-
-
 
 	/**
 	* Defines the model schema.
-	* @param schema  Mongoose schema of the model. 
+	* @param schema  Mongoose schema of the model.
 	* @param config  Mongoose model configuration.
 	*/
-	define( schema : SchemaDefinition , config : SchemaConfig = {} ) : void
-	{
-		this.Schema.define( schema, config );
+	define (schema : SchemaDefinition, config : SchemaConfig = {}) : void {
+	  this.Schema.define(schema, config)
 	}
-
-
-
 
 	/**
 	* Registers the model
 	*/
-	register() : void
-	{
-		(this.Schema as Schema<T>).register();
-		(this.Routes as Routes<T>).register();
+	register () : void {
+	  (this.Schema as Schema<T>).register();
+	  (this.Routes as Routes<T>).register()
 
-		for(let i in this.plugins)
-		{
-			this.plugins[i].model = this;
-			this.plugins[i].init();
-		}
+	  for (const i in this.plugins) {
+	    this.plugins[i].model = this
+	    this.plugins[i].init()
+	  }
 
-		Models[ this.name ] = this;
+	  Models[this.name] = this
 	}
-
-
-
-
 
 	/**
 	* Installs a plugin.
 	* @param plugin  Plugin to install.
 	*/
-	install( plugin : any )
-	{
-		//plugin validity
-		Assert( plugin.name 		, "Invalid plugin." );
-		Assert( plugin.dependencies , "Invalid plugin." );
-		Assert( plugin.init 		, "Invalid plugin." );
+	install (plugin : any) {
+	  // plugin validity
+	  Assert(plugin.name, 'Invalid plugin.')
+	  Assert(plugin.dependencies, 'Invalid plugin.')
+	  Assert(plugin.init, 'Invalid plugin.')
 
-		Assert( !(plugin.name in this.plugins) , "Plugin is already installed." );
+	  Assert(!(plugin.name in this.plugins), 'Plugin is already installed.')
 
-		let missing_dependencies = plugin.dependencies.filter( (x : string) =>!(x in this.plugins) );
-		Assert( !missing_dependencies.length, "Plugin dependencies are not yet installed : " + missing_dependencies.join(",") );
+	  const missingDependencies = plugin.dependencies.filter((x : string) => !(x in this.plugins))
+	  Assert(!missingDependencies.length, 'Plugin dependencies are not yet installed : ' + missingDependencies.join(','))
 
-		this.plugins[plugin.name] = plugin;
+	  this.plugins[plugin.name] = plugin
 	}
 }

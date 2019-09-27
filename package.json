@@ -4,10 +4,11 @@
   "description": "REST Api framework",
   "main": "index",
   "scripts": {
-    "compile": "tsc --outDir dist",
+    "compile": "tsc index.ts  --experimentalDecorators --outDir dist",
     "test": "tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators && mocha ./dist/tests/index.spec.js --exit",
     "test-watch": "cls && tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators --watch ",
-    "create-docs": "typedoc --readme README.md --out docs/ index.ts --mode modules --name Tent"
+    "create-docs": "typedoc --readme README.md --out docs/ index.ts --mode modules --name Tent",
+    "lint" : "eslint index.ts components/**/*.ts --fix"
   },
   "repository": {
     "type": "git",
@@ -32,9 +33,17 @@
     "@types/joi": "^14.3.3",
     "@types/object-assign": "^4.0.30",
     "@types/pluralize": "0.0.29",
+    "@typescript-eslint/eslint-plugin": "^2.3.1",
+    "@typescript-eslint/parser": "^2.3.1",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "chai-http": "^4.3.0",
+    "eslint": "^6.4.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "mocha": "^6.2.0",
     "node-mocks-http": "^1.7.6",
     "nyc": "^14.1.1",

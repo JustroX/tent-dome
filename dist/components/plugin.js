@@ -112,12 +112,13 @@ exports.__esModule = true;
 */
 function Plugin(options) {
     /**
-    * Plugin Decorator
-    * @param constructorFn Constructor function of the class
-    */
+      * Plugin Decorator
+      * @param constructorFn Constructor function of the class
+      */
     return function (constructorFn) {
-        if (!constructorFn.prototype.init)
-            throw "Plugins should have an init() method.";
+        if (!constructorFn.prototype.init) {
+            throw new Error('Plugins should have an init() method.');
+        }
         constructorFn.prototype.name = options.name;
         constructorFn.prototype.dependencies = options.dependencies;
     };

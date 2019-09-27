@@ -4,8 +4,8 @@
   "description": "REST Api framework",
   "main": "index",
   "scripts": {
-    "compile": "tsc --outDir dist --watch",
-    "test": "cls && tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators && cls && mocha ./dist/tests/index.spec.js --exit",
+    "compile": "tsc --outDir dist",
+    "test": "tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators && mocha ./dist/tests/index.spec.js --exit",
     "test-watch": "cls && tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators --watch ",
     "create-docs": "typedoc --readme README.md --out docs/ index.ts --mode modules --name Tent"
   },

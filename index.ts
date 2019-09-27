@@ -25,7 +25,7 @@
 ********/
 
 
-import { SchemaDefinition as Definition } from "mongoose";
+import { SchemaDefinition as Definition, Schema } from "mongoose";
 import { Model , RegisterModels  } from "./components/model";
 import { Server , HttpServerInterface } from "./components/server";
 import { SchemaConfig } from "./components/schema"
@@ -54,6 +54,8 @@ export var Sanitation = SanitationPluginModule.Sanitation;
 import * as ValidationModule from "./components/plugins/validation";
 export var Validation = ValidationModule.Validation;
 
+/** Expose mongoose types */
+export var Types = Schema.Types; 
 
 /**
 * Configuration options for Tent

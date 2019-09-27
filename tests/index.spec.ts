@@ -1,153 +1,36 @@
-import { TentDome } from "../index";
-import { Model} from "../components/model";
-import { assert, expect } from "chai";
+import * as Tent from "../index";
+import { assert, expect,use } from "chai";
 
-import mongoose = require("mongoose");
+import "./tent.spec";
 
-
-
-
-import { config } from "dotenv";
-config();
-
-//preconditions
-
-import "./components/server.spec";
-import "./components/model.spec";
-
-
-
-describe("Tent",function()
+describe("Tent Module",function()
 {
-	describe("Tent",function()
+	it("Tent should be available",function()
 	{
-		let Tent = new TentDome();
-		it('should return an object',function()
-		{
-			expect(Tent).to.be.an('object');
-		});
+		expect(Tent.Tent).to.exist;
 	});
-
-	describe("Tent set()",function()
+	it("Plugin should be available",function()
 	{
-		let Tent = new TentDome();	
-		it('should equal TentOptions',function()
-		{
-			Tent.set<string>('sample string', 'hello');
-			Tent.set<number>('sample number',  123	 );
-			
-			expect(Tent.TentOptions["sample string"]).to.equal('hello');
-			expect(Tent.TentOptions["sample number"]).to.equal(123);	
-		});
-
-		it('should replace previous TentOptions',function()
-		{
-			Tent.set<string>('sample string', 'world');
-			Tent.set<number>('sample number',  234	 );
-
-			expect(Tent.TentOptions["sample string"]).to.equal('world');
-			expect(Tent.TentOptions["sample number"]).to.equal(234);	
-		});
+		expect(Tent.Plugin).to.exist;
 	});
-
-	describe("Tent get()",function()
+	it("Route should be available",function()
 	{
-		let Tent = new TentDome();	
-		Tent.set<string>('sample string', 'hello');
-		Tent.set<number>('sample number',  123	 );
-	
-		it('should equal TentOptions',function()
-		{		
-			expect(Tent.get<string>('sample string')).to.equal('hello');
-			expect(Tent.get<number>('sample number')).to.equal(123);	
-		});
-
+		expect(Tent.Route).to.exist;
 	});
-
-	describe("#setDefaultOptions()",function()
+	it("Sanitation Plugin should be available",function()
 	{
-		let Tent = new TentDome();	
-		it('should have default options',function()
-		{
-			Tent.setDefaultOptions();
-			expect(Tent.TentOptions["api prefix"]).to.equal('api');	
-		});
+		expect(Tent.Sanitation).to.exist;
 	});
-
-	describe("#init()",function()
+	it("Validation Plugin should be available",function()
 	{
-		let Tent = new TentDome();
-		it('should have default options',function()
-		{
-			Tent.init({});
-			expect(Tent.TentOptions["api prefix"]).to.equal('api');
-		});
-
-		after(function()
-		{
-			Tent.AppServer.close();
-		})
+		expect(Tent.Validation).to.exist;
 	});
-
-	describe("#Entity",function()
+	it("Types should be available",function()
 	{
-		let Tent = new TentDome();
-		it('should return proper model',function()
-		{
-			let model = Tent.Entity<any>( "sample" , { name : String });
-			expect(model).to.be.instanceof(Model);
-		});
+		expect(Tent.Types).to.exist;
 	});
-
-	describe("#start",function()
+	it("TentDome should be available",function()
 	{
-		let Tent = new TentDome();
-		let model = Tent.Entity<any>( "sample" , { name : String });
-
-		Tent.init({
-			"mongodb uri" :process.env.TEST_MONGODB_URI
-		});
-
-		it('should not throw any error',function()
-		{
-			expect(function()
-			{
-				Tent.start();
-			}).to.not.throw();
-		});
-
-		after(function()
-		{
-			Tent.AppServer.close();
-		});
+		expect(Tent.TentDome).to.exist;
 	});
-
-
-	describe("#server",function()
-	{
-		let Tent = new TentDome();
-		it('should return tent server',function()
-		{
-			expect(Tent.server()).to.be.equal( Tent.AppServer.server );
-		});
-	});
-
-
-	describe("#app",function()
-	{
-		let Tent = new TentDome();
-		it('should return tent app',function()
-		{
-			expect(Tent.app()).to.be.equal( Tent.AppServer.app );
-		});
-
-	});
-
 });
-
-//integration without plugins
-import "./integration.spec";
-
-//built-in plugins
-import "./components/plugins/sanitation.spec";
-import "./components/plugins/validation.spec";

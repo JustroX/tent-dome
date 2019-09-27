@@ -2,7 +2,6 @@
 *	@module Schema
 */
 
-
 /*******
 *
 *	Copyright (C) 2019  Justine Che T. Romero
@@ -22,8 +21,7 @@
 *
 ********/
 
-
-import { Schema as MongooseSchema, model as MongooseModel, Document, Model, SchemaDefinition as Definition } from "mongoose";
+import { Schema as MongooseSchema, model as MongooseModel, Document, Model, SchemaDefinition as Definition } from 'mongoose'
 
 /**
 * Virtual field definition
@@ -32,15 +30,19 @@ import { Schema as MongooseSchema, model as MongooseModel, Document, Model, Sche
 interface VirtualInterface<T>
 {
 	/** setter function of the virtual */
-	set? (value: T) : void,
-	
+	set?: (value: T) => void,
+
 	/** getter function of the virtual */
-	get? () : T,
+	get?: () => T,
+
+	/** configuration for the virtuals  **/
+	config?: { [ key : string] : any}
+
+	[ key : string ] : any
 }
 
-
 /**
-* Dictionary interface for numerous virtual fields 
+* Dictionary interface for numerous virtual fields
 */
 interface VirtualsStoreInterface
 {
@@ -60,24 +62,23 @@ export type SchemaDefinition<T> = T & Document;
 
 /**
 * This is the Schema class which encapsulates the Mongoose business part of the model.
-* @typeparam T Schema interface of the model 
+* @typeparam T Schema interface of the model
 */
-export class Schema<T>
-{
-	private schema 	 : Definition = {};
-	private virtuals : VirtualsStoreInterface = {};
-	private config	 : SchemaConfig = {};
-	private name     : string;
-	
-	model  		   : Model<SchemaDefinition<T>> | undefined;
+export class Schema<T> {
+	private name : string;
+
+	schema 	 : Definition = {};
+	config	 : SchemaConfig = {};
+	virtuals : VirtualsStoreInterface = {};
+
+	model : Model<SchemaDefinition<T>> | undefined;
 	mongooseSchema : MongooseSchema | undefined;
-	
+
 	/**
 	* @param name The name of the model
 	*/
-	constructor(name : string)
-	{
-		this.name = name;
+	constructor (name : string) {
+	  this.name = name
 	}
 
 	/**
@@ -85,13 +86,12 @@ export class Schema<T>
 	* @param schema Definition of the model. Mongoose schema
 	* @param config Mongoose schema configuration.
 	*/
-	define( schema: Definition, config? : SchemaConfig ) : void
-	{
-		this.schema = schema;
+	define (schema: Definition, config? : SchemaConfig) : void {
+	  this.schema = schema
 
-		if(config)
-			for(let i in config)
-				this.set(i,config[i]);
+	  if (config) {
+	    for (const i in config) { this.set(i, config[i]) }
+	  }
 	}
 
 	/**
@@ -100,36 +100,40 @@ export class Schema<T>
 	* @param virtual virtual field definition
 	* @typeparam T data type of the virtual field
 	*/
-	virtual<T>(key: string, virtual : VirtualInterface<T> ) : void
-	{
-		this.virtuals[key] = virtual;
+	virtual<T> (key: string, virtual : VirtualInterface<T>) : void {
+	  this.virtuals[key] = virtual
 	}
-	
+
 	/**
 	* Sets a schema configuration
 	* @param key name of the configuration option
 	* @param value value of the configuration option
 	*/
-	set(key : string, value : any) : void
-	{
-		this.config[key] = value;
+	set (key : string, value : any) : void {
+	  this.config[key] = value
 	}
 
 	/**
 	* Returns the schema configuration
 	* @param key name of the configuration option
 	*/
-	get(key : string) : any
-	{
-		return this.config[key];
+	get (key : string) : any {
+	  return this.config[key]
 	}
 
 	/**
 	* Registers the schema. Creates a mongoose schema and mongoose model.
 	*/
-	register()
-	{
-		this.mongooseSchema = new MongooseSchema( this.schema as Definition , this.config );
-		this.model = MongooseModel<SchemaDefinition<T>>(this.name , this.mongooseSchema);
+	register () {
+	  this.mongooseSchema = new MongooseSchema(this.schema as Definition, this.config)
+
+	  // Parse virtual fields
+	  for (const i in this.virtuals) {
+	    const virtual = this.mongooseSchema.virtual(i, this.virtuals[i].config)
+	    if ('get' in this.virtuals[i]) { virtual.get(this.virtuals[i].get as Function) }
+	    if ('set' in this.virtuals[i]) { virtual.set(this.virtuals[i].set as Function) }
+	  }
+
+	  this.model = MongooseModel<SchemaDefinition<T>>(this.name, this.mongooseSchema)
 	}
 }

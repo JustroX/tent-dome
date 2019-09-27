@@ -21,13 +21,13 @@
 *
 ********/
 
-import { Plugin } from "../plugin";
-import Joi = require("@hapi/joi");
+import { Plugin } from '../plugin'
 
-import { Accessor , Dispatcher }  from "../routes/accessor";
-import { Model } from "../model";
+import { Accessor, Dispatcher } from '../routes/accessor'
+import { Model } from '../model'
 
-import { Request as ExpressRequest, Response  as ExpressResponse,NextFunction } from "express";
+import { Request as ExpressRequest, Response as ExpressResponse, NextFunction } from 'express'
+import Joi = require('@hapi/joi');
 interface Request extends ExpressRequest
 {
 	tent: Accessor<any>
@@ -37,168 +37,118 @@ interface Response extends ExpressResponse
 	tent: Dispatcher
 }
 
-type Middleware = ( req: Request , res: Response, next: NextFunction )=> (void | Promise<void>);
+type Middleware = (req: Request, res: Response, next: NextFunction)=> (void | Promise<void>);
 
 /**
 * Utility function for chainable constraints definition
 */
-export class ConstraintUtility
-{
+export class ConstraintUtility {
 	/** Validation reference */
 	parent : Validation;
 
-	/** 
+	/**
 	* @param parent Validation instance
 	*/
-	constructor(parent : Validation)
-	{
-		this.parent = parent;
+	constructor (parent : Validation) {
+	  this.parent = parent
 	}
-
-	/** 
-	* @param args - if `args[i]` is string, `args[i]` is a peer
-					if `args[i]` is Constraint option, it will be the new option for the relation
-	*/
-	and( ... args : ( string | ConstraintOptions )[] )
-	{
-		let list : string[] = [];
-		for(let arg of args)
-		{
-			if(typeof arg == "string")
-				list.push(arg);
-			else
-				this.parent.constraints.and.options = arg;
-		}
-		this.parent.constraints.and.peers.push(list);
-	}
-
-	/** 
-	* @param args - if `args[i]` is string, `args[i]` is a peer
-					if `args[i]` is Constraint option, it will be the new option for the relation
-	*/
-	nand( ... args : ( string | ConstraintOptions )[] )
-	{
-		let list : string[] = [];
-		for(let arg of args)
-		{
-			if(typeof arg == "string")
-				list.push(arg);
-			else
-				this.parent.constraints.nand.options = arg;
-		}
-		this.parent.constraints.nand.peers.push(list);
-	}
-
-
-	/** 
-	* @param args - if `args[i]` is string, `args[i]` is a peer
-					if `args[i]` is Constraint option, it will be the new option for the relation
-	*/
-	or( ... args : ( string | ConstraintOptions )[] )
-	{
-		let list : string[] = [];
-		for(let arg of args)
-		{
-			if(typeof arg == "string")
-				list.push(arg);
-			else
-				this.parent.constraints.or.options = arg;
-		}
-		this.parent.constraints.or.peers.push(list);
-	}
-
-
-	/** 
-	* @param args - if `args[i]` is string, `args[i]` is a peer
-					if `args[i]` is Constraint option, it will be the new option for the relation
-	*/
-	oxor( ... args : ( string | ConstraintOptions )[] )
-	{
-		let list : string[] = [];
-		for(let arg of args)
-		{
-			if(typeof arg == "string")
-				list.push(arg);
-			else
-				this.parent.constraints.oxor.options = arg;
-		}	
-		this.parent.constraints.oxor.peers.push(list);
-	}
-
 
 	/**
-	* @param field field to have the relation. 
 	* @param args - if `args[i]` is string, `args[i]` is a peer
 					if `args[i]` is Constraint option, it will be the new option for the relation
 	*/
-	with( field : string, ... args : ( string[] | string | ConstraintOptions )[] )
-	{
-		if(this.parent.constraints.with[field] == undefined)
-			this.parent.constraints.with[field] = { peers: [], options: {} };
-		for(let arg of args)
-		{
-			if(typeof arg == "string")
-				this.parent.constraints.with[field].peers.push(arg);	
-			else
-			if(arg instanceof Array )
-				this.parent.constraints.with[field].peers.push(...arg);	
-			else
-				this.parent.constraints.with[field].options = arg;	
-		}
+	and (...args : (string | ConstraintOptions)[]) {
+	  const list : string[] = []
+	  for (const arg of args) {
+	    if (typeof arg === 'string') { list.push(arg) } else { this.parent.constraints.and.options = arg }
+	  }
+	  this.parent.constraints.and.peers.push(list)
 	}
-
 
 	/**
-	* @param field field to have the relation. 
 	* @param args - if `args[i]` is string, `args[i]` is a peer
 					if `args[i]` is Constraint option, it will be the new option for the relation
 	*/
-	without( field : string, ... args : ( string | ConstraintOptions )[] )
-	{
-		if(this.parent.constraints.without[field] == undefined)
-			this.parent.constraints.without[field] = { peers: [], options: {} };
-		for(let arg of args)
-		{
-			if(typeof arg == "string")
-				this.parent.constraints.without[field].peers.push(arg);	
-			else
-			if(arg instanceof Array )
-				this.parent.constraints.without[field].peers.push(...arg);	
-			else
-				this.parent.constraints.without[field].options = arg;	
-		}
+	nand (...args : (string | ConstraintOptions)[]) {
+	  const list : string[] = []
+	  for (const arg of args) {
+	    if (typeof arg === 'string') { list.push(arg) } else { this.parent.constraints.nand.options = arg }
+	  }
+	  this.parent.constraints.nand.peers.push(list)
 	}
 
-
-	/** 
+	/**
 	* @param args - if `args[i]` is string, `args[i]` is a peer
 					if `args[i]` is Constraint option, it will be the new option for the relation
 	*/
-	xor( ... args : ( string | ConstraintOptions )[] )
-	{
-		let list : string[] = [];
-		for(let arg of args)
-		{
-			if(typeof arg == "string")
-				list.push(arg);
-			else
-				this.parent.constraints.xor.options = arg;
-		}	
-		this.parent.constraints.xor.peers.push(list);
+	or (...args : (string | ConstraintOptions)[]) {
+	  const list : string[] = []
+	  for (const arg of args) {
+	    if (typeof arg === 'string') { list.push(arg) } else { this.parent.constraints.or.options = arg }
+	  }
+	  this.parent.constraints.or.peers.push(list)
+	}
+
+	/**
+	* @param args - if `args[i]` is string, `args[i]` is a peer
+					if `args[i]` is Constraint option, it will be the new option for the relation
+	*/
+	oxor (...args : (string | ConstraintOptions)[]) {
+	  const list : string[] = []
+	  for (const arg of args) {
+	    if (typeof arg === 'string') { list.push(arg) } else { this.parent.constraints.oxor.options = arg }
+	  }
+	  this.parent.constraints.oxor.peers.push(list)
+	}
+
+	/**
+	* @param field field to have the relation.
+	* @param args - if `args[i]` is string, `args[i]` is a peer
+					if `args[i]` is Constraint option, it will be the new option for the relation
+	*/
+	with (field : string, ...args : (string[] | string | ConstraintOptions)[]) {
+	  if (this.parent.constraints.with[field] === undefined) { this.parent.constraints.with[field] = { peers: [], options: {} } }
+	  for (const arg of args) {
+	    if (typeof arg === 'string') { this.parent.constraints.with[field].peers.push(arg) } else
+	    if (arg instanceof Array) { this.parent.constraints.with[field].peers.push(...arg) } else { this.parent.constraints.with[field].options = arg }
+	  }
+	}
+
+	/**
+	* @param field field to have the relation.
+	* @param args - if `args[i]` is string, `args[i]` is a peer
+					if `args[i]` is Constraint option, it will be the new option for the relation
+	*/
+	without (field : string, ...args : (string | ConstraintOptions)[]) {
+	  if (this.parent.constraints.without[field] === undefined) { this.parent.constraints.without[field] = { peers: [], options: {} } }
+	  for (const arg of args) {
+	    if (typeof arg === 'string') { this.parent.constraints.without[field].peers.push(arg) } else
+	    if (arg instanceof Array) { this.parent.constraints.without[field].peers.push(...arg) } else { this.parent.constraints.without[field].options = arg }
+	  }
+	}
+
+	/**
+	* @param args - if `args[i]` is string, `args[i]` is a peer
+					if `args[i]` is Constraint option, it will be the new option for the relation
+	*/
+	xor (...args : (string | ConstraintOptions)[]) {
+	  const list : string[] = []
+	  for (const arg of args) {
+	    if (typeof arg === 'string') { list.push(arg) } else { this.parent.constraints.xor.options = arg }
+	  }
+	  this.parent.constraints.xor.peers.push(list)
 	}
 }
-
 
 /**
 * Validation Plugin
 * This adds validation middleware on `POST` and `PUT`
 */
 @Plugin({
-	name : "validation",
-	dependencies : [],
+  name: 'validation',
+  dependencies: []
 })
-export class Validation
-{
+export class Validation {
 	/** Joi reference. */
 	joi = Joi;
 
@@ -208,104 +158,82 @@ export class Validation
 	/** Validation contraints */
 	constraints : Constraint =
 	{
-		and : { peers: [], options: {} },
-		nand : { peers: [], options: {} },
-		oxor : { peers: [], options: {} },
-		or : { peers: [], options: {} },
-		xor : { peers: [], options: {} },
-		with : {},
-		without : {}
+	  and: { peers: [], options: {} },
+	  nand: { peers: [], options: {} },
+	  oxor: { peers: [], options: {} },
+	  or: { peers: [], options: {} },
+	  xor: { peers: [], options: {} },
+	  with: {},
+	  without: {}
 	};
 
-	constructor(){}	
-
 	/** Defines the validation Schema. */
-	schema( schema : Definition )
-	{
-		this.definition = schema;
-		return new ConstraintUtility(this);
+	schema (schema : Definition) {
+	  this.definition = schema
+	  return new ConstraintUtility(this)
 	}
 
 	/** Validation middleware factory. This will be called on init. */
-	validationMiddleware() : Middleware
-	{
-		let onFailMiddleware = this.onFailMiddlewareFactory();
-		const _this = this;
+	validationMiddleware () : Middleware {
+	  const onFailMiddleware = this.onFailMiddlewareFactory()
+	  const _this = this
 
-		return function(req : Request, res: Response , next : NextFunction)
-		{
-			req.tent.plugins.validation = {};
+	  return function (req : Request, res: Response, next : NextFunction) {
+	    req.tent.plugins.validation = {}
 
-			// Set up validation schema
-			let validation = _this;
-			let schema = Joi.object(validation.definition);
-			const isRequired = req.method == "POST";
-			if(!isRequired)
-			{
-				schema = schema.optionalKeys(Object.keys(validation.definition));
-			}
-			
-			let constraints = validation.constraints; 
-			for(let i in constraints)
-			{
-				switch (i) {
-					case "and":  
-						for(let peer of constraints.and.peers )
-						schema.and( ...peer); break;
-					case "nand": 
-						for(let peer of constraints.nand.peers )
-						schema.nand(...peer); break;
-					case "oxor": 
-						for(let peer of constraints.oxor.peers )
-						schema.oxor(...peer); break;
-					case "or":   
-						for(let peer of constraints.or.peers )
-						schema.or(  ...peer); break;
-					case "xor":  
-						for(let peer of constraints.xor.peers )
-						schema.xor( ...peer); break;
+	    // Set up validation schema
+	    const validation = _this
+	    let schema = Joi.object(validation.definition)
+	    const isRequired = req.method === 'POST'
+	    if (!isRequired) {
+	      schema = schema.optionalKeys(Object.keys(validation.definition))
+	    }
 
-					//with and withouts
-				}
-			}
+	    const constraints = validation.constraints
+	    for (const i in constraints) {
+	      switch (i) {
+	        case 'and':
+	          for (const peer of constraints.and.peers) { schema.and(...peer) } break
+	        case 'nand':
+	          for (const peer of constraints.nand.peers) { schema.nand(...peer) } break
+	        case 'oxor':
+	          for (const peer of constraints.oxor.peers) { schema.oxor(...peer) } break
+	        case 'or':
+	          for (const peer of constraints.or.peers) { schema.or(...peer) } break
+	        case 'xor':
+	          for (const peer of constraints.xor.peers) { schema.xor(...peer) } break
 
+					// with and withouts
+	      }
+	    }
 
-			let  { value, error }  = schema.validate( req.tent.payload )
+	    const { value, error } = schema.validate(req.tent.payload)
 
-			req.tent.plugins.validation.value = value;
-			req.tent.plugins.validation.error = error;
-			
-			if(error)
-				onFailMiddleware(req,res,next);
-			else
-				next();	
+	    req.tent.plugins.validation.value = value
+	    req.tent.plugins.validation.error = error
 
-		}
+	    if (error) { onFailMiddleware(req, res, next) } else { next() }
+	  }
 	}
 
 	/** This function will replace the current `onFailMiddlewareFactory` by the parameter. */
-	onFail( mw: () => Middleware )
-	{
-		this.onFailMiddlewareFactory  = mw;
+	onFail (mw: () => Middleware) {
+	  this.onFailMiddlewareFactory = mw
 	}
 
 	/** Default on fail middleware factory */
-	onFailMiddlewareFactory() : Middleware
-	{
-		/** On fail middleware */
-		return function(req : Request, res: Response , next: NextFunction)
-		{
-			res.tent.apiError(400,"Request validation failed.")
-		};
+	onFailMiddlewareFactory () : Middleware {
+	  /** On fail middleware */
+	  return function (req : Request, res: Response) {
+	    res.tent.apiError(400, 'Request validation failed.')
+	  }
 	}
 
 	/** Plugin initialization */
-	init()
-	{
-		this.model.Routes.builder("/","POST").post("sanitize",this.validationMiddleware());
-		this.model.Routes.builder("/","PUT") .post("sanitize",this.validationMiddleware());
+	init () {
+	  this.model.Routes.builder('/', 'POST').post('sanitize', this.validationMiddleware())
+	  this.model.Routes.builder('/', 'PUT').post('sanitize', this.validationMiddleware())
 	}
-
 }
 
 /**
@@ -344,20 +272,20 @@ interface SingleConstraint
 	[ key : string ] :
 	{
 		peers	: string[],
-		options : ConstraintOptions 
+		options : ConstraintOptions
 	}
 }
 
 /**
-* Interface for peer constraints of the schema  
+* Interface for peer constraints of the schema
 */
 interface Constraint
 {
 	and		: MutualConstraint,
 	nand	: MutualConstraint,
 	or		: MutualConstraint,
-	oxor	: MutualConstraint,   
-	xor		: MutualConstraint,	
+	oxor	: MutualConstraint,
+	xor		: MutualConstraint,
 
 	with	: SingleConstraint,
 	without : SingleConstraint

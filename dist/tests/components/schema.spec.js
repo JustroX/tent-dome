@@ -66,5 +66,11 @@ describe("Schema", function () {
                 schema.register();
             }).to.not["throw"]();
         });
+        it("should add `mongooseSchema on scope`", function () {
+            chai_1.expect(schema.mongooseSchema).to.exist;
+        });
+        it("should add `model on scope`", function () {
+            chai_1.expect(schema.model).to.exist;
+        });
     });
 });

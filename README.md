@@ -87,7 +87,7 @@ See this [link](https://justrox.github.io/tent-dome/) for the documentation.
 - [x] Sanitation
 - [x] Validation
 - [x] Expand Query
-- [ ] Virtual fields
+- [x] Virtual fields
 - [ ] Methods and Statics
 - [ ] Authentication Plugin
 - [ ] Permissions Plugin

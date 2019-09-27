@@ -12,6 +12,24 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 exports.__esModule = true;
+/*******
+*
+*	Copyright (C) 2019  Justine Che T. Romero
+*
+*    This program is free software: you can redistribute it and/or modify
+*    it under the terms of the GNU General Public License as published by
+*    the Free Software Foundation, either version 3 of the License, or
+*    any later version.
+*
+*    This program is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*    GNU General Public License for more details.
+*
+*    You should have received a copy of the GNU General Public License
+*    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*
+********/
 var middlewares_1 = require("./routes/middlewares");
 var builder_1 = require("./routes/builder");
 var express_1 = require("express");
@@ -28,7 +46,7 @@ var Routes = /** @class */ (function () {
         /** List of builder definitions */
         this.builders = [];
         /** Name of the current model. */
-        this.name = "";
+        this.name = '';
         this.name = name;
         this.router = express_1.Router();
     }
@@ -42,12 +60,15 @@ var Routes = /** @class */ (function () {
             var endpoint = item.endpoint;
             var method = item.method.toLowerCase();
             var builder = item.builder;
-            if (method == "list")
+            if (method === 'list') {
                 (_a = this.router).get.apply(_a, __spreadArrays([endpoint], builder.expose()));
-            else if (method == "post")
+            }
+            else if (method === 'post') {
                 (_b = this.router).post.apply(_b, __spreadArrays([endpoint], builder.expose()));
-            else
-                (_c = this.router)[method].apply(_c, __spreadArrays([endpoint + ":id"], builder.expose()));
+            }
+            else {
+                (_c = this.router)[method].apply(_c, __spreadArrays([endpoint + ':id'], builder.expose()));
+            }
         }
     };
     /**
@@ -70,8 +91,8 @@ var Routes = /** @class */ (function () {
     * @param method HTTP method
     */
     Routes.prototype.builder = function (endpoint, method) {
-        var builder = this.builders.filter(function (x) { return x.endpoint == endpoint && x.method == method; })[0];
-        assert(builder, "Builder endpoint is not yet defined.");
+        var builder = this.builders.filter(function (x) { return x.endpoint === endpoint && x.method === method; })[0];
+        assert(builder, 'Builder endpoint is not yet defined.');
         return builder.builder;
     };
     /**
@@ -84,7 +105,7 @@ var Routes = /** @class */ (function () {
      * Creates a new endpoint with predefined middlewares to create a new document. Returns the builder.
      */
     Routes.prototype.create = function () {
-        var builder = this.endpoint("/", "POST");
+        var builder = this.endpoint('/', 'POST');
         builder
             .model(this.name)
             .create()
@@ -98,7 +119,7 @@ var Routes = /** @class */ (function () {
      * Creates a new endpoint with predefined middlewares to update a new document. Returns the builder.
      */
     Routes.prototype.update = function () {
-        var builder = this.endpoint("/", "PUT");
+        var builder = this.endpoint('/', 'PUT');
         builder
             .model(this.name)
             .read()
@@ -112,7 +133,7 @@ var Routes = /** @class */ (function () {
      * Creates a new endpoint with predefined middlewares to read a new document. Returns the builder.
      */
     Routes.prototype.read = function () {
-        var builder = this.endpoint("/", "GET");
+        var builder = this.endpoint('/', 'GET');
         builder
             .model(this.name)
             .read()
@@ -123,7 +144,7 @@ var Routes = /** @class */ (function () {
      * Creates a new endpoint with predefined middlewares to list a query. Returns the builder.
      */
     Routes.prototype.list = function () {
-        var builder = this.endpoint("/", "LIST");
+        var builder = this.endpoint('/', 'LIST');
         builder
             .model(this.name)
             .param()
@@ -135,7 +156,7 @@ var Routes = /** @class */ (function () {
      * Creates a new endpoint with predefined middlewares to delete a new document. Returns the builder.
      */
     Routes.prototype["delete"] = function () {
-        var builder = this.endpoint("/", "DELETE");
+        var builder = this.endpoint('/', 'DELETE');
         builder
             .model(this.name)
             .read()
@@ -151,7 +172,7 @@ exports.Routes = Routes;
  */
 function RegisterRoute() {
     var router = express_1.Router();
-    router.use("/", middlewares_1.Middlewares.initTent);
+    router.use('/', middlewares_1.Middlewares.initTent);
     return router;
 }
 exports.RegisterRoute = RegisterRoute;

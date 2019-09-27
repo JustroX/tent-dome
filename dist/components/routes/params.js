@@ -46,7 +46,7 @@ exports.Parse = Parse;
 function Sort(result, raw) {
     var extractField = function (fieldValue) {
         var indexOfDash = fieldValue.indexOf('-') + 1;
-        return { val: fieldValue.slice(indexOfDash), orientation: 1 - 2 * Number(fieldValue[0] == '-') };
+        return { val: fieldValue.slice(indexOfDash), orientation: 1 - 2 * Number(fieldValue[0] === '-') };
     };
     if (raw.sort) {
         var _a = extractField(raw.sort), val = _a.val, orientation_1 = _a.orientation;
@@ -82,12 +82,12 @@ exports.Filters = Filters;
 * @param raw unprocessed query param reference
 */
 function FilterSanitize(result, raw) {
-    var BLACKLIST = ["sort", "limit", "offset", "expand"];
+    var BLACKLIST = ['sort', 'limit', 'offset', 'expand'];
     for (var i in raw) {
-        if (BLACKLIST.indexOf(i) == -1) {
+        if (BLACKLIST.indexOf(i) === -1) {
             /**
-             *	  @todo Validate if field has read permissions
-             */
+                   *	  @todo Validate if field has read permissions
+                   */
             result.filters[i] = raw[i];
         }
     }
@@ -102,13 +102,13 @@ exports.FilterSanitize = FilterSanitize;
 function FilterParse(result) {
     for (var key in result.filters) {
         var filterValue = result.filters[key];
-        if (typeof filterValue != "string") {
+        if (typeof filterValue !== 'string') {
             result.filters[key] = filterValue;
             return;
         }
-        var bounds = filterValue.split("..");
-        var list = filterValue.split(",");
-        var isRange = bounds.length == 2;
+        var bounds = filterValue.split('..');
+        var list = filterValue.split(',');
+        var isRange = bounds.length === 2;
         var isList = list.length > 1;
         var lower = void 0, upper = void 0, value = void 0;
         if (isRange) {
@@ -121,8 +121,9 @@ function FilterParse(result) {
                 result.filters[key].$lte = upper;
         }
         else if (isList) {
-            for (var i in list)
+            for (var i in list) {
                 list[i] = ValueParse(list[i]);
+            }
             result.filters[key] = { $in: list };
         }
         else {
@@ -139,22 +140,30 @@ exports.FilterParse = FilterParse;
 function ValueParse(value) {
     var prefix = value.slice(0, 4);
     var unparsedValue = value.slice(4);
-    if (prefix == "$dt_")
+    if (prefix === '$dt_') {
         return new Date(unparsedValue);
-    if (prefix == "$bl_")
-        return unparsedValue == "true";
-    if (prefix == "$zz_")
+    }
+    if (prefix === '$bl_') {
+        return unparsedValue === 'true';
+    }
+    if (prefix === '$zz_') {
         return parseInt(unparsedValue);
-    if (prefix == "$fl_")
+    }
+    if (prefix === '$fl_') {
         return parseFloat(unparsedValue);
-    if (prefix == "$st_")
-        return "" + unparsedValue;
-    if (prefix == "$ne_")
+    }
+    if (prefix === '$st_') {
+        return '' + unparsedValue;
+    }
+    if (prefix === '$ne_') {
         return { $ne: ValueParse(unparsedValue) };
-    if (prefix == "$lk_")
+    }
+    if (prefix === '$lk_') {
         return { $regex: new RegExp(ValueParse(unparsedValue)), $options: 'i' };
-    if (prefix == "$nll")
+    }
+    if (prefix === '$nll') {
         return null;
+    }
     return prefix + unparsedValue;
 }
 exports.ValueParse = ValueParse;
@@ -166,7 +175,7 @@ exports.ValueParse = ValueParse;
 function Expand(result, raw) {
     if (!raw.expand)
         return;
-    for (var _i = 0, _a = raw.expand.split(","); _i < _a.length; _i++) {
+    for (var _i = 0, _a = raw.expand.split(','); _i < _a.length; _i++) {
         var field = _a[_i];
         result.populate.push(field);
     }

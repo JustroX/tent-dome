@@ -47,10 +47,10 @@ exports.get = get;
 * @param app  Express application
 */
 function RegisterModels(app) {
-    app.use("/" + index_1.Tent.get("api prefix"), route_1.RegisterRoute());
+    app.use('/' + index_1.Tent.get('api prefix'), route_1.RegisterRoute());
     for (var name_1 in Models) {
         var model = Models[name_1];
-        app.use("/" + index_1.Tent.get("api prefix") + "/" + model.dbname, model.Routes.expose());
+        app.use('/' + index_1.Tent.get('api prefix') + '/' + model.dbname, model.Routes.expose());
     }
 }
 exports.RegisterModels = RegisterModels;
@@ -100,13 +100,13 @@ var Model = /** @class */ (function () {
     */
     Model.prototype.install = function (plugin) {
         var _this = this;
-        //plugin validity
-        Assert(plugin.name, "Invalid plugin.");
-        Assert(plugin.dependencies, "Invalid plugin.");
-        Assert(plugin.init, "Invalid plugin.");
-        Assert(!(plugin.name in this.plugins), "Plugin is already installed.");
-        var missing_dependencies = plugin.dependencies.filter(function (x) { return !(x in _this.plugins); });
-        Assert(!missing_dependencies.length, "Plugin dependencies are not yet installed : " + missing_dependencies.join(","));
+        // plugin validity
+        Assert(plugin.name, 'Invalid plugin.');
+        Assert(plugin.dependencies, 'Invalid plugin.');
+        Assert(plugin.init, 'Invalid plugin.');
+        Assert(!(plugin.name in this.plugins), 'Plugin is already installed.');
+        var missingDependencies = plugin.dependencies.filter(function (x) { return !(x in _this.plugins); });
+        Assert(!missingDependencies.length, 'Plugin dependencies are not yet installed : ' + missingDependencies.join(','));
         this.plugins[plugin.name] = plugin;
     };
     return Model;

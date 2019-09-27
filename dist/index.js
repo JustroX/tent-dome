@@ -7,38 +7,38 @@
 exports.__esModule = true;
 /**
 *
-*	Copyright (C) 2019  Justine Che T. Romero
+* Copyright (C) 2019  Justine Che T. Romero
 *
-*    This program is free software: you can redistribute it and/or modify
-*    it under the terms of the GNU General Public License as published by
-*    the Free Software Foundation, either version 3 of the License, or
-*    any later version.
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
 *
-*    This program is distributed in the hope that it will be useful,
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*    GNU General Public License for more details.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
 *
-*    You should have received a copy of the GNU General Public License
-*    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <https://www.gnu.org/licenses/>.
 *
 ********/
 var mongoose_1 = require("mongoose");
 var model_1 = require("./components/model");
 var server_1 = require("./components/server");
-//Expose Plugin Module
+// Expose Plugin Module
 var PluginModule = require("./components/plugin");
+// Expose Route Module
+var RouteModule = require("./components/route");
+// Expose Prebuilt Plugins
+var SanitationPluginModule = require("./components/plugins/sanitation");
+var ValidationModule = require("./components/plugins/validation");
 /** Expose Plugin Class */
 exports.Plugin = PluginModule.Plugin;
 ;
-//Expose Route Module
-var RouteModule = require("./components/route");
 /** Expose Route Class */
 exports.Route = RouteModule.Routes;
-//Expose Prebuilt Plugins
-var SanitationPluginModule = require("./components/plugins/sanitation");
 exports.Sanitation = SanitationPluginModule.Sanitation;
-var ValidationModule = require("./components/plugins/validation");
 exports.Validation = ValidationModule.Validation;
 /** Expose mongoose types */
 exports.Types = mongoose_1.Schema.Types;
@@ -60,15 +60,16 @@ var TentDome = /** @class */ (function () {
     * @param options  Tent application configuration.
     */
     TentDome.prototype.init = function (options) {
-        for (var i in options)
+        for (var i in options) {
             this.TentOptions[i] = options[i];
+        }
         this.AppServer = new server_1.Server();
     };
     /**
     * Sets the default options for the application.
     */
     TentDome.prototype.setDefaultOptions = function () {
-        this.set("api prefix", "api");
+        this.set('api prefix', 'api');
     };
     /**
      * Sets an application variable
@@ -96,8 +97,9 @@ var TentDome = /** @class */ (function () {
     TentDome.prototype.Entity = function (name, schema, config) {
         if (config === void 0) { config = {}; }
         var model = new model_1.Model(name);
-        if (schema)
+        if (schema) {
             model.define(schema, config);
+        }
         return model;
     };
     /**
@@ -108,7 +110,7 @@ var TentDome = /** @class */ (function () {
     TentDome.prototype.start = function (port) {
         if (port === void 0) { port = 7072; }
         model_1.RegisterModels(this.app());
-        this.AppServer.initDatabase(this.get("mongodb uri"));
+        this.AppServer.initDatabase(this.get('mongodb uri'));
         return this.AppServer.start(port);
     };
     /**

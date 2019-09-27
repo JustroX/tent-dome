@@ -2,7 +2,6 @@
 * @module Expand
 */
 
-
 /*******
 *
 *	Copyright (C) 2019  Justine Che T. Romero
@@ -22,7 +21,6 @@
 *
 ********/
 
-
 /** Dictionary of the fields to be populated. */
 export interface PopulateStore
 {
@@ -30,36 +28,28 @@ export interface PopulateStore
 	[ key : string ] : string
 }
 
-export class Expand
-{
+export class Expand {
 	/** Dictionary of populated fields */
 	populate : PopulateStore = {};
-
-
-	constructor(){}
 
 	/** Set property of the model to be expandable
 	* @param key name of the property
 	* @param fields fields to be whitelisted when expanded.
 	*/
-	add( key : string, fields: string  )
-	{
-		this.populate[key] = fields;
+	add (key : string, fields: string) {
+	  this.populate[key] = fields
 	}
 
-	/** Returns the populated dictionary*/
-	expose()
-	{
-		return this.populate;
+	/** Returns the populated dictionary */
+	expose () {
+	  return this.populate
 	}
 
 	/** Returns whether a certain property is expandable
 	* @param key name of the property
 	*/
-	isExpandable(key: string)
-	{
-		if(this.populate[key])
-			return true;
-		return false;
+	isExpandable (key: string) {
+	  if (this.populate[key]) { return true }
+	  return false
 	}
 }

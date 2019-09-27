@@ -4,74 +4,67 @@
 * @module Tent
 */
 
-
 /**
 *
-*	Copyright (C) 2019  Justine Che T. Romero
+* Copyright (C) 2019  Justine Che T. Romero
 *
-*    This program is free software: you can redistribute it and/or modify
-*    it under the terms of the GNU General Public License as published by
-*    the Free Software Foundation, either version 3 of the License, or
-*    any later version.
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
 *
-*    This program is distributed in the hope that it will be useful,
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*    GNU General Public License for more details.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
 *
-*    You should have received a copy of the GNU General Public License
-*    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <https://www.gnu.org/licenses/>.
 *
 ********/
 
+import { SchemaDefinition as Definition, Schema } from 'mongoose'
+import { Model, RegisterModels } from './components/model'
+import { Server, HttpServerInterface } from './components/server'
+import { SchemaConfig } from './components/schema'
 
-import { SchemaDefinition as Definition, Schema } from "mongoose";
-import { Model , RegisterModels  } from "./components/model";
-import { Server , HttpServerInterface } from "./components/server";
-import { SchemaConfig } from "./components/schema"
+// Expose Plugin Module
+import * as PluginModule from './components/plugin'
 
+// Expose Route Module
+import * as RouteModule from './components/route'
 
+// Expose Prebuilt Plugins
 
+import * as SanitationPluginModule from './components/plugins/sanitation'
 
-
-//Expose Plugin Module
-import * as PluginModule from "./components/plugin";
+import * as ValidationModule from './components/plugins/validation'
 /** Expose Plugin Class */
-export var Plugin 			= PluginModule.Plugin;
+export var Plugin = PluginModule.Plugin
 /** Expose Plugin Interface */
-export interface PluginInterface  extends PluginModule.PluginInterface {};
-
-//Expose Route Module
-import * as RouteModule from "./components/route";
+export interface PluginInterface extends PluginModule.PluginInterface {};
 /** Expose Route Class */
-export var Route = RouteModule.Routes;
-
-//Expose Prebuilt Plugins
-
-import * as SanitationPluginModule from "./components/plugins/sanitation";
-export var Sanitation = SanitationPluginModule.Sanitation;
-
-import * as ValidationModule from "./components/plugins/validation";
-export var Validation = ValidationModule.Validation;
+export var Route = RouteModule.Routes
+export var Sanitation = SanitationPluginModule.Sanitation
+export var Validation = ValidationModule.Validation
 
 /** Expose mongoose types */
-export var Types = Schema.Types; 
+export var Types = Schema.Types
 
 /**
 * Configuration options for Tent
 */
 export interface TentOptionsInterface
 {
-	"api prefix"   ?: string,
-	"mongodb uri" ?: string,
+	'api prefix' ?: string,
+	'mongodb uri' ?: string,
 	[ key : string ]: any
 }
 
 /**
 * Tent-Dome module.
 */
-export class TentDome
-{
+export class TentDome {
 	/**
 		Application Server
 	*/
@@ -79,73 +72,59 @@ export class TentDome
 	TentOptions: TentOptionsInterface	= {} as TentOptionsInterface;
 
 	Models : Model<any>[] = [];
-	
-	constructor(){
-		this.setDefaultOptions();
+
+	constructor () {
+	  this.setDefaultOptions()
 	}
 
 	/**
 	*  Initialize the app.
 	* @param options  Tent application configuration.
 	*/
-	init( options : TentOptionsInterface ) : void
-	{
-		for(let i in options)
-			this.TentOptions[i] = options[i];
-
-		this.AppServer = new Server();
+	init (options : TentOptionsInterface) : void {
+	  for (const i in options) { this.TentOptions[i] = options[i] }
+	  this.AppServer = new Server()
 	}
 
 	/**
 	* Sets the default options for the application.
 	*/
-	setDefaultOptions()
-	{
-		this.set<string>("api prefix", "api");
+	setDefaultOptions () {
+	  this.set<string>('api prefix', 'api')
 	}
-
-
 
 	/**
 	 * Sets an application variable
 	 * @param key  Variable name
 	 * @param value  Variable value
 	 */
-	set<T>( key : string , value : T ) : void
-	{
-		this.TentOptions[key] = value;
+	set<T> (key : string, value : T) : void {
+	  this.TentOptions[key] = value
 	}
-
-
 
 	/**
 	 * Get the value of an application variable
-	 * 
+	 *
 	 * @param key  Variable name
 	 */
-	get<T>( key : string ) : T
-	{
-		return this.TentOptions[key];
+	get<T> (key : string) : T {
+	  return this.TentOptions[key]
 	}
-
 
 	/**
 	 *Creates a new database model entity.
 	 * @param name  Name of the entity.
-	 * @param schema  Mongoose schema of the model. 
+	 * @param schema  Mongoose schema of the model.
 	 * @param config  Mongoose model configuration.
 	 * @typeparam T Schema interface of the model.
 	 */
-	Entity<T>( name: string, schema : Definition , config : SchemaConfig = {} ) : Model<T>
-	{
-		let model = new Model<T>(name);
+	Entity<T> (name: string, schema : Definition, config : SchemaConfig = {}) : Model<T> {
+	  const model = new Model<T>(name)
 
-		if(schema)
-			model.define( schema , config );
-		
-		return model;
+	  if (schema) { model.define(schema, config) }
+
+	  return model
 	}
-
 
 	/**
 	*Start the application
@@ -153,30 +132,25 @@ export class TentDome
 	*@param port The port of the server.
 	*/
 
-	start( port : number = 7072 ) : Promise<void>
-	{
-		RegisterModels(this.app());
-		this.AppServer.initDatabase( this.get<string>("mongodb uri") );
-		return this.AppServer.start( port );
+	start (port : number = 7072) : Promise<void> {
+	  RegisterModels(this.app())
+	  this.AppServer.initDatabase(this.get<string>('mongodb uri'))
+	  return this.AppServer.start(port)
 	}
 
 	/**
 	* Returns the http server.
 	*/
-	server() : HttpServerInterface
-	{
-		return this.AppServer.server;
+	server () : HttpServerInterface {
+	  return this.AppServer.server
 	}
-
-
 
 	/**
 	*Returns the express app.
 	*/
-	app() 
-	{
-		return this.AppServer.app;
+	app () {
+	  return this.AppServer.app
 	}
 }
 
-export var Tent = new TentDome();
+export var Tent = new TentDome()

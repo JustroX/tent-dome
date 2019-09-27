@@ -106,6 +106,14 @@ describe("Schema",function()
 				schema.register();
 			}).to.not.throw();
 		});
+		it("should add `mongooseSchema on scope`",function()
+		{
+			expect(schema.mongooseSchema).to.exist;
+		});
+		it("should add `model on scope`",function()
+		{
+			expect(schema.model).to.exist;
+		});
 	});
 
 

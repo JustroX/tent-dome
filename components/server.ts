@@ -3,7 +3,6 @@
 * Tent Server
 */
 
-
 /*******
 *
 *	Copyright (C) 2019  Justine Che T. Romero
@@ -23,88 +22,77 @@
 *
 ********/
 
+import { Server as HttpServer, createServer } 	from 'http'
+import { Application } 	 from 'express'
 
+import * as Mongoose 	 from 'mongoose'
 
+import Express = require('express');
+import CookieParser = require('cookie-parser');
+import BodyParser = require('body-parser');
+import morgan = require('morgan');
 
-import { Server as HttpServer , createServer } 	from "http";
-
-import Express = require("express");
-import { Application } 	 from "express";
-import CookieParser =  require("cookie-parser");
-import BodyParser   =  require("body-parser");
-
-import * as Mongoose 	 from "mongoose";
-import morgan = require("morgan");
-
-
-var urlencodedParser = BodyParser.urlencoded({extended: true});
+var urlencodedParser = BodyParser.urlencoded({ extended: true })
 
 export interface HttpServerInterface extends HttpServer {};
 
 /**
 *	This is the Server class that encapsulates database connection and the http server.
 */
-export class Server
-{
-	app    : Application;
+export class Server {
+	app : Application;
 	server : HttpServer;
-	
-	constructor()
-	{
-		this.app = Express();
-		this.server = createServer(this.app);
-		
-		this.initDefaultMiddlewares();
+
+	constructor () {
+	  this.app = Express()
+	  this.server = createServer(this.app)
+
+	  this.initDefaultMiddlewares()
 	}
 
 	/**
 	*	Initializes default middlewares
 	*/
-	initDefaultMiddlewares()
-	{
-		this.app.use(morgan('dev'))
-		this.app.use(urlencodedParser);
-		this.app.use(BodyParser.json());
-		this.app.use(CookieParser());
+	initDefaultMiddlewares () {
+	  this.app.use(morgan('dev'))
+	  this.app.use(urlencodedParser)
+	  this.app.use(BodyParser.json())
+	  this.app.use(CookieParser())
 	}
-
 
 	/**
 	*	Connects App to the database
 	*
 	*	@param databaseURI URI of the database
 	*/
-	initDatabase( databaseURI : string )
-	{
-		Mongoose.connect( databaseURI , { useNewUrlParser: true, useUnifiedTopology: true });
+	initDatabase (databaseURI : string) {
+	  Mongoose.connect(databaseURI, { useNewUrlParser: true, useUnifiedTopology: true })
 	}
 
 	/**
 	*	Start the Server
-	* 
+	*
 	*	@param port Port to listen to
 	*
-	*/	
-	start( port ?: number  ) : Promise<void>
-	{
-		return new Promise<void>(
-		(resolve, reject)=>
-		{
-			this.server.listen(port,()=>
-			{
-				resolve();
-			});
-		});
+	*/
+	start (port ?: number) : Promise<void> {
+	  return new Promise<void>(
+	    (resolve, reject) => {
+	    	try {
+		      this.server.listen(port, () => {
+		        resolve()
+		      })
+	    	} catch (err) {
+	    		reject(err)
+	    	}
+	    })
 	}
 
 	/**
 	*	Close the Server
 	*/
-	close()
-	{
-		this.server.close();
-		Mongoose.connection.close();	
+	close () {
+	  this.server.close()
+	  Mongoose.connection.close()
 	}
-
-
 }

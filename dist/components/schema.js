@@ -32,8 +32,8 @@ var Schema = /** @class */ (function () {
     */
     function Schema(name) {
         this.schema = {};
-        this.virtuals = {};
         this.config = {};
+        this.virtuals = {};
         this.name = name;
     }
     /**
@@ -43,9 +43,11 @@ var Schema = /** @class */ (function () {
     */
     Schema.prototype.define = function (schema, config) {
         this.schema = schema;
-        if (config)
-            for (var i in config)
+        if (config) {
+            for (var i in config) {
                 this.set(i, config[i]);
+            }
+        }
     };
     /**
     * Defines a virtual field for the object
@@ -76,6 +78,16 @@ var Schema = /** @class */ (function () {
     */
     Schema.prototype.register = function () {
         this.mongooseSchema = new mongoose_1.Schema(this.schema, this.config);
+        // Parse virtual fields
+        for (var i in this.virtuals) {
+            var virtual = this.mongooseSchema.virtual(i, this.virtuals[i].config);
+            if ('get' in this.virtuals[i]) {
+                virtual.get(this.virtuals[i].get);
+            }
+            if ('set' in this.virtuals[i]) {
+                virtual.set(this.virtuals[i].set);
+            }
+        }
         this.model = mongoose_1.model(this.name, this.mongooseSchema);
     };
     return Schema;

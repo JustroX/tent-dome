@@ -163,14 +163,37 @@ class Middleware {
   }
 
   /** Returns a middleware that would respond a status code of 200.
-	* @typeparam T Schema interface of the model.
-	*/
+  * @typeparam T Schema interface of the model.
+  */
   success<T> () {
     return function successMiddleware (req : Request<T>, res : Response) {
       res.status(200).send({
         message: 'Success',
         code: 200
       })
+    }
+  }
+
+  /** Returns a middleware that would call `method` of the model.
+  * @param name Name of the method.
+  * @typeparam T Schema interface of the model.
+  */
+
+  method<T> (name : string) {
+    return async function methodMiddleware (req : Request<any>, res: Response, next : NextFunction) {
+      await (req.tent as Accessor<any>).Method(name)
+      next()
+    }
+  }
+
+  /** Returns a middleware that would call `static` of the model.
+  * @param name Name of the static method.
+  * @typeparam T Schema interface of the model.
+  */
+  static<T> (name : string) {
+    return async function staticMiddleware (req : Request<any>, res: Response, next : NextFunction) {
+      await (req.tent as Accessor<any>).Static(name)
+      next()
     }
   }
 
@@ -193,6 +216,17 @@ class Middleware {
     return function presentMiddleware (req : Request<T>, res : Response) {
       return res.status(200).send(
         (req.tent as Accessor<T>).Present()
+      )
+    }
+  }
+
+  /** Returns a middleware that would respond a status code of 200 and `req.tent.returnVVal`
+  * @typeparam T Schema interface of the model.
+  */
+  return<T> () {
+    return function returnMiddleware (req: Request<T>, res: Response) {
+      return res.status(200).send(
+        (req.tent as Accessor<T>).Return()
       )
     }
   }

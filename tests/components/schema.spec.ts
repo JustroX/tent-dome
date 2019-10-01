@@ -18,6 +18,17 @@ describe("Schema",function()
 		{
 			expect(schema["name"]).to.be.equal('sample');
 		});
+
+		it("should have a `method` method",function()
+		{
+			expect(schema["method"]).to.exist;
+		});
+		
+		it("should have a `static` method",function()
+		{
+			expect(schema["static"]).to.exist;
+		});
+
 	});
 
 
@@ -97,6 +108,26 @@ describe("Schema",function()
 		});
 	});
 
+	describe("#method",function()
+	{
+		it('should save it in the `methods` store',function()
+		{
+			let dummy_function = function(){};
+			schema.method("dummy",dummy_function);
+			expect(schema.methods["dummy"]).to.be.equal(dummy_function);
+		});
+	});
+
+	describe("#static",function()
+	{
+		it('should save it in the `statics` store',function()
+		{
+			let dummy_function = function(){};
+			schema.static("dummy",dummy_function);
+			expect(schema.statics["dummy"]).to.be.equal(dummy_function);
+		});
+	});
+
 	describe("#register",function()
 	{
 		it("should run properly",function()
@@ -115,6 +146,7 @@ describe("Schema",function()
 			expect(schema.model).to.exist;
 		});
 	});
+
 
 
 });

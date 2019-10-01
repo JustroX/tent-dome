@@ -33,7 +33,7 @@ describe("Builder",function()
 		{
 			expect(function()
 			{
-				builder.define("sample",sample_middleware);
+				builder.define("sample",()=>sample_middleware);
 			}).to.not.throw();
 
 		});
@@ -52,7 +52,7 @@ describe("Builder",function()
 		{
 			expect(function()
 			{
-				builder.define("sample",()=>{});
+				builder.define("sample",()=>()=>{});
 			}).to.throw("Builder pipe is already defined");
 		});
 
@@ -113,6 +113,9 @@ describe("Builder",function()
 			expect(builder.success).to.exist;
 			expect(builder.show).to.exist;
 			expect(builder.present).to.exist;
+			expect(builder.method).to.exist;
+			expect(builder.static).to.exist;
+			expect(builder.return).to.exist;
 		});
 	});	
 

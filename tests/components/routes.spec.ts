@@ -241,6 +241,37 @@ describe("Routes",function()
 					].map(x=>x.name));
 				});
 			});
+			describe("#method",function()
+			{
+				it('should create the proper endpoint',function()
+				{
+					let endpiontSpy = spy( route, "endpoint" );
+
+					let builder = route.method("dummy","PUT");
+					expect(endpiontSpy.calledWith(route.name+":id/do/dummy", "PUT"));
+					expect(builder.expose().map(x=>x.name)).to.be.deep.equal([
+						Middlewares.model("endpoint"),
+						Middlewares.read(),
+						Middlewares.method("dummy"),
+						Middlewares.return()
+					].map(x=>x.name));
+				});
+			});
+			describe("#static",function()
+			{
+				it('should create the proper endpoint',function()
+				{
+					let endpiontSpy = spy( route, "endpoint" );
+
+					let builder = route.static("dummy","LIST");
+					expect(endpiontSpy.calledWith(route.name+"/do/dummy", "LIST"));
+					expect(builder.expose().map(x=>x.name)).to.be.deep.equal([
+						Middlewares.model("endpoint"),
+						Middlewares.static("dummy"),
+						Middlewares.return()
+					].map(x=>x.name));
+				});
+			});
 		});
 
 

@@ -87,7 +87,13 @@ export class Routes<T> {
 	    const method 	: MethodsFunc = (item.method as Methods).toLowerCase() as MethodsFunc
 	    const builder : Builder<T> = item.builder
 
-	    if (method === 'list') { this.router.get(endpoint, ...builder.expose() as ((...args : any[])=>void)[]) } else if (method === 'post') { this.router.post(endpoint, ...builder.expose() as ((...args : any[])=>void)[]) } else { this.router[method](endpoint + ':id', ...builder.expose() as ((...args : any[])=>void)[]) }
+	    if (method === 'list') {
+	    	this.router.get(endpoint, ...builder.expose() as ((...args : any[])=>void)[])
+	    } else if (method === 'post') {
+	      this.router.post(endpoint, ...builder.expose() as ((...args : any[])=>void)[])
+	    } else {
+	      this.router[method]('/:id' + endpoint, ...builder.expose() as ((...args : any[])=>void)[])
+	    }
 	  }
 	}
 
@@ -198,6 +204,39 @@ export class Routes<T> {
 		 .read()
 		 .remove()
 		 .success()
+
+	  return builder
+	}
+
+	/**
+	 * Creates a new endpoint with predefined middlewares to execute a method of a document. Returns the builder.
+	 * @param name Name of the method
+	 * @param requestMethod Request method.
+	 */
+	method (name : string, requestMethod: 'GET' | 'PUT' | 'DELETE') : Builder<T> {
+	  const builder : Builder<T> = this.endpoint('/do/' + name, requestMethod)
+
+	  builder
+		 .model(this.name)
+		 .read()
+		 .method(name)
+		 .return()
+
+	  return builder
+	}
+
+	/**
+	 * Creates a new endpoint with predefined middlewares to execute a static method of a model. Returns the builder.
+	 * @param name Name of the static method
+	 * @param requestMethod Request method.
+	 */
+	static (name : string, requestMethod: 'LIST' | 'POST') : Builder<T> {
+	  const builder : Builder<T> = this.endpoint('/do/' + name, requestMethod)
+
+	  builder
+		 .model(this.name)
+		 .static(name)
+		 .return()
 
 	  return builder
 	}

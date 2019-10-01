@@ -21,7 +21,7 @@ describe("Builder", function () {
     describe("#define", function () {
         it('should not throw', function () {
             chai_1.expect(function () {
-                builder.define("sample", sample_middleware);
+                builder.define("sample", function () { return sample_middleware; });
             }).to.not["throw"]();
         });
         it('should create a class function', function () {
@@ -32,7 +32,7 @@ describe("Builder", function () {
         });
         it('should throw when middleware is already defined', function () {
             chai_1.expect(function () {
-                builder.define("sample", function () { });
+                builder.define("sample", function () { return function () { }; });
             }).to["throw"]("Builder pipe is already defined");
         });
         describe("#define:sample", function () {
@@ -76,6 +76,9 @@ describe("Builder", function () {
             chai_1.expect(builder.success).to.exist;
             chai_1.expect(builder.show).to.exist;
             chai_1.expect(builder.present).to.exist;
+            chai_1.expect(builder.method).to.exist;
+            chai_1.expect(builder.static).to.exist;
+            chai_1.expect(builder["return"]).to.exist;
         });
     });
     describe("#custom", function () {

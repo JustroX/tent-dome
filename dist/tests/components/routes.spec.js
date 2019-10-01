@@ -168,6 +168,31 @@ describe("Routes", function () {
                     ].map(function (x) { return x.name; }));
                 });
             });
+            describe("#method", function () {
+                it('should create the proper endpoint', function () {
+                    var endpiontSpy = sinon_1.spy(route, "endpoint");
+                    var builder = route.method("dummy", "PUT");
+                    chai_1.expect(endpiontSpy.calledWith(route.name + ":id/do/dummy", "PUT"));
+                    chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
+                        middlewares_1.Middlewares.model("endpoint"),
+                        middlewares_1.Middlewares.read(),
+                        middlewares_1.Middlewares.method("dummy"),
+                        middlewares_1.Middlewares["return"]()
+                    ].map(function (x) { return x.name; }));
+                });
+            });
+            describe("#static", function () {
+                it('should create the proper endpoint', function () {
+                    var endpiontSpy = sinon_1.spy(route, "endpoint");
+                    var builder = route.static("dummy", "LIST");
+                    chai_1.expect(endpiontSpy.calledWith(route.name + "/do/dummy", "LIST"));
+                    chai_1.expect(builder.expose().map(function (x) { return x.name; })).to.be.deep.equal([
+                        middlewares_1.Middlewares.model("endpoint"),
+                        middlewares_1.Middlewares.static("dummy"),
+                        middlewares_1.Middlewares["return"]()
+                    ].map(function (x) { return x.name; }));
+                });
+            });
         });
     });
 });

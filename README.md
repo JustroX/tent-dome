@@ -87,12 +87,12 @@ See this [link](https://justrox.github.io/tent-dome/) for the documentation.
 4. [Plugins](modules/plugin.html)
  - [Sanitation Plugin](modules/sanitationplugin.html) 
 
-## Roadmap Core
+## Core Roadmap
 - [x] Sanitation
 - [x] Validation
 - [x] Expand Query
 - [x] Virtual fields
-- [ ] Methods and Statics
+- [x] Methods and Statics
 - [ ] Authentication Plugin
 - [ ] Permissions Plugin
 - [ ] Rate Limiting

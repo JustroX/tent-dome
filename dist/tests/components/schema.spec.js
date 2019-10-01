@@ -9,6 +9,12 @@ describe("Schema", function () {
         it('should assign a name', function () {
             chai_1.expect(schema["name"]).to.be.equal('sample');
         });
+        it("should have a `method` method", function () {
+            chai_1.expect(schema["method"]).to.exist;
+        });
+        it("should have a `static` method", function () {
+            chai_1.expect(schema["static"]).to.exist;
+        });
     });
     describe("#virtual", function () {
         beforeEach(function () {
@@ -58,6 +64,20 @@ describe("Schema", function () {
         });
         it("config should be saved", function () {
             chai_1.expect(schema.get("sample config")).to.be.equal("config");
+        });
+    });
+    describe("#method", function () {
+        it('should save it in the `methods` store', function () {
+            var dummy_function = function () { };
+            schema.method("dummy", dummy_function);
+            chai_1.expect(schema.methods["dummy"]).to.be.equal(dummy_function);
+        });
+    });
+    describe("#static", function () {
+        it('should save it in the `statics` store', function () {
+            var dummy_function = function () { };
+            schema.static("dummy", dummy_function);
+            chai_1.expect(schema.statics["dummy"]).to.be.equal(dummy_function);
         });
     });
     describe("#register", function () {

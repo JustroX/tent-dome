@@ -74,6 +74,13 @@ describe("Sanitation Plugin",function()
 			expect(sanitationPlugin.inboundMiddleware).to.exist;
 			expect(sanitationPlugin.outboundMiddleware).to.exist;
 		});
+		
+		it("`outboundMiddleware` and `outboundMiddleware`should have tags",function()
+		{
+			expect((sanitationPlugin.inboundMiddleware as any).tag).to.be.equal("inboundSanitation");
+			expect((sanitationPlugin.outboundMiddleware as any).tag).to.be.equal("outboundSanitation");
+		});
+
 	});
 
 	describe("#inbound.whitelist()",function()
@@ -391,6 +398,7 @@ describe("Sanitation Plugin",function()
 			expect(modelPutSpy .args[0][1] ).to.be.a("function");
 
 			expect(middlewareInboundSpy.callCount).to.be.equal(2);
+
 		});
 
 		it("should add outbound middleware on methods `GET` before `present` and `show` middleware",function()

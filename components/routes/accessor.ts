@@ -72,6 +72,9 @@ export class Accessor<T> {
 	/** Scope reserved for plugins. */
 	plugins 	: Dictionary = {};
 
+	/** Returned value by `method` and `static` */
+	returnVal 	: any;
+
 	/**
 	* Returns a new accessor instance.
 	* @param req Express request
@@ -227,6 +230,40 @@ export class Accessor<T> {
 	  Assert(this.document, 'Show can not be called without first calling Read')
 	  Assert(!(this.document as Document<T>).isNew, 'Show can not be called when FreshDocument is called.')
 	  return this.document
+	}
+
+	/**
+	* Runs method `name` and returns it at `req.tent.returnVal`
+	* @param name Name of the method.
+	*/
+	async Method (name : string) {
+	  Assert(this.collection, 'Method can not be called without first calling `Model`')
+	  Assert(this.document, 	'Method can not be called without first calling `FreshDocument` or `Read`')
+
+	  if (this.document === undefined) return
+
+	  Assert((this.document as any)[name], 'Method `' + name + '`is nonexistent.')
+
+	  this.returnVal = await ((this.document as any)[name] as Function)()
+	}
+
+	/**
+	* Runs static `name` and returns it at `req.tent.returnVal`
+	* @param name Name of the static.
+	*/
+	async Static (name : string) {
+	  Assert(this.collection, 'Static can not be called without first calling `Model`')
+	  Assert((this.collection as any)[name], 'Static `' + name + '`is nonexistent.')
+
+	  this.returnVal = await ((this.collection as any)[name] as Function)()
+	}
+
+	/**
+	* Returns the value of `req.tent.returnVal`
+	*/
+	Return () {
+	  Assert(this.returnVal, 'Return can not be called without first calling `Method` or `Static`')
+	  return this.returnVal
 	}
 }
 

@@ -102,6 +102,9 @@ var Sanitation = /** @class */ (function () {
     function Sanitation() {
         this.inbound = new Bound();
         this.outbound = new Bound();
+        // add tags
+        this.inboundMiddleware.tag = 'inboundSanitation';
+        this.outboundMiddleware.tag = 'outboundSanitation';
     }
     Sanitation.prototype.init = function () {
         if (this.model) {

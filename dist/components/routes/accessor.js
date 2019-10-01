@@ -245,6 +245,58 @@ var Accessor = /** @class */ (function () {
         Assert(!this.document.isNew, 'Show can not be called when FreshDocument is called.');
         return this.document;
     };
+    /**
+    * Runs method `name` and returns it at `req.tent.returnVal`
+    * @param name Name of the method.
+    */
+    Accessor.prototype.Method = function (name) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        Assert(this.collection, 'Method can not be called without first calling `Model`');
+                        Assert(this.document, 'Method can not be called without first calling `FreshDocument` or `Read`');
+                        if (this.document === undefined)
+                            return [2 /*return*/];
+                        Assert(this.document[name], 'Method `' + name + '`is nonexistent.');
+                        _a = this;
+                        return [4 /*yield*/, this.document[name]()];
+                    case 1:
+                        _a.returnVal = _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+    * Runs static `name` and returns it at `req.tent.returnVal`
+    * @param name Name of the static.
+    */
+    Accessor.prototype.Static = function (name) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        Assert(this.collection, 'Static can not be called without first calling `Model`');
+                        Assert(this.collection[name], 'Static `' + name + '`is nonexistent.');
+                        _a = this;
+                        return [4 /*yield*/, this.collection[name]()];
+                    case 1:
+                        _a.returnVal = _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+    * Returns the value of `req.tent.returnVal`
+    */
+    Accessor.prototype.Return = function () {
+        Assert(this.returnVal, 'Return can not be called without first calling `Method` or `Static`');
+        return this.returnVal;
+    };
     return Accessor;
 }());
 exports.Accessor = Accessor;

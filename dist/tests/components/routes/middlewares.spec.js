@@ -339,6 +339,107 @@ describe("Middlewares", function () {
             });
         });
     });
+    describe("#method", function () {
+        before(function () {
+            req.tent.model = undefined;
+            req.tent.collection = undefined;
+            req.tent.document = undefined;
+        });
+        it('should throw if model is not yet called', function (done) {
+            util_1.promisify(middlewares_1.Middlewares.method("sayHello"), req, res).then(function () {
+                done(new Error("Should throw"));
+            })["catch"](function (err) {
+                if (err.name == "AssertionError")
+                    done();
+                else
+                    done(err);
+            });
+        });
+        it('should throw if #FreshDocument or #Read is not yet called is not yet called', function (done) {
+            ;
+            util_1.promisify(middlewares_1.Middlewares.model("Person"), req, res).then(function () {
+                util_1.promisify(middlewares_1.Middlewares.method("sayHello"), req, res).then(function () {
+                    done(new Error("Should throw"));
+                })["catch"](function (err) {
+                    if (err.name == "AssertionError")
+                        done();
+                    else
+                        done(err);
+                });
+            })["catch"](done);
+        });
+        it('should throw if method is nonexistent', function (done) {
+            util_1.promisify(middlewares_1.Middlewares.model("Person"), req, res).then(function () {
+                util_1.promisify(middlewares_1.Middlewares.create(), req, res).then(function () {
+                    util_1.promisify(middlewares_1.Middlewares.method("NonexistentMethod"), req, res).then(function () {
+                        done(new Error("Should throw"));
+                    })["catch"](function (err) {
+                        if (err.name == "AssertionError")
+                            done();
+                        else
+                            done(err);
+                    })["catch"](done);
+                })["catch"](done);
+            });
+        });
+        it('should work properly', function (done) {
+            util_1.promisify(middlewares_1.Middlewares.model("Person"), req, res).then(function () {
+                util_1.promisify(middlewares_1.Middlewares.create(), req, res).then(function () {
+                    util_1.promisify(middlewares_1.Middlewares.method("sayHello"), req, res).then(function () {
+                        try {
+                            chai_1.expect(req.tent.returnVal).to.be.deep.equal({ value: "Hello" });
+                            done();
+                        }
+                        catch (e) {
+                            done(e);
+                        }
+                    })["catch"](done);
+                })["catch"](done);
+            })["catch"](done);
+        });
+    });
+    describe("#static", function () {
+        before(function () {
+            req.tent.model = undefined;
+            req.tent.collection = undefined;
+            req.tent.returnVal = undefined;
+        });
+        it('should throw if model is not yet called', function (done) {
+            util_1.promisify(middlewares_1.Middlewares.static("sayHello"), req, res).then(function () {
+                done(new Error("Should throw"));
+            })["catch"](function (err) {
+                if (err.name == "AssertionError")
+                    done();
+                else
+                    done(err);
+            });
+        });
+        it('should throw if static is nonexistent', function (done) {
+            util_1.promisify(middlewares_1.Middlewares.model("Person"), req, res).then(function () {
+                util_1.promisify(middlewares_1.Middlewares.static("NonexistentMethod"), req, res).then(function () {
+                    done(new Error("Should throw"));
+                })["catch"](function (err) {
+                    if (err.name == "AssertionError")
+                        done();
+                    else
+                        done(err);
+                });
+            })["catch"](done);
+        });
+        it('should work properly', function (done) {
+            util_1.promisify(middlewares_1.Middlewares.model("Person"), req, res).then(function () {
+                util_1.promisify(middlewares_1.Middlewares.static("sayHello"), req, res).then(function () {
+                    try {
+                        chai_1.expect(req.tent.returnVal).to.be.deep.equal({ value: "Hello Static" });
+                        done();
+                    }
+                    catch (e) {
+                        done(e);
+                    }
+                })["catch"](done);
+            })["catch"](done);
+        });
+    });
     describe("#save", function () {
         it('should throw AssertionError when document is not yet defined', function (done) {
             req.tent.document = undefined;
@@ -959,6 +1060,56 @@ describe("Middlewares", function () {
                     });
                 }); })["catch"](done);
             })["catch"](done);
+        });
+    });
+    describe("#return", function () {
+        var _id = "";
+        before(function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var Person, person;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            req.tent.model = undefined;
+                            req.tent.collection = undefined;
+                            req.tent.returnVal = undefined;
+                            Person = model_1.get("Person").Schema.model;
+                            person = new Person();
+                            person.name = "Sample Person";
+                            person.age = 18;
+                            return [4 /*yield*/, person.save()];
+                        case 1:
+                            _a.sent();
+                            _id = person._id.toString();
+                            return [4 /*yield*/, util_1.promisify(middlewares_1.Middlewares.model("Person"), req, res)];
+                        case 2:
+                            _a.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        });
+        it('should throw when `static` or `method` is not yet called', function (done) {
+            util_1.promisify(middlewares_1.Middlewares["return"](), req, res)
+                .then(function () {
+                done(new Error("Should throw."));
+            })["catch"](function (err) {
+                if (err.name == "AssertionError")
+                    done();
+                else
+                    done(err);
+            });
+        });
+        it('should properly return the `returnVal` with status code of 200.', function (done) {
+            req.params.id = _id;
+            util_1.promisify(middlewares_1.Middlewares.method("sayHello"), req, res)
+                .then(function () {
+                util_1.promisify(middlewares_1.Middlewares["return"](), req, res).then(function () {
+                    chai_1.expect(res._getStatusCode()).to.be.equal(200);
+                    chai_1.expect(res._getData()).to.be.deep.equal({ value: "Hello" });
+                    done();
+                })["catch"](function (err) { done(err); });
+            })["catch"](function (err) { done(err); });
         });
     });
 });

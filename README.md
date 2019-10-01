@@ -73,8 +73,12 @@ See this [link](https://justrox.github.io/tent-dome/) for the documentation.
 1. [Models](modules/model.html)
  - Expand
 2. REST URLs
- - Filters
- - 
+ - CRUD operations
+ - LIST operations
+  - Pagination
+  - Filters
+  - Sorting
+  - Advanced queries
 3. Routes
  - Builders
  - Accessors

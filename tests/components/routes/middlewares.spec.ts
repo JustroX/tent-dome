@@ -443,6 +443,159 @@ describe("Middlewares",function()
 	});
 
 
+	describe("#method", function()
+	{
+		before(function()
+		{
+			req.tent.model 		= undefined;
+			req.tent.collection = undefined;
+			req.tent.document   = undefined;
+		});
+
+		it('should throw if model is not yet called',function(done)
+		{
+			promisify(Middlewares.method("sayHello"),req,res).then(()=>
+			{
+				done(new Error("Should throw"));
+			})
+			.catch((err)=>
+			{
+				if(err.name=="AssertionError")
+					done();
+				else
+					done(err);
+			});
+		});
+
+		it('should throw if #FreshDocument or #Read is not yet called is not yet called',function(done)
+		{;
+			promisify(Middlewares.model("Person"),req,res).then(function()
+			{
+				promisify(Middlewares.method("sayHello"),req,res).then(()=>
+				{
+					done(new Error("Should throw"));
+				})
+				.catch((err)=>
+				{
+					if(err.name=="AssertionError")
+						done();
+					else
+						done(err);
+				});
+			})
+			.catch(done);
+		});
+
+		it('should throw if method is nonexistent',function(done)
+		{
+			promisify(Middlewares.model("Person"),req,res).then(()=>
+			{
+				promisify(Middlewares.create(),req,res).then(()=>
+				{
+					promisify(Middlewares.method("NonexistentMethod"),req,res).then(()=>
+					{
+						done(new Error("Should throw"));
+					})
+					.catch((err)=>
+					{
+						if(err.name=="AssertionError")
+							done();
+						else
+							done(err);
+				})
+				.catch(done);
+			})
+			.catch(done);
+			});
+		});
+
+		it('should work properly',function(done)
+		{
+			promisify(Middlewares.model("Person"),req,res).then(()=>
+			{
+				promisify(Middlewares.create(),req,res).then(()=>
+				{
+					promisify(Middlewares.method("sayHello"),req,res).then(()=>
+					{
+						try
+						{
+							expect( req.tent.returnVal ).to.be.deep.equal({ value : "Hello" });
+							done();
+						}
+						catch(e)
+						{
+							done(e);
+						}
+					})
+					.catch(done);
+				}).catch(done);
+			}).catch(done);
+		});
+	});
+	describe("#static", function()
+	{
+		before(function()
+		{
+			req.tent.model 		= undefined;
+			req.tent.collection = undefined;
+			req.tent.returnVal  = undefined;
+		});
+
+		it('should throw if model is not yet called',function(done)
+		{
+			promisify(Middlewares.static("sayHello"),req,res).then(()=>
+			{
+				done(new Error("Should throw"));
+			})
+			.catch((err)=>
+			{
+				if(err.name=="AssertionError")
+					done();
+				else
+					done(err);
+			});
+		});
+
+		it('should throw if static is nonexistent',function(done)
+		{	
+			promisify(Middlewares.model("Person"),req,res).then(()=>
+			{
+				promisify(Middlewares.static("NonexistentMethod"),req,res).then(()=>
+				{
+					done(new Error("Should throw"));
+				})
+				.catch((err)=>
+				{
+					if(err.name=="AssertionError")
+						done();
+					else
+						done(err);
+				});
+			}).catch(done);
+			
+		});
+
+		it('should work properly',function(done)
+		{
+			promisify(Middlewares.model("Person"),req,res).then(()=>
+			{
+				promisify(Middlewares.static("sayHello"),req,res).then(()=>
+				{
+					try
+					{
+						expect( req.tent.returnVal ).to.be.deep.equal({ value : "Hello Static"});
+						done();
+					}
+					catch(e)
+					{
+						done(e);
+					}
+				})
+				.catch(done);
+			}).catch(done);
+			
+		});
+	});
 
 	describe("#save",function()
 	{
@@ -1163,5 +1316,64 @@ describe("Middlewares",function()
 		});
 
 	});
+
+	describe("#return",function()
+	{
+		let _id : string = "";
+		before(async function()
+		{
+			req.tent.model = undefined;
+			req.tent.collection = undefined;
+			req.tent.returnVal  = undefined;
+
+			//add new Person
+			let Person = get("Person").Schema.model;
+			let person : Document<SampleSchema> = new Person();
+			
+			person.name = "Sample Person";
+			person.age  = 18;
+
+			await person.save();
+			_id = person._id.toString();
+
+
+			await promisify(Middlewares.model("Person"),req,res);
+		});
+		
+		it('should throw when `static` or `method` is not yet called',function(done)
+		{
+			promisify(Middlewares.return(),req,res)
+			.then(()=>
+			{
+				done(new Error("Should throw."));
+			})
+			.catch((err)=>{
+				if(err.name == "AssertionError")
+					done();
+				else
+					done(err);
+			});
+		});
+
+
+		it('should properly return the `returnVal` with status code of 200.',function(done)
+		{
+			req.params.id = _id;
+			promisify(Middlewares.method("sayHello"),req,res)
+			.then(()=>
+			{
+				promisify(Middlewares.return(),req,res).then(()=>
+				{
+					expect(res._getStatusCode()).to.be.equal(200);
+					expect(res._getData()).to.be.deep.equal({ value : "Hello" });
+					done();
+				})
+				.catch((err)=>{done(err)});
+			})
+			.catch((err)=>{done(err)});
+		});
+
+	});
+
 
 });

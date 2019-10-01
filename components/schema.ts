@@ -49,6 +49,9 @@ interface VirtualsStoreInterface
 	[ key : string ] : VirtualInterface<any>
 }
 
+/**
+* Options for Mongoose Schema
+*/
 export interface SchemaConfig
 {
 	[ key : string ] : any;
@@ -60,6 +63,12 @@ export interface SchemaConfig
 */
 export type SchemaDefinition<T> = T & Document;
 
+/** Dictionary for methods */
+interface MethodStore
+{
+	[ key : string ] : Function
+}
+
 /**
 * This is the Schema class which encapsulates the Mongoose business part of the model.
 * @typeparam T Schema interface of the model
@@ -70,6 +79,8 @@ export class Schema<T> {
 	schema 	 : Definition = {};
 	config	 : SchemaConfig = {};
 	virtuals : VirtualsStoreInterface = {};
+	methods : MethodStore = {};
+	statics : MethodStore = {};
 
 	model : Model<SchemaDefinition<T>> | undefined;
 	mongooseSchema : MongooseSchema | undefined;
@@ -121,18 +132,34 @@ export class Schema<T> {
 	  return this.config[key]
 	}
 
+	/** Define a method. */
+	method (name : string, func : Function) {
+	  this.methods[name] = func
+	}
+
+	/** Define a static method. */
+	static (name : string, func : Function) {
+	  this.statics[name] = func
+	}
+
 	/**
 	* Registers the schema. Creates a mongoose schema and mongoose model.
 	*/
 	register () {
 	  this.mongooseSchema = new MongooseSchema(this.schema as Definition, this.config)
 
-	  // Parse virtual fields
+	  // Save virtual fields
 	  for (const i in this.virtuals) {
 	    const virtual = this.mongooseSchema.virtual(i, this.virtuals[i].config)
 	    if ('get' in this.virtuals[i]) { virtual.get(this.virtuals[i].get as Function) }
 	    if ('set' in this.virtuals[i]) { virtual.set(this.virtuals[i].set as Function) }
 	  }
+
+	  // Save methods
+	  for (const i in this.methods) { this.mongooseSchema.method(i, this.methods[i]) }
+
+	  // Save static
+	  for (const i in this.statics) { this.mongooseSchema.static(i, this.statics[i]) }
 
 	  this.model = MongooseModel<SchemaDefinition<T>>(this.name, this.mongooseSchema)
 	}

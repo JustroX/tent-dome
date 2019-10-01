@@ -52,6 +52,10 @@ describe("Sanitation Plugin", function () {
             chai_1.expect(sanitationPlugin.inboundMiddleware).to.exist;
             chai_1.expect(sanitationPlugin.outboundMiddleware).to.exist;
         });
+        it("`outboundMiddleware` and `outboundMiddleware`should have tags", function () {
+            chai_1.expect(sanitationPlugin.inboundMiddleware.tag).to.be.equal("inboundSanitation");
+            chai_1.expect(sanitationPlugin.outboundMiddleware.tag).to.be.equal("outboundSanitation");
+        });
     });
     describe("#inbound.whitelist()", function () {
         it('should add new field in inbound whitelisted', function () {

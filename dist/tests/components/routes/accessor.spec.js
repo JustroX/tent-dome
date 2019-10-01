@@ -68,6 +68,12 @@ describe("Accessor", function () {
             name: String
         });
         model.Expand.add("bubble", "name _id");
+        model.Schema.method("sayHello", function () {
+            return { value: "Hello" };
+        });
+        model.Schema.static("sayHello", function () {
+            return { value: "Hello Static" };
+        });
         model.register();
         bubble.register();
         process.nextTick(function () {
@@ -95,6 +101,44 @@ describe("Accessor", function () {
         });
         it('should attach the indicated collection', function () {
             chai_1.expect(accessor.collection).to.be.equal(model_1.get("Person").Schema.model);
+        });
+    });
+    describe("#Static", function () {
+        before(function () {
+            accessor.collection = undefined;
+            accessor.model = undefined;
+        });
+        it("should throw when Model is not yet called", function (done) {
+            accessor.Static("sayHello").then(function () {
+                done(new Error("Should throw"));
+            })["catch"](function (err) {
+                if (err.name == "AssertionError")
+                    done();
+                else
+                    done(err);
+            });
+        });
+        it("should throw when Method does not exist", function (done) {
+            accessor.Model("Person");
+            accessor.Static("NonExistent").then(function () {
+                done(new Error("Should throw"));
+            })["catch"](function (err) {
+                if (err.name == "AssertionError")
+                    done();
+                else
+                    done(err);
+            });
+        });
+        it("should save the result of the method in `accessor.returnVal`", function (done) {
+            accessor.Static("sayHello").then(function () {
+                try {
+                    chai_1.expect(accessor.returnVal).to.be.deep.equal({ value: "Hello Static" });
+                    done();
+                }
+                catch (err) {
+                    done(err);
+                }
+            })["catch"](done);
         });
     });
     describe("#Sanitize", function () {
@@ -275,6 +319,59 @@ describe("Accessor", function () {
                 var i = keys_1[_i];
                 chai_1.expect(accessor.document.get(i)).to.be.equal(accessor.payload[i]);
             }
+        });
+    });
+    describe("#Method", function () {
+        before(function () {
+            accessor.collection = undefined;
+            accessor.model = undefined;
+        });
+        it("should throw when Model is not yet called", function (done) {
+            accessor.Method("sayHello")
+                .then(function () {
+                done(new Error("Should throw"));
+            })["catch"](function (err) {
+                if (err.name == "AssertionError")
+                    done();
+                else
+                    done(err);
+            });
+        });
+        it("should throw when #Read or #FreshDocument is not yet called", function (done) {
+            accessor.Model("Person");
+            accessor.Method("nonExistentMethod")
+                .then(function () {
+                done(new Error("Should throw"));
+            })["catch"](function (err) {
+                if (err.name == "AssertionError")
+                    done();
+                else
+                    done(err);
+            });
+        });
+        it("should throw when Method does not exist", function (done) {
+            accessor.Model("Person");
+            accessor.FreshDocument();
+            accessor.Method("nonExistentMethod")
+                .then(function () {
+                done(new Error("Should throw"));
+            })["catch"](function (err) {
+                if (err.name == "AssertionError")
+                    done();
+                else
+                    done(err);
+            });
+        });
+        it("should save the result of the method in `accessor.returnVal`", function (done) {
+            accessor.Method("sayHello").then(function () {
+                try {
+                    chai_1.expect(accessor.returnVal).to.be.deep.equal({ value: "Hello" });
+                    done();
+                }
+                catch (err) {
+                    done(err);
+                }
+            })["catch"](done);
         });
     });
     describe("#Param", function () {
@@ -768,6 +865,29 @@ describe("Accessor", function () {
                 done();
             })["catch"](function (err) {
                 done(err);
+            });
+        });
+    });
+    describe("#Return", function () {
+        before(function () {
+            accessor.returnVal = undefined;
+        });
+        it('should throw when `Method` or `Static` is not yet called', function () {
+            chai_1.expect(function () {
+                accessor.Return();
+            }).to["throw"]().property("name", "AssertionError");
+        });
+        it('should work', function () {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, accessor.Method("sayHello")];
+                        case 1:
+                            _a.sent();
+                            chai_1.expect(accessor.Return()).be.deep.equal({ value: "Hello" });
+                            return [2 /*return*/];
+                    }
+                });
             });
         });
     });

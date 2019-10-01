@@ -131,18 +131,21 @@ var Builder = /** @class */ (function () {
     * Import built in middlewares.
     */
     Builder.prototype.importBuiltIn = function () {
-        this.define('model', middlewares_1.Middlewares.model(this.name));
-        this.define('create', middlewares_1.Middlewares.create());
-        this.define('save', middlewares_1.Middlewares.save());
-        this.define('read', middlewares_1.Middlewares.read());
-        this.define('remove', middlewares_1.Middlewares.remove());
-        this.define('assign', middlewares_1.Middlewares.assign());
-        this.define('sanitize', middlewares_1.Middlewares.sanitize());
-        this.define('param', middlewares_1.Middlewares.param());
-        this.define('list', middlewares_1.Middlewares.list());
-        this.define('success', middlewares_1.Middlewares.success());
-        this.define('show', middlewares_1.Middlewares.show());
-        this.define('present', middlewares_1.Middlewares.present());
+        this.define('model', middlewares_1.Middlewares.model);
+        this.define('create', middlewares_1.Middlewares.create);
+        this.define('save', middlewares_1.Middlewares.save);
+        this.define('read', middlewares_1.Middlewares.read);
+        this.define('remove', middlewares_1.Middlewares.remove);
+        this.define('assign', middlewares_1.Middlewares.assign);
+        this.define('sanitize', middlewares_1.Middlewares.sanitize);
+        this.define('param', middlewares_1.Middlewares.param);
+        this.define('list', middlewares_1.Middlewares.list);
+        this.define('success', middlewares_1.Middlewares.success);
+        this.define('show', middlewares_1.Middlewares.show);
+        this.define('present', middlewares_1.Middlewares.present);
+        this.define('return', middlewares_1.Middlewares["return"]);
+        this.define('method', middlewares_1.Middlewares.method);
+        this.define('static', middlewares_1.Middlewares.static);
     };
     /**
     * Defines a reusable middleware inside the builder. Chainable middleware factory will be available once called.
@@ -153,7 +156,11 @@ var Builder = /** @class */ (function () {
         Assert(!this[name], 'Builder pipe is already defined');
         var _this = this;
         this.builds[name] = function () {
-            _this.middlewares.splice(_this.head, 0, mw);
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            _this.middlewares.splice(_this.head, 0, mw.apply(void 0, args));
             _this.head++;
             return _this;
         };

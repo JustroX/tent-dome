@@ -34,6 +34,8 @@ var Schema = /** @class */ (function () {
         this.schema = {};
         this.config = {};
         this.virtuals = {};
+        this.methods = {};
+        this.statics = {};
         this.name = name;
     }
     /**
@@ -73,12 +75,20 @@ var Schema = /** @class */ (function () {
     Schema.prototype.get = function (key) {
         return this.config[key];
     };
+    /** Define a method. */
+    Schema.prototype.method = function (name, func) {
+        this.methods[name] = func;
+    };
+    /** Define a static method. */
+    Schema.prototype.static = function (name, func) {
+        this.statics[name] = func;
+    };
     /**
     * Registers the schema. Creates a mongoose schema and mongoose model.
     */
     Schema.prototype.register = function () {
         this.mongooseSchema = new mongoose_1.Schema(this.schema, this.config);
-        // Parse virtual fields
+        // Save virtual fields
         for (var i in this.virtuals) {
             var virtual = this.mongooseSchema.virtual(i, this.virtuals[i].config);
             if ('get' in this.virtuals[i]) {
@@ -87,6 +97,14 @@ var Schema = /** @class */ (function () {
             if ('set' in this.virtuals[i]) {
                 virtual.set(this.virtuals[i].set);
             }
+        }
+        // Save methods
+        for (var i in this.methods) {
+            this.mongooseSchema.method(i, this.methods[i]);
+        }
+        // Save static
+        for (var i in this.statics) {
+            this.mongooseSchema.static(i, this.statics[i]);
         }
         this.model = mongoose_1.model(this.name, this.mongooseSchema);
     };

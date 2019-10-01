@@ -204,13 +204,51 @@ var Middleware = /** @class */ (function () {
         };
     };
     /** Returns a middleware that would respond a status code of 200.
-      * @typeparam T Schema interface of the model.
-      */
+    * @typeparam T Schema interface of the model.
+    */
     Middleware.prototype.success = function () {
         return function successMiddleware(req, res) {
             res.status(200).send({
                 message: 'Success',
                 code: 200
+            });
+        };
+    };
+    /** Returns a middleware that would call `method` of the model.
+    * @param name Name of the method.
+    * @typeparam T Schema interface of the model.
+    */
+    Middleware.prototype.method = function (name) {
+        return function methodMiddleware(req, res, next) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, req.tent.Method(name)];
+                        case 1:
+                            _a.sent();
+                            next();
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
+    };
+    /** Returns a middleware that would call `static` of the model.
+    * @param name Name of the static method.
+    * @typeparam T Schema interface of the model.
+    */
+    Middleware.prototype.static = function (name) {
+        return function staticMiddleware(req, res, next) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, req.tent.Static(name)];
+                        case 1:
+                            _a.sent();
+                            next();
+                            return [2 /*return*/];
+                    }
+                });
             });
         };
     };
@@ -229,6 +267,14 @@ var Middleware = /** @class */ (function () {
     Middleware.prototype.present = function () {
         return function presentMiddleware(req, res) {
             return res.status(200).send(req.tent.Present());
+        };
+    };
+    /** Returns a middleware that would respond a status code of 200 and `req.tent.returnVVal`
+    * @typeparam T Schema interface of the model.
+    */
+    Middleware.prototype["return"] = function () {
+        return function returnMiddleware(req, res) {
+            return res.status(200).send(req.tent.Return());
         };
     };
     return Middleware;

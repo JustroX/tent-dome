@@ -173,18 +173,21 @@ export class Builder<T> {
 	* Import built in middlewares.
 	*/
 	importBuiltIn () {
-	  this.define('model', Middlewares.model<T>(this.name))
-	  this.define('create', Middlewares.create<T>())
-	  this.define('save', Middlewares.save<T>())
-	  this.define('read', Middlewares.read<T>())
-	  this.define('remove', Middlewares.remove<T>())
-	  this.define('assign', Middlewares.assign<T>())
-	  this.define('sanitize', Middlewares.sanitize<T>())
-	  this.define('param', Middlewares.param<T>())
-	  this.define('list', Middlewares.list<T>())
-	  this.define('success', Middlewares.success<T>())
-	  this.define('show', Middlewares.show<T>())
-	  this.define('present', Middlewares.present<T>())
+	  this.define('model', Middlewares.model)
+	  this.define('create', Middlewares.create)
+	  this.define('save', Middlewares.save)
+	  this.define('read', Middlewares.read)
+	  this.define('remove', Middlewares.remove)
+	  this.define('assign', Middlewares.assign)
+	  this.define('sanitize', Middlewares.sanitize)
+	  this.define('param', Middlewares.param)
+	  this.define('list', Middlewares.list)
+	  this.define('success', Middlewares.success)
+	  this.define('show', Middlewares.show)
+	  this.define('present', Middlewares.present)
+	  this.define('return', Middlewares.return)
+	  this.define('method', Middlewares.method)
+	  this.define('static', Middlewares.static)
 	}
 
 	/**
@@ -192,12 +195,12 @@ export class Builder<T> {
 	* @param name Name of the middleware
 	* @param mw Middleware
 	*/
-	define (name : string, mw : Middleware) {
+	define (name : string, mw : (...args: any[])=> Middleware) {
 	  Assert(!(this as unknown as any)[name], 'Builder pipe is already defined')
 
 	  const _this : Builder<T> = this
-	  this.builds[name] = function () {
-	    _this.middlewares.splice(_this.head, 0, mw)
+	  this.builds[name] = function (...args : any[]) {
+	    _this.middlewares.splice(_this.head, 0, mw(...args))
 	    _this.head++
 	    return _this
 	  }

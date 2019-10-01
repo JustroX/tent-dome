@@ -67,7 +67,7 @@ var Routes = /** @class */ (function () {
                 (_b = this.router).post.apply(_b, __spreadArrays([endpoint], builder.expose()));
             }
             else {
-                (_c = this.router)[method].apply(_c, __spreadArrays([endpoint + ':id'], builder.expose()));
+                (_c = this.router)[method].apply(_c, __spreadArrays(['/:id' + endpoint], builder.expose()));
             }
         }
     };
@@ -162,6 +162,31 @@ var Routes = /** @class */ (function () {
             .read()
             .remove()
             .success();
+        return builder;
+    };
+    /**
+     * Creates a new endpoint with predefined middlewares to execute a method of a document. Returns the builder.
+     * @param name Name of the method
+     * @param requestMethod Request method.
+     */
+    Routes.prototype.method = function (name, requestMethod) {
+        var builder = this.endpoint('/do/' + name, requestMethod);
+        builder
+            .model(this.name)
+            .read()
+            .method(name)["return"]();
+        return builder;
+    };
+    /**
+     * Creates a new endpoint with predefined middlewares to execute a static method of a model. Returns the builder.
+     * @param name Name of the static method
+     * @param requestMethod Request method.
+     */
+    Routes.prototype.static = function (name, requestMethod) {
+        var builder = this.endpoint('/do/' + name, requestMethod);
+        builder
+            .model(this.name)
+            .static(name)["return"]();
         return builder;
     };
     return Routes;

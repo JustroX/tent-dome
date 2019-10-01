@@ -108,7 +108,11 @@ export class Sanitation<T> {
 
 	constructor () {
 	  this.inbound = new Bound<T>()
-	  this.outbound = new Bound<T>()
+	  this.outbound = new Bound<T>();
+
+	  // add tags
+	  (this.inboundMiddleware as any).tag = 'inboundSanitation';
+	  (this.outboundMiddleware as any).tag = 'outboundSanitation'
 	}
 
 	init () {

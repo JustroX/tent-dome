@@ -92,7 +92,7 @@ See this [link](https://justrox.github.io/tent-dome/) for the documentation.
 - [x] Validation
 - [x] Expand Query
 - [x] Virtual fields
-- [ ] Methods and Statics
+- [x] Methods and Statics
 - [ ] Authentication Plugin
 - [ ] Permissions Plugin
 - [ ] Rate Limiting

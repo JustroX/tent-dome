@@ -40,6 +40,7 @@ BooksEntity.Routes.delete();
 BooksEntity.register()
 
 //Start app at port 3000.
+Tent.register();
 Tent.start(3000);
 ```
 And that's it!
@@ -93,7 +94,7 @@ See this [link](https://justrox.github.io/tent-dome/) for the documentation.
 - [x] Expand Query
 - [x] Virtual fields
 - [x] Methods and Statics
-- [ ] Authentication Plugin
+- [x] Authentication Plugin
 - [ ] Permissions Plugin
 - [ ] Rate Limiting
 

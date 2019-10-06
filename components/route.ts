@@ -32,7 +32,7 @@ import assert = require('assert');
 /**
 * HTTP method type
 */
-type Methods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'LIST';
+export type Methods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'LIST';
 
 /**
 * Lowercase HTTP method
@@ -86,7 +86,6 @@ export class Routes<T> {
 	    const endpoint : string = item.endpoint
 	    const method 	: MethodsFunc = (item.method as Methods).toLowerCase() as MethodsFunc
 	    const builder : Builder<T> = item.builder
-
 	    if (method === 'list') {
 	    	this.router.get(endpoint, ...builder.expose() as ((...args : any[])=>void)[])
 	    } else if (method === 'post') {

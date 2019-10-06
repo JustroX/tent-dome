@@ -24,7 +24,7 @@
 ********/
 
 import { SchemaDefinition as Definition, Schema } from 'mongoose'
-import { Model, RegisterModels } from './components/model'
+import { Model, RegisterModels, Models } from './components/model'
 import { Server, HttpServerInterface } from './components/server'
 import { SchemaConfig } from './components/schema'
 
@@ -37,16 +37,20 @@ import * as RouteModule from './components/route'
 // Expose Prebuilt Plugins
 
 import * as SanitationPluginModule from './components/plugins/sanitation'
-
 import * as ValidationModule from './components/plugins/validation'
+import * as AuthenticationModule from './components/plugins/authentication'
+import assert = require('assert');
+
 /** Expose Plugin Class */
 export var Plugin = PluginModule.Plugin
 /** Expose Plugin Interface */
 export interface PluginInterface extends PluginModule.PluginInterface {};
+
 /** Expose Route Class */
 export var Route = RouteModule.Routes
 export var Sanitation = SanitationPluginModule.Sanitation
 export var Validation = ValidationModule.Validation
+export var Authentication = AuthenticationModule.AuthenticationPlugin
 
 /** Expose mongoose types */
 export var Types = Schema.Types
@@ -72,6 +76,9 @@ export class TentDome {
 	TentOptions: TentOptionsInterface	= {} as TentOptionsInterface;
 
 	Models : Model<any>[] = [];
+
+	/** Tent Application Plugins */
+	plugins : { [ pluginName : string ] : PluginInterface } = {};
 
 	constructor () {
 	  this.setDefaultOptions()
@@ -150,6 +157,33 @@ export class TentDome {
 	*/
 	app () {
 	  return this.AppServer.app
+	}
+
+	/**
+	* Installs a plugin globally.
+	* @param plugin The plugin instance
+	*/
+	install (plugin : any & PluginInterface) {
+	  assert(!this.plugins[plugin.name], 'Plugin is already installed.')
+	  assert(plugin.name, 'Trying to install an invalid plugin.')
+	  assert(plugin.dependencies, 'Trying to install an invalid plugin.')
+	  assert(plugin.initGlobal, 'Trying to install an invalid global plugin.')
+
+	  this.plugins[plugin.name] = plugin
+	}
+
+	/**
+	* Registers all global plugins and model routes. Add the express app on their scope.
+	*/
+	register () {
+	  for (const i in this.plugins) {
+	    this.plugins[i].app = this.app();
+	    (this.plugins[i].initGlobal as Function)()
+	  }
+
+	  for (const i in Models) {
+			  Models[i].Routes.register()
+	  }
 	}
 }
 

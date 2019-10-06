@@ -67,6 +67,8 @@ var Accessor = /** @class */ (function () {
     function Accessor(req, res) {
         /** Scope reserved for plugins. */
         this.plugins = {};
+        /** Scope reserved for reusable variables */
+        this.vars = {};
         this.res = res;
         this.req = req;
     }

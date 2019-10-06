@@ -33,13 +33,13 @@ var Assert = require("assert");
 /**
 * Dictionary for storing Models
 */
-var Models = {};
+exports.Models = {};
 /**
 * Returns a specified Model.
 * @param name  Name of the model
 */
 function get(name) {
-    return Models[name];
+    return exports.Models[name];
 }
 exports.get = get;
 /**
@@ -48,8 +48,8 @@ exports.get = get;
 */
 function RegisterModels(app) {
     app.use('/' + index_1.Tent.get('api prefix'), route_1.RegisterRoute());
-    for (var name_1 in Models) {
-        var model = Models[name_1];
+    for (var name_1 in exports.Models) {
+        var model = exports.Models[name_1];
         app.use('/' + index_1.Tent.get('api prefix') + '/' + model.dbname, model.Routes.expose());
     }
 }
@@ -86,13 +86,12 @@ var Model = /** @class */ (function () {
     * Registers the model
     */
     Model.prototype.register = function () {
-        this.Schema.register();
-        this.Routes.register();
+        exports.Models[this.name] = this;
         for (var i in this.plugins) {
             this.plugins[i].model = this;
             this.plugins[i].init();
         }
-        Models[this.name] = this;
+        this.Schema.register();
     };
     /**
     * Installs a plugin.

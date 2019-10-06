@@ -47,7 +47,7 @@ interface ModelStore<T>
 /**
 * Dictionary for storing Models
 */
-var Models : ModelStore<any> = {}
+export var Models : ModelStore<any> = {}
 
 /**
 * Returns a specified Model.
@@ -132,15 +132,14 @@ export class Model<T> {
 	* Registers the model
 	*/
 	register () : void {
-	  (this.Schema as Schema<T>).register();
-	  (this.Routes as Routes<T>).register()
+	  Models[this.name] = this
 
 	  for (const i in this.plugins) {
 	    this.plugins[i].model = this
 	    this.plugins[i].init()
 	  }
 
-	  Models[this.name] = this
+	  this.Schema.register()
 	}
 
 	/**

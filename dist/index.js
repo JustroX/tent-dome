@@ -33,6 +33,8 @@ var RouteModule = require("./components/route");
 // Expose Prebuilt Plugins
 var SanitationPluginModule = require("./components/plugins/sanitation");
 var ValidationModule = require("./components/plugins/validation");
+var AuthenticationModule = require("./components/plugins/authentication");
+var assert = require("assert");
 /** Expose Plugin Class */
 exports.Plugin = PluginModule.Plugin;
 ;
@@ -40,6 +42,7 @@ exports.Plugin = PluginModule.Plugin;
 exports.Route = RouteModule.Routes;
 exports.Sanitation = SanitationPluginModule.Sanitation;
 exports.Validation = ValidationModule.Validation;
+exports.Authentication = AuthenticationModule.AuthenticationPlugin;
 /** Expose mongoose types */
 exports.Types = mongoose_1.Schema.Types;
 /**
@@ -53,6 +56,8 @@ var TentDome = /** @class */ (function () {
         this.AppServer = {};
         this.TentOptions = {};
         this.Models = [];
+        /** Tent Application Plugins */
+        this.plugins = {};
         this.setDefaultOptions();
     }
     /**
@@ -124,6 +129,29 @@ var TentDome = /** @class */ (function () {
     */
     TentDome.prototype.app = function () {
         return this.AppServer.app;
+    };
+    /**
+    * Installs a plugin globally.
+    * @param plugin The plugin instance
+    */
+    TentDome.prototype.install = function (plugin) {
+        assert(!this.plugins[plugin.name], 'Plugin is already installed.');
+        assert(plugin.name, 'Trying to install an invalid plugin.');
+        assert(plugin.dependencies, 'Trying to install an invalid plugin.');
+        assert(plugin.initGlobal, 'Trying to install an invalid global plugin.');
+        this.plugins[plugin.name] = plugin;
+    };
+    /**
+    * Registers all global plugins and model routes. Add the express app on their scope.
+    */
+    TentDome.prototype.register = function () {
+        for (var i in this.plugins) {
+            this.plugins[i].app = this.app();
+            this.plugins[i].initGlobal();
+        }
+        for (var i in model_1.Models) {
+            model_1.Models[i].Routes.register();
+        }
     };
     return TentDome;
 }());

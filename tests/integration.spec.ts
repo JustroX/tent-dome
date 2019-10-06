@@ -86,6 +86,7 @@ describe("Tent integration run 1.",function()
 
 	it("should start properly",function(done)
 	{
+		Tent.register();
 		Tent.start().then(()=>
 		{
 			done();
@@ -302,6 +303,4 @@ describe("Tent integration run 1.",function()
 	{
 		Tent.AppServer.close();		
 	});
-
-
 });

@@ -97,6 +97,7 @@ describe("Tent integration run 1.", function () {
         }).to.not["throw"]();
     });
     it("should start properly", function (done) {
+        Tent.register();
         Tent.start().then(function () {
             done();
         })["catch"](done);

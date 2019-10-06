@@ -151,6 +151,9 @@ export interface PluginInterface
 	/** Initialization function. */
 	init() : void,
 
+	/** Initialization of global function. */
+	initGlobal? : Function,
+
 	/** Model which plugin instance is installed. */
 	model ?: Model<any>,
 

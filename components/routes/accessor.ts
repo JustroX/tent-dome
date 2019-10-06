@@ -33,7 +33,7 @@ import Assert = require('assert');
 export type Document<T> = MongooseDocument & Partial<T>;
 
 /** Mongoose model interface */
-type Collection<T> = MongooseModel< Document<T> >;
+export type Collection<T> = MongooseModel< Document<T> >;
 
 /** Dictionary Interface */
 interface Dictionary
@@ -74,6 +74,9 @@ export class Accessor<T> {
 
 	/** Returned value by `method` and `static` */
 	returnVal 	: any;
+
+	/** Scope reserved for reusable variables */
+	vars : Dictionary = {};
 
 	/**
 	* Returns a new accessor instance.

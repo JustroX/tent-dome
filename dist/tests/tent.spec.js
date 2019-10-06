@@ -3,6 +3,7 @@ exports.__esModule = true;
 var index_1 = require("../index");
 var model_1 = require("../components/model");
 var chai_1 = require("chai");
+var sinon_1 = require("sinon");
 var dotenv_1 = require("dotenv");
 dotenv_1.config();
 //preconditions
@@ -63,6 +64,32 @@ describe("Tent", function () {
             chai_1.expect(model).to.be["instanceof"](model_1.Model);
         });
     });
+    describe("#install", function () {
+        var Tent = new index_1.TentDome();
+        var samplePlugin = { initGlobal: function () { }, name: "sample", dependencies: [] };
+        it("should save plugin on `plugins` store plugin", function () {
+            Tent.install(samplePlugin);
+            chai_1.expect(Tent.plugins.sample).to.exist;
+        });
+    });
+    describe("#register", function () {
+        var Tent = new index_1.TentDome();
+        var samplePlugin = { initGlobal: function () { }, name: "sample", dependencies: [] };
+        var pluginSpy = sinon_1.spy(samplePlugin, "initGlobal");
+        Tent.install(samplePlugin);
+        it('should throw when namespace is unavailable', function () {
+            chai_1.expect(function () {
+                Tent.install(samplePlugin);
+            });
+        });
+        it("should call `initGlobal` of the plugin", function () {
+            Tent.register();
+            chai_1.expect(pluginSpy.calledOnce).to.be.equal(true);
+        });
+        it("should add `app`", function () {
+            chai_1.expect(samplePlugin.app).to.be.equal(Tent.app());
+        });
+    });
     describe("#start", function () {
         var Tent = new index_1.TentDome();
         var model = Tent.Entity("sample", { name: String });
@@ -91,8 +118,9 @@ describe("Tent", function () {
         });
     });
 });
-//integration without plugins
-require("./integration.spec");
 //built-in plugins
 require("./components/plugins/sanitation.spec");
 require("./components/plugins/validation.spec");
+require("./components/plugins/authentication.spec");
+// //integration without plugins
+// import "./integration.spec";

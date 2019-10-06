@@ -51,11 +51,11 @@ import { Request as ExpressRequest, Response as ExpressResponse, NextFunction } 
 
 import Assert = require('assert');
 
-interface Request extends ExpressRequest
+export interface Request extends ExpressRequest
 {
 	tent: Accessor<any>
 }
-interface Response extends ExpressResponse
+export interface Response extends ExpressResponse
 {
 	tent: Dispatcher
 }
@@ -200,7 +200,10 @@ export class Builder<T> {
 
 	  const _this : Builder<T> = this
 	  this.builds[name] = function (...args : any[]) {
-	    _this.middlewares.splice(_this.head, 0, mw(...args))
+	  	const middleware = mw(...args);
+	  	(middleware as any).tag = name
+
+	    _this.middlewares.splice(_this.head, 0, middleware)
 	    _this.head++
 	    return _this
 	  }

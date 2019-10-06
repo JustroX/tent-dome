@@ -160,7 +160,9 @@ var Builder = /** @class */ (function () {
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            _this.middlewares.splice(_this.head, 0, mw.apply(void 0, args));
+            var middleware = mw.apply(void 0, args);
+            middleware.tag = name;
+            _this.middlewares.splice(_this.head, 0, middleware);
             _this.head++;
             return _this;
         };

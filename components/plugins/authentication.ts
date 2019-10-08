@@ -102,7 +102,7 @@ export class AuthenticationPlugin {
 	}
 
 	/** Middleware that blocks if user is unauthenticated */
-	async authMiddleware (req : Request, res: Response, next : NextFunction) {
+	authMiddleware (req : Request, res: Response, next : NextFunction) {
 	  if ((req as any).user) {
 	    next()
 	  } else { return res.tent.apiError(403, 'Forbidden.') }
@@ -118,12 +118,10 @@ export class AuthenticationPlugin {
 
 	  const jwtMW = exjwt({ secret })
 
-	    const userModelName = Tent.get<string>('auth user')
+	  const userModelName = Tent.get<string>('auth user')
 	  if (userModelName === this.model.name) { buildSchema() }
 
-	  // Tent.app().use();
-
-	    (this.authMiddleware as any).tag = 'auth'
+	  (this.authMiddleware as any).tag = 'auth'
 
 	  for (const i in this.model.Routes.builders) {
 	    const builderObj = this.model.Routes.builders[i]

@@ -102,11 +102,17 @@ function buildSchema() {
         }
         next();
     };
+    var tokenizeMW = function (req, res, next) {
+        var token = jwt.sign(req.tent.document, secret, options || { expiresIn: 129600 });
+        req.tent.document = { token: token };
+        next();
+    };
+    tokenizeMW.tag = "tokenize";
     UserModel.Routes.endpoint('/login', 'POST')
         .model(userModelName)
         .custom(validationMW)
-        .custom(function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-        var tent, collection, user, token, e_1;
+        .custom(function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var tent, collection, user, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -128,8 +134,8 @@ function buildSchema() {
                     if (!user.validPassword(req.body[passwordToken])) {
                         return [2 /*return*/, res.tent.apiError(401, 'Password is incorrect.')];
                     }
-                    token = jwt.sign({ id: user.id, username: user[emailToken] }, secret, options || { expiresIn: 129600 });
-                    res.status(200).send({ token: token });
+                    req.tent.document = { id: user.id, username: user[emailToken] };
+                    next();
                     return [3 /*break*/, 4];
                 case 3:
                     e_1 = _a.sent();
@@ -138,7 +144,9 @@ function buildSchema() {
                 case 4: return [2 /*return*/];
             }
         });
-    }); });
+    }); })
+        .custom(tokenizeMW)
+        .show();
     if (isSignUp) {
         UserModel.Routes.endpoint('/signup', 'POST')
             .model(userModelName)
@@ -175,8 +183,8 @@ function buildSchema() {
                 }
             });
         }); })
-            .custom(function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var tent, collection, Collection, user, e_3, token;
+            .custom(function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var tent, collection, Collection, user, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -197,18 +205,21 @@ function buildSchema() {
                         return [4 /*yield*/, user.save()];
                     case 2:
                         _a.sent();
+                        tent.vars.user = user;
                         return [3 /*break*/, 4];
                     case 3:
                         e_3 = _a.sent();
                         res.tent.apiError(500, 'Something went wrong.');
                         throw e_3;
                     case 4:
-                        token = jwt.sign({ id: user.id, username: user[emailToken] }, secret, options || { expiresIn: 129600 });
-                        res.status(200).send({ token: token });
+                        req.tent.document = { id: user.id, username: user[emailToken] };
+                        next();
                         return [2 /*return*/];
                 }
             });
-        }); });
+        }); })
+            .custom(tokenizeMW)
+            .show();
     }
 }
 exports.buildSchema = buildSchema;

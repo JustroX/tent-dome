@@ -79,10 +79,18 @@ export function buildSchema () {
     next()
   }
 
+  const tokenizeMW = function (req: Request, res: Response, next: NextFunction) {
+    const token = jwt.sign(req.tent.document, secret, options || { expiresIn: 129600 });
+    (req.tent.document as any) = { token }
+    next()
+  };
+
+  (tokenizeMW as any).tag = 'tokenize'
+
   UserModel.Routes.endpoint('/login', 'POST')
     .model(userModelName)
     .custom(validationMW)
-    .custom(async (req: Request, res: Response) => {
+    .custom(async (req: Request, res: Response, next: NextFunction) => {
       // Authentication
 
       const tent = req.tent
@@ -96,13 +104,15 @@ export function buildSchema () {
         tent.vars.user = user
         if (!user.validPassword(req.body[passwordToken])) { return res.tent.apiError(401, 'Password is incorrect.') }
 
-        const token = jwt.sign({ id: user.id, username: user[emailToken] }, secret, options || { expiresIn: 129600 })
-        res.status(200).send({ token })
+        (req.tent.document as any) = { id: user.id, username: user[emailToken] }
+        next()
       } catch (e) {
         res.tent.apiError(500, 'Something went wrong.')
         throw e
       }
     })
+    .custom(tokenizeMW)
+    .show()
 
   if (isSignUp) {
     UserModel.Routes.endpoint('/signup', 'POST')
@@ -126,7 +136,7 @@ export function buildSchema () {
           throw e
         }
       })
-      .custom(async (req: Request, res: Response) => {
+      .custom(async (req: Request, res: Response, next: NextFunction) => {
         // Authentication
         const tent = req.tent
         const collection = tent.collection
@@ -142,14 +152,16 @@ export function buildSchema () {
 
         try {
           await user.save()
+          tent.vars.user = user
         } catch (e) {
           res.tent.apiError(500, 'Something went wrong.')
           throw e
         }
-
-        const token = jwt.sign({ id: user.id, username: user[emailToken] }, secret, options || { expiresIn: 129600 })
-        res.status(200).send({ token })
+        (req.tent.document as any) = { id: user.id, username: user[emailToken] }
+        next()
       })
+      .custom(tokenizeMW)
+      .show()
   }
 }
 

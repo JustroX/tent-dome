@@ -122,5 +122,6 @@ describe("Tent", function () {
 require("./components/plugins/sanitation.spec");
 require("./components/plugins/validation.spec");
 require("./components/plugins/authentication.spec");
+require("./components/plugins/permission.spec");
 // //integration without plugins
 // import "./integration.spec";

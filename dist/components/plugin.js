@@ -124,3 +124,9 @@ function Plugin(options) {
     };
 }
 exports.Plugin = Plugin;
+var PluginClass = /** @class */ (function () {
+    function PluginClass() {
+    }
+    return PluginClass;
+}());
+exports.PluginClass = PluginClass;

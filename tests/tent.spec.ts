@@ -190,6 +190,7 @@ describe("Tent",function()
 import "./components/plugins/sanitation.spec";
 import "./components/plugins/validation.spec";
 import "./components/plugins/authentication.spec";
+import "./components/plugins/permission.spec";
 
 // //integration without plugins
 // import "./integration.spec";

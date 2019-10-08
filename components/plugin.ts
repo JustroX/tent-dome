@@ -179,3 +179,8 @@ export function Plugin (options : PluginOptions) {
     constructorFn.prototype.dependencies = options.dependencies
   }
 }
+
+export class PluginClass {
+	name : string;
+	dependencies : string[]
+}

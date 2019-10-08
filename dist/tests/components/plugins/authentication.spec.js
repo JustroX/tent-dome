@@ -171,7 +171,8 @@ describe("Authentication Plugin", function () {
             });
             AuthModel = index_1.Tent.Entity("AuthModel", {
                 email: String,
-                password: String
+                password: String,
+                roles: [String]
             });
             AuthModel.register();
         });
@@ -185,7 +186,6 @@ describe("Authentication Plugin", function () {
             chai_1.expect(function () {
                 authPlugin.allow("/", "PUT");
                 model.register();
-                ;
             }).to.not["throw"]();
         });
         it('should add jwt middleware', function () {

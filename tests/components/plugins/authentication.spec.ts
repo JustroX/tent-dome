@@ -246,7 +246,8 @@ describe("Authentication Plugin",function()
 			AuthModel = TentGlobal.Entity("AuthModel",
 			{
 				email : String,
-				password: String
+				password: String,
+				roles : [ String]
 			});
 
 			AuthModel.register();
@@ -266,7 +267,7 @@ describe("Authentication Plugin",function()
 			expect(function()
 			{
 				authPlugin.allow("/","PUT");
-				model.register();;
+				model.register();
 			}).to.not.throw();
 		});
 

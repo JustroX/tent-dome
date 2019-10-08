@@ -39,6 +39,7 @@ import * as RouteModule from './components/route'
 import * as SanitationPluginModule from './components/plugins/sanitation'
 import * as ValidationModule from './components/plugins/validation'
 import * as AuthenticationModule from './components/plugins/authentication'
+import * as PermissionModule from './components/plugins/permission'
 import assert = require('assert');
 
 /** Expose Plugin Class */
@@ -51,6 +52,7 @@ export var Route = RouteModule.Routes
 export var Sanitation = SanitationPluginModule.Sanitation
 export var Validation = ValidationModule.Validation
 export var Authentication = AuthenticationModule.AuthenticationPlugin
+export var Permission = PermissionModule.Permission
 
 /** Expose mongoose types */
 export var Types = Schema.Types

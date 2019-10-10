@@ -34,6 +34,7 @@ var RouteModule = require("./components/route");
 var SanitationPluginModule = require("./components/plugins/sanitation");
 var ValidationModule = require("./components/plugins/validation");
 var AuthenticationModule = require("./components/plugins/authentication");
+var PermissionModule = require("./components/plugins/permission");
 var assert = require("assert");
 /** Expose Plugin Class */
 exports.Plugin = PluginModule.Plugin;
@@ -43,6 +44,7 @@ exports.Route = RouteModule.Routes;
 exports.Sanitation = SanitationPluginModule.Sanitation;
 exports.Validation = ValidationModule.Validation;
 exports.Authentication = AuthenticationModule.AuthenticationPlugin;
+exports.Permission = PermissionModule.Permission;
 /** Expose mongoose types */
 exports.Types = mongoose_1.Schema.Types;
 /**

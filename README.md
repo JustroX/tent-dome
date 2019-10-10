@@ -97,6 +97,7 @@ See this [link](https://justrox.github.io/tent-dome/) for the documentation.
 - [x] Authentication Plugin
 - [x] Permissions Plugin
 - [ ] Rate Limiting
+- [ ] Decorator Functions
 
 ## Fun features
 - [ ] Cloudinary Schema Type

@@ -2,9 +2,10 @@
   "name": "tent-dome",
   "version": "0.0.1",
   "description": "REST Api framework",
-  "main": "index",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "compile": "tsc index.ts  --experimentalDecorators --outDir dist",
+    "compile": "tsc index.ts  --experimentalDecorators --outDir dist --declaration",
     "test": "tsc ./tests/index.spec.ts ./tests/integration.spec.ts ./tests/components/integrations/auth.integration.spec.ts ./tests/components/integrations/permission.integration.spec.ts --outDir dist --experimentalDecorators && mocha ./dist/tests/index.spec.js --exit && mocha ./dist/tests/integration.spec.js --exit && mocha ./dist/tests/components/integrations/auth.integration.spec.js && mocha ./dist/tests/components/integrations/permission.integration.spec.js --exit",
     "test-watch": "cls && tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators --watch ",
     "create-docs": "typedoc --readme README.md --out docs/ index.ts --mode modules --name Tent",

@@ -107,7 +107,7 @@ function buildSchema() {
         req.tent.document = { token: token };
         next();
     };
-    tokenizeMW.tag = "tokenize";
+    tokenizeMW.tag = 'tokenize';
     UserModel.Routes.endpoint('/login', 'POST')
         .model(userModelName)
         .custom(validationMW)

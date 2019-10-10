@@ -48,11 +48,11 @@ export var Plugin = PluginModule.Plugin
 export interface PluginInterface extends PluginModule.PluginInterface {};
 
 /** Expose Route Class */
-export var Route = RouteModule.Routes
-export var Sanitation = SanitationPluginModule.Sanitation
-export var Validation = ValidationModule.Validation
-export var Authentication = AuthenticationModule.AuthenticationPlugin
-export var Permission = PermissionModule.Permission
+export class Route<T> extends RouteModule.Routes<T> {};
+export class Sanitation<T> extends SanitationPluginModule.Sanitation<T> {};
+export class Validation extends ValidationModule.Validation {};
+export class Authentication extends AuthenticationModule.AuthenticationPlugin {};
+export class Permission extends PermissionModule.Permission {};
 
 /** Expose mongoose types */
 export var Types = Schema.Types

@@ -3,11 +3,12 @@ import * as Params from "../../../components/routes/params";
 import { assert, expect, use } from "chai";
 import { todo } from "../../util";
 import { parse } from "query-string";
+import { func } from "joi";
 
 
 describe("Params",function()
 {
-	let output : Params.QueryParams = {  sort: {}, pagination: { limit: 10, offset: 0 }, filters: {}, populate: [] };
+	let output : Params.QueryParams = {  sort: {}, pagination: { limit: 10, offset: 0 }, filters: {}, populate: [], options: true };
 	let raw : Params.RawQuery;
 
 	function parseURI(uri : string)
@@ -383,8 +384,16 @@ describe("Params",function()
 				sort: { name: -1 },
 				pagination: { limit: 1, offset: 12 },
 				filters: { key1 : "a" , key2 : { $gte: "12", $lte: "15" } },
-				populate : ["bubble"]
+				populate : ["bubble"],
+				options : false
 			});
 		});
 	});
+
+	describe("#Options",function(){
+		it('should work properly',function(){
+			let a : Params.QueryParams = Params.Parse("option=true");
+			expect(a.options).to.be.equal(true);
+		})
+	})
 });

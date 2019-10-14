@@ -39,7 +39,8 @@ export interface QueryParams
 	{
 		[ key : string ] : any
 	};
-	populate : string[];
+  populate : string[];
+  options : boolean
 }
 
 /** Object definition for unprocessed queries`. */
@@ -56,14 +57,24 @@ export function Parse (param : string) : QueryParams {
     parseNumbers: true,
     parseBooleans: true
   }) as RawQuery
-  const output : QueryParams = { sort: {}, pagination: { limit: 10, offset: 0 }, filters: {}, populate: [] }
+  const output : QueryParams = { sort: {}, pagination: { limit: 10, offset: 0 }, filters: {}, populate: [], options: false }
 
   Sort(output, raw)
   Pagination(output, raw)
   Filters(output, raw)
   Expand(output, raw)
+  Option(output, raw)
 
   return output
+}
+
+/**
+ * Parses the option part of the query and assigns them properly to `result`
+ * @param result processed query param reference
+ * @param raw unprocessed query param reference
+ */
+export function Option (result: QueryParams, raw: RawQuery) {
+  result.options = raw.option === true
 }
 
 /**

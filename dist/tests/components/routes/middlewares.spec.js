@@ -640,7 +640,8 @@ describe("Middlewares", function () {
                 sort: "-name",
                 limit: "1",
                 offset: "12",
-                expand: "bubble"
+                expand: "bubble",
+                option: "true"
             };
             util_1.promisify(middlewares_1.Middlewares.param(), req, res)
                 .then(function () {
@@ -649,7 +650,8 @@ describe("Middlewares", function () {
                         sort: { name: -1 },
                         pagination: { limit: 1, offset: 12 },
                         filters: { name: "a", age: { $gte: "12", $lte: "15" } },
-                        populate: ["bubble"]
+                        populate: ["bubble"],
+                        options: true
                     });
                     done();
                 }

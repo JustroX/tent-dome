@@ -514,14 +514,16 @@ describe("Accessor",function()
 				sort  : "-name",
 				limit : "1",
 				offset: "12",
-				expand: "bubble,buttercup,blossom"
+				expand: "bubble,buttercup,blossom",
+				option: "true",
 			});
 			// accessor.Param("name=a&age=12..15&sort=-name&limit=1&offset=12&expand=bubble");
 			expect(accessor.param).to.be.deep.equal({ 
 				sort: { name: -1 },
 				pagination: { limit: 1, offset: 12 },
 				filters: { name : "a" , age : { $gte: "12", $lte: "15" }, "layer.sublayer" : 2 },
-				populate : ["bubble"]
+				populate : ["bubble"],
+				options: true
 			});
 		});
 	});

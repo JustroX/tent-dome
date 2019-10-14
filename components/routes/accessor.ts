@@ -41,6 +41,10 @@ interface Dictionary
 	[ key : string ] : any;
 }
 
+interface ResultInfo{
+	numOfDocs : number
+}
+
 /** Accessor class. This would be binded to `req.tent` for the middlewares to access.
 * @typeparam T Schema interface
 */
@@ -77,6 +81,9 @@ export class Accessor<T> {
 
 	/** Scope reserved for reusable variables */
 	vars : Dictionary = {};
+
+	/** Query information */
+	info : ResultInfo = { numOfDocs: 0 };
 
 	/**
 	* Returns a new accessor instance.
@@ -148,17 +155,21 @@ export class Accessor<T> {
 	* @param id _id of the document.
 	*/
 	async List () : Promise<void> {
-	  const { sort, filters, populate, pagination } = this.param as QueryParams
+	  const { sort, filters, populate, pagination, options } = this.param as QueryParams
 
-	  const query = (this.collection as Collection<T>).find(filters)
+	  if (options) {
+	    const numOfDocs = await (this.collection as Collection<T>).countDocuments(filters).exec()
+	    this.info = { numOfDocs }
+	  } else {
+		  const query = (this.collection as Collection<T>).find(filters)
+		  query.sort(sort)
+				 .limit(pagination.limit)
+				 .skip(pagination.offset * pagination.limit)
 
-	  query.sort(sort)
-			 .limit(pagination.limit)
-			 .skip(pagination.offset * pagination.limit)
+		  for (const field of populate) { query.populate(field) }
 
-	  for (const field of populate) { query.populate(field) }
-
-	  this.list = await query.exec()
+		  this.list = await query.exec()
+	  }
 	}
 
 	/**
@@ -223,6 +234,7 @@ export class Accessor<T> {
 	*/
 	Present () {
 	  Assert(this.list, 'Present can not be called without first calling List')
+	  if (this.param.options) { return this.info }
 	  return this.list
 	}
 

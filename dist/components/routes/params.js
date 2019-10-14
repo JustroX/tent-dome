@@ -30,14 +30,24 @@ function Parse(param) {
         parseNumbers: true,
         parseBooleans: true
     });
-    var output = { sort: {}, pagination: { limit: 10, offset: 0 }, filters: {}, populate: [] };
+    var output = { sort: {}, pagination: { limit: 10, offset: 0 }, filters: {}, populate: [], options: false };
     Sort(output, raw);
     Pagination(output, raw);
     Filters(output, raw);
     Expand(output, raw);
+    Option(output, raw);
     return output;
 }
 exports.Parse = Parse;
+/**
+ * Parses the option part of the query and assigns them properly to `result`
+ * @param result processed query param reference
+ * @param raw unprocessed query param reference
+ */
+function Option(result, raw) {
+    result.options = raw.option == true;
+}
+exports.Option = Option;
 /**
 * Parses the sort part of the query and assigns them properly to `result`
 * @param result processed query param reference

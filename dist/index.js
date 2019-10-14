@@ -4,6 +4,19 @@
 * This module contains functions and definitions needed to setup a tent app.
 * @module Tent
 */
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 exports.__esModule = true;
 /**
 *
@@ -40,11 +53,51 @@ var assert = require("assert");
 exports.Plugin = PluginModule.Plugin;
 ;
 /** Expose Route Class */
-exports.Route = RouteModule.Routes;
-exports.Sanitation = SanitationPluginModule.Sanitation;
-exports.Validation = ValidationModule.Validation;
-exports.Authentication = AuthenticationModule.AuthenticationPlugin;
-exports.Permission = PermissionModule.Permission;
+var Route = /** @class */ (function (_super) {
+    __extends(Route, _super);
+    function Route() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Route;
+}(RouteModule.Routes));
+exports.Route = Route;
+;
+var Sanitation = /** @class */ (function (_super) {
+    __extends(Sanitation, _super);
+    function Sanitation() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Sanitation;
+}(SanitationPluginModule.Sanitation));
+exports.Sanitation = Sanitation;
+;
+var Validation = /** @class */ (function (_super) {
+    __extends(Validation, _super);
+    function Validation() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Validation;
+}(ValidationModule.Validation));
+exports.Validation = Validation;
+;
+var Authentication = /** @class */ (function (_super) {
+    __extends(Authentication, _super);
+    function Authentication() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Authentication;
+}(AuthenticationModule.AuthenticationPlugin));
+exports.Authentication = Authentication;
+;
+var Permission = /** @class */ (function (_super) {
+    __extends(Permission, _super);
+    function Permission() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Permission;
+}(PermissionModule.Permission));
+exports.Permission = Permission;
+;
 /** Expose mongoose types */
 exports.Types = mongoose_1.Schema.Types;
 /**

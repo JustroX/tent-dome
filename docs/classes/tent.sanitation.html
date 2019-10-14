@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>PluginInterface | Tent</title>
+	<title>Sanitation | Tent</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -59,37 +59,38 @@
 					<a href="../modules/tent.html">Tent</a>
 				</li>
 				<li>
-					<a href="tent.plugininterface.html">PluginInterface</a>
+					<a href="tent.sanitation.html">Sanitation</a>
 				</li>
 			</ul>
-			<h1>Interface PluginInterface</h1>
+			<h1>Class Sanitation&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Expose Plugin Interface</p>
-					</div>
-				</div>
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>T</h4>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="plugin.plugininterface.html" class="tsd-signature-type">PluginInterface</a>
+						<a href="sanitationplugin.sanitation.html" class="tsd-signature-type">Sanitation</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">PluginInterface</span>
+								<span class="target">Sanitation</span>
 							</li>
 						</ul>
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel tsd-kind-interface tsd-parent-kind-external-module">
+			<section class="tsd-panel tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
 				<h3 class="tsd-before-signature">Indexable</h3>
 				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></div>
 				<div class="tsd-comment tsd-typography">
@@ -103,31 +104,62 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-inherited">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><a href="tent.sanitation.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="tent.plugininterface.html#dependencies" class="tsd-kind-icon">dependencies</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="tent.plugininterface.html#initglobal" class="tsd-kind-icon">init<wbr>Global</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="tent.plugininterface.html#model" class="tsd-kind-icon">model</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="tent.plugininterface.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="tent.sanitation.html#dependencies" class="tsd-kind-icon">dependencies</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="tent.sanitation.html#inbound" class="tsd-kind-icon">inbound</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="tent.sanitation.html#initglobal" class="tsd-kind-icon">init<wbr>Global</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="tent.sanitation.html#model" class="tsd-kind-icon">model</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="tent.sanitation.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="tent.sanitation.html#outbound" class="tsd-kind-icon">outbound</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="tent.plugininterface.html#init" class="tsd-kind-icon">init</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="tent.sanitation.html#inboundmiddleware" class="tsd-kind-icon">inbound<wbr>Middleware</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="tent.sanitation.html#init" class="tsd-kind-icon">init</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="tent.sanitation.html#outboundmiddleware" class="tsd-kind-icon">outbound<wbr>Middleware</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Sanitation<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="tent.sanitation.html" class="tsd-signature-type">Sanitation</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="sanitationplugin.sanitation.html">Sanitation</a>.<a href="sanitationplugin.sanitation.html#constructor">constructor</a></p>
+								<ul>
+									<li>Defined in components/plugins/sanitation.ts:107</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="tent.sanitation.html" class="tsd-signature-type">Sanitation</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="dependencies" class="tsd-anchor"></a>
 					<h3>dependencies</h3>
 					<div class="tsd-signature tsd-kind-icon">dependencies<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="plugin.plugininterface.html">PluginInterface</a>.<a href="plugin.plugininterface.html#dependencies">dependencies</a></p>
+						<p>Inherited from <a href="../interfaces/plugin.plugininterface.html">PluginInterface</a>.<a href="../interfaces/plugin.plugininterface.html#dependencies">dependencies</a></p>
 						<ul>
 							<li>Defined in components/plugin.ts:149</li>
 						</ul>
@@ -138,12 +170,23 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="inbound" class="tsd-anchor"></a>
+					<h3>inbound</h3>
+					<div class="tsd-signature tsd-kind-icon">inbound<span class="tsd-signature-symbol">:</span> <a href="sanitationplugin.bound.html" class="tsd-signature-type">Bound</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="sanitationplugin.sanitation.html">Sanitation</a>.<a href="sanitationplugin.sanitation.html#inbound">inbound</a></p>
+						<ul>
+							<li>Defined in components/plugins/sanitation.ts:105</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="initglobal" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> init<wbr>Global</h3>
 					<div class="tsd-signature tsd-kind-icon">init<wbr>Global<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="plugin.plugininterface.html">PluginInterface</a>.<a href="plugin.plugininterface.html#initglobal">initGlobal</a></p>
+						<p>Inherited from <a href="../interfaces/plugin.plugininterface.html">PluginInterface</a>.<a href="../interfaces/plugin.plugininterface.html#initglobal">initGlobal</a></p>
 						<ul>
 							<li>Defined in components/plugin.ts:155</li>
 						</ul>
@@ -154,28 +197,24 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
 					<a name="model" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> model</h3>
-					<div class="tsd-signature tsd-kind-icon">model<span class="tsd-signature-symbol">:</span> <a href="../classes/model.model-1.html" class="tsd-signature-type">Model</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">model<span class="tsd-signature-symbol">:</span> <a href="model.model-1.html" class="tsd-signature-type">Model</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="plugin.plugininterface.html">PluginInterface</a>.<a href="plugin.plugininterface.html#model">model</a></p>
+						<p>Inherited from <a href="sanitationplugin.sanitation.html">Sanitation</a>.<a href="sanitationplugin.sanitation.html#model">model</a></p>
+						<p>Overrides <a href="../interfaces/plugin.plugininterface.html">PluginInterface</a>.<a href="../interfaces/plugin.plugininterface.html#model">model</a></p>
 						<ul>
-							<li>Defined in components/plugin.ts:158</li>
+							<li>Defined in components/plugins/sanitation.ts:107</li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Model which plugin instance is installed.</p>
-						</div>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="name" class="tsd-anchor"></a>
 					<h3>name</h3>
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="plugin.plugininterface.html">PluginInterface</a>.<a href="plugin.plugininterface.html#name">name</a></p>
+						<p>Inherited from <a href="../interfaces/plugin.plugininterface.html">PluginInterface</a>.<a href="../interfaces/plugin.plugininterface.html#name">name</a></p>
 						<ul>
 							<li>Defined in components/plugin.ts:146</li>
 						</ul>
@@ -186,29 +225,72 @@
 						</div>
 					</div>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="outbound" class="tsd-anchor"></a>
+					<h3>outbound</h3>
+					<div class="tsd-signature tsd-kind-icon">outbound<span class="tsd-signature-symbol">:</span> <a href="sanitationplugin.bound.html" class="tsd-signature-type">Bound</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="sanitationplugin.sanitation.html">Sanitation</a>.<a href="sanitationplugin.sanitation.html#outbound">outbound</a></p>
+						<ul>
+							<li>Defined in components/plugins/sanitation.ts:106</li>
+						</ul>
+					</aside>
+				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="inboundmiddleware" class="tsd-anchor"></a>
+					<h3>inbound<wbr>Middleware</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">inbound<wbr>Middleware<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">(Anonymous function)</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="sanitationplugin.sanitation.html">Sanitation</a>.<a href="sanitationplugin.sanitation.html#inboundmiddleware">inboundMiddleware</a></p>
+								<ul>
+									<li>Defined in components/plugins/sanitation.ts:128</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
 					<a name="init" class="tsd-anchor"></a>
 					<h3>init</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">init<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="plugin.plugininterface.html">PluginInterface</a>.<a href="plugin.plugininterface.html#init">init</a></p>
+								<p>Inherited from <a href="sanitationplugin.sanitation.html">Sanitation</a>.<a href="sanitationplugin.sanitation.html#init">init</a></p>
+								<p>Overrides <a href="../interfaces/plugin.plugininterface.html">PluginInterface</a>.<a href="../interfaces/plugin.plugininterface.html#init">init</a></p>
 								<ul>
-									<li>Defined in components/plugin.ts:152</li>
+									<li>Defined in components/plugins/sanitation.ts:118</li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Initialization function.</p>
-								</div>
-							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="outboundmiddleware" class="tsd-anchor"></a>
+					<h3>outbound<wbr>Middleware</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">outbound<wbr>Middleware<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">(Anonymous function)</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="sanitationplugin.sanitation.html">Sanitation</a>.<a href="sanitationplugin.sanitation.html#outboundmiddleware">outboundMiddleware</a></p>
+								<ul>
+									<li>Defined in components/plugins/sanitation.ts:146</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -276,49 +358,64 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/tent.authentication.html" class="tsd-kind-icon">Authentication</a>
+						<a href="tent.authentication.html" class="tsd-kind-icon">Authentication</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/tent.permission.html" class="tsd-kind-icon">Permission</a>
+						<a href="tent.permission.html" class="tsd-kind-icon">Permission</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="../classes/tent.route.html" class="tsd-kind-icon">Route</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="../classes/tent.sanitation.html" class="tsd-kind-icon">Sanitation</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/tent.tentdome.html" class="tsd-kind-icon">Tent<wbr>Dome</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/tent.validation.html" class="tsd-kind-icon">Validation</a>
+						<a href="tent.route.html" class="tsd-kind-icon">Route</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="tent.plugininterface.html" class="tsd-kind-icon">Plugin<wbr>Interface</a>
+					<li class="current tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="tent.sanitation.html" class="tsd-kind-icon">Sanitation</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="tent.plugininterface.html#dependencies" class="tsd-kind-icon">dependencies</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+								<a href="tent.sanitation.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="tent.plugininterface.html#initglobal" class="tsd-kind-icon">init<wbr>Global</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="tent.sanitation.html#dependencies" class="tsd-kind-icon">dependencies</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="tent.plugininterface.html#model" class="tsd-kind-icon">model</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="tent.sanitation.html#inbound" class="tsd-kind-icon">inbound</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="tent.plugininterface.html#name" class="tsd-kind-icon">name</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="tent.sanitation.html#initglobal" class="tsd-kind-icon">init<wbr>Global</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-								<a href="tent.plugininterface.html#init" class="tsd-kind-icon">init</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+								<a href="tent.sanitation.html#model" class="tsd-kind-icon">model</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="tent.sanitation.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="tent.sanitation.html#outbound" class="tsd-kind-icon">outbound</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="tent.sanitation.html#inboundmiddleware" class="tsd-kind-icon">inbound<wbr>Middleware</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+								<a href="tent.sanitation.html#init" class="tsd-kind-icon">init</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="tent.sanitation.html#outboundmiddleware" class="tsd-kind-icon">outbound<wbr>Middleware</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="tent.tentdome.html" class="tsd-kind-icon">Tent<wbr>Dome</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="tent.validation.html" class="tsd-kind-icon">Validation</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="tent.tentoptionsinterface.html" class="tsd-kind-icon">Tent<wbr>Options<wbr>Interface</a>
+						<a href="../interfaces/tent.plugininterface.html" class="tsd-kind-icon">Plugin<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/tent.tentoptionsinterface.html" class="tsd-kind-icon">Tent<wbr>Options<wbr>Interface</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
 						<a href="../modules/tent.html#plugin" class="tsd-kind-icon">Plugin</a>

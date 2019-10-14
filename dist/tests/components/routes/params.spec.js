@@ -4,7 +4,7 @@ var Params = require("../../../components/routes/params");
 var chai_1 = require("chai");
 var query_string_1 = require("query-string");
 describe("Params", function () {
-    var output = { sort: {}, pagination: { limit: 10, offset: 0 }, filters: {}, populate: [] };
+    var output = { sort: {}, pagination: { limit: 10, offset: 0 }, filters: {}, populate: [], options: true };
     var raw;
     function parseURI(uri) {
         raw = query_string_1.parse(uri, {
@@ -288,8 +288,15 @@ describe("Params", function () {
                 sort: { name: -1 },
                 pagination: { limit: 1, offset: 12 },
                 filters: { key1: "a", key2: { $gte: "12", $lte: "15" } },
-                populate: ["bubble"]
+                populate: ["bubble"],
+                options: false
             });
+        });
+    });
+    describe("#Options", function () {
+        it('should work properly', function () {
+            var a = Params.Parse("option=true");
+            chai_1.expect(a.options).to.be.equal(true);
         });
     });
 });

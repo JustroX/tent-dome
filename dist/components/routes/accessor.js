@@ -69,6 +69,8 @@ var Accessor = /** @class */ (function () {
         this.plugins = {};
         /** Scope reserved for reusable variables */
         this.vars = {};
+        /** Query information */
+        this.info = { numOfDocs: 0 };
         this.res = res;
         this.req = req;
     }
@@ -136,11 +138,18 @@ var Accessor = /** @class */ (function () {
     */
     Accessor.prototype.List = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, sort, filters, populate, pagination, query, _i, populate_1, field, _b;
+            var _a, sort, filters, populate, pagination, options, numOfDocs, query, _i, populate_1, field, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        _a = this.param, sort = _a.sort, filters = _a.filters, populate = _a.populate, pagination = _a.pagination;
+                        _a = this.param, sort = _a.sort, filters = _a.filters, populate = _a.populate, pagination = _a.pagination, options = _a.options;
+                        if (!options) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.collection.countDocuments(filters).exec()];
+                    case 1:
+                        numOfDocs = _c.sent();
+                        this.info = { numOfDocs: numOfDocs };
+                        return [3 /*break*/, 4];
+                    case 2:
                         query = this.collection.find(filters);
                         query.sort(sort)
                             .limit(pagination.limit)
@@ -151,9 +160,10 @@ var Accessor = /** @class */ (function () {
                         }
                         _b = this;
                         return [4 /*yield*/, query.exec()];
-                    case 1:
+                    case 3:
                         _b.list = _c.sent();
-                        return [2 /*return*/];
+                        _c.label = 4;
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -237,6 +247,8 @@ var Accessor = /** @class */ (function () {
     */
     Accessor.prototype.Present = function () {
         Assert(this.list, 'Present can not be called without first calling List');
+        if (this.param.options)
+            return this.info;
         return this.list;
     };
     /**

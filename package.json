@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "compile": "tsc index.ts  --experimentalDecorators --outDir dist --declaration",
-    "test": "tsc ./tests/index.spec.ts ./tests/integration.spec.ts ./tests/components/integrations/auth.integration.spec.ts ./tests/components/integrations/permission.integration.spec.ts --outDir dist --experimentalDecorators && mocha ./dist/tests/index.spec.js --exit && mocha ./dist/tests/integration.spec.js --exit && mocha ./dist/tests/components/integrations/auth.integration.spec.js && mocha ./dist/tests/components/integrations/permission.integration.spec.js --exit",
+    "test": "tsc && mocha ./dist/tests/index.spec.js --exit && mocha-parallel-tests ./dist/tests/components/integrations/*.spec.js --timeout 5000 --exit",
     "test-watch": "cls && tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators --watch ",
     "create-docs": "typedoc --readme README.md --out docs/ index.ts --mode modules --name Tent",
     "lint": "eslint index.ts components/**/*.ts --fix"
@@ -46,6 +46,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "mocha": "^6.2.0",
+    "mocha-parallel-tests": "^2.2.2",
     "node-mocks-http": "^1.7.6",
     "nyc": "^14.1.1",
     "sinon": "^7.4.2",

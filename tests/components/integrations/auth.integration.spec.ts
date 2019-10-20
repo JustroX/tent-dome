@@ -2,7 +2,7 @@ import { TentDome, Tent } from "../../../index";
 import { Model } from "../../../components/model"
 import { AuthenticationPlugin } from "../../../components/plugins/authentication";
 
-import * as chai from "chai";
+import chai = require("chai");
 var chaiHttp = require("chai-http");
 
 import {config} from "dotenv";
@@ -80,7 +80,7 @@ describe("Authentication Plugin - Integration",function()
 	it("should start properly",function(done)
 	{
 		Tent.register();
-		Tent.start().then(()=>
+		Tent.start(3020).then(()=>
 		{
 			done();
 		})

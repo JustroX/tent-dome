@@ -247,8 +247,9 @@ var Accessor = /** @class */ (function () {
     */
     Accessor.prototype.Present = function () {
         Assert(this.list, 'Present can not be called without first calling List');
-        if (this.param.options)
+        if (this.param.options) {
             return this.info;
+        }
         return this.list;
     };
     /**

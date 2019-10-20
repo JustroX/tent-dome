@@ -17,6 +17,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 exports.__esModule = true;
 /**
 *
@@ -40,14 +47,14 @@ var mongoose_1 = require("mongoose");
 var model_1 = require("./components/model");
 var server_1 = require("./components/server");
 // Expose Plugin Module
-var PluginModule = require("./components/plugin");
+var PluginModule = __importStar(require("./components/plugin"));
 // Expose Route Module
-var RouteModule = require("./components/route");
+var RouteModule = __importStar(require("./components/route"));
 // Expose Prebuilt Plugins
-var SanitationPluginModule = require("./components/plugins/sanitation");
-var ValidationModule = require("./components/plugins/validation");
-var AuthenticationModule = require("./components/plugins/authentication");
-var PermissionModule = require("./components/plugins/permission");
+var SanitationPluginModule = __importStar(require("./components/plugins/sanitation"));
+var ValidationModule = __importStar(require("./components/plugins/validation"));
+var AuthenticationModule = __importStar(require("./components/plugins/authentication"));
+var PermissionModule = __importStar(require("./components/plugins/permission"));
 var assert = require("assert");
 /** Expose Plugin Class */
 exports.Plugin = PluginModule.Plugin;

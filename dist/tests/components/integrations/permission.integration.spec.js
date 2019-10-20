@@ -94,7 +94,7 @@ describe("Permission Plugin - Integration", function () {
     });
     it("should start properly", function (done) {
         index_1.Tent.register();
-        index_1.Tent.start().then(function () {
+        index_1.Tent.start(3021).then(function () {
             done();
         })["catch"](done);
     });

@@ -31,6 +31,9 @@ export declare type Collection<T> = MongooseModel<Document<T>>;
 interface Dictionary {
     [key: string]: any;
 }
+interface ResultInfo {
+    numOfDocs: number;
+}
 /** Accessor class. This would be binded to `req.tent` for the middlewares to access.
 * @typeparam T Schema interface
 */
@@ -57,6 +60,8 @@ export declare class Accessor<T> {
     returnVal: any;
     /** Scope reserved for reusable variables */
     vars: Dictionary;
+    /** Query information */
+    info: ResultInfo;
     /**
     * Returns a new accessor instance.
     * @param req Express request
@@ -109,7 +114,7 @@ export declare class Accessor<T> {
     /**
     *  Returns `Accessor.list`
     */
-    Present(): Document<T>[];
+    Present(): ResultInfo | Document<T>[];
     /**
     *  Returns `Accessor.document`
     */

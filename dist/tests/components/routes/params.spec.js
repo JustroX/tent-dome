@@ -1,6 +1,13 @@
 "use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 exports.__esModule = true;
-var Params = require("../../../components/routes/params");
+var Params = __importStar(require("../../../components/routes/params"));
 var chai_1 = require("chai");
 var query_string_1 = require("query-string");
 describe("Params", function () {

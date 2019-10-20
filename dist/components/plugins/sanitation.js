@@ -116,7 +116,7 @@ var Sanitation = /** @class */ (function () {
     };
     Sanitation.prototype.inboundMiddleware = function () {
         var _this = this;
-        return function (req, res, next) {
+        var mw = function (req, res, next) {
             var inbound = _this.inbound;
             if (inbound.whitelisted.length) {
                 var body = {};
@@ -136,10 +136,12 @@ var Sanitation = /** @class */ (function () {
             }
             next();
         };
+        mw.tag = 'inboundSanitation';
+        return mw;
     };
     Sanitation.prototype.outboundMiddleware = function () {
         var _this = this;
-        return function (req, res, next) {
+        var mw = function (req, res, next) {
             var tent = req.tent;
             // sanitize list
             var outbound = _this.outbound;
@@ -169,7 +171,7 @@ var Sanitation = /** @class */ (function () {
                         for (var _i = 0, _a = outbound.blacklisted; _i < _a.length; _i++) {
                             var i = _a[_i];
                             if (x[i]) {
-                                delete x[i];
+                                x[i] = undefined;
                             }
                         }
                         return x;
@@ -179,13 +181,15 @@ var Sanitation = /** @class */ (function () {
                     for (var _b = 0, _c = outbound.blacklisted; _b < _c.length; _b++) {
                         var i = _c[_b];
                         if (tent.document[i]) {
-                            delete tent.document[i];
+                            tent.document[i] = undefined;
                         }
                     }
                 }
             }
             next();
         };
+        mw.tag = "outboundSanitation";
+        return mw;
     };
     Sanitation = __decorate([
         plugin_1.Plugin({

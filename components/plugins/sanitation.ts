@@ -127,7 +127,8 @@ export class Sanitation<T> {
 
 	inboundMiddleware () {
 	  const _this = this
-	  return function (req: Request, res: Response, next : NextFunction) {
+
+	  const mw = function (req: Request, res: Response, next : NextFunction) {
 	    const inbound = _this.inbound
 
 	    if (inbound.whitelisted.length) {
@@ -140,12 +141,15 @@ export class Sanitation<T> {
 	      }
 	    }
 	    next()
-	  }
+	  };
+
+	  (mw as any).tag = 'inboundSanitation'
+	  return mw
 	}
 
 	outboundMiddleware () {
 	  const _this = this
-	  return function (req: Request, res: Response, next : NextFunction) {
+	  const mw = function (req: Request, res: Response, next : NextFunction) {
 	    const tent : Accessor<T> = req.tent as Accessor<T>
 
 	    // sanitize list
@@ -170,20 +174,25 @@ export class Sanitation<T> {
 	      if (tent.list) {
 	        tent.list = tent.list.map((x : Document<T>) => {
 	          for (const i of outbound.blacklisted) {
-	            if (x[i]) { delete x[i] }
+	            if (x[i]) { x[i] = undefined }
 	          }
 	          return x
 	        })
 	      }
 	      if (tent.document) {
 	        for (const i of outbound.blacklisted) {
-	          if (tent.document[i]) { delete tent.document[i] }
+	          if (tent.document[i]) {
+	          	tent.document[i] = undefined
+	          }
 	        }
 	      }
 	    }
 
 	    next()
-	  }
+	  };
+
+	  (mw as any).tag = 'outboundSanitation'
+	  return mw
 	}
 }
 

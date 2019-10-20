@@ -10,7 +10,7 @@ import { spy } from "sinon";
 
 // import Joi = require("@hapi/joi");
 
-import * as Joi from "@hapi/joi";
+import Joi = require("@hapi/joi");
 
 describe("Validation Plugin",function()
 {

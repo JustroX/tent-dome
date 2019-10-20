@@ -45,7 +45,7 @@ exports.Parse = Parse;
  * @param raw unprocessed query param reference
  */
 function Option(result, raw) {
-    result.options = raw.option == true;
+    result.options = raw.option === true;
 }
 exports.Option = Option;
 /**

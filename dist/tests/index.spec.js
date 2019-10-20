@@ -1,6 +1,13 @@
 "use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 exports.__esModule = true;
-var Tent = require("../index");
+var Tent = __importStar(require("../index"));
 var chai_1 = require("chai");
 require("./tent.spec");
 describe("Tent Module", function () {

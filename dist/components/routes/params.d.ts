@@ -14,6 +14,7 @@ export interface QueryParams {
         [key: string]: any;
     };
     populate: string[];
+    options: boolean;
 }
 /** Object definition for unprocessed queries`. */
 export interface RawQuery {
@@ -23,6 +24,12 @@ export interface RawQuery {
  * @param param parameters from url string. e.g. `limit=120&offset=0`
  */
 export declare function Parse(param: string): QueryParams;
+/**
+ * Parses the option part of the query and assigns them properly to `result`
+ * @param result processed query param reference
+ * @param raw unprocessed query param reference
+ */
+export declare function Option(result: QueryParams, raw: RawQuery): void;
 /**
 * Parses the sort part of the query and assigns them properly to `result`
 * @param result processed query param reference

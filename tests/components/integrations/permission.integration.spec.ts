@@ -3,7 +3,7 @@ import { Model } from "../../../components/model"
 import { AuthenticationPlugin } from "../../../components/plugins/authentication";
 import { Permission } from "../../../components/plugins/permission";
 
-import * as chai from "chai";
+import chai = require("chai");
 var chaiHttp = require("chai-http");
 
 import {config} from "dotenv";
@@ -91,7 +91,7 @@ describe("Permission Plugin - Integration",function()
 	it("should start properly",function(done)
 	{
 		Tent.register();
-		Tent.start().then(()=>
+		Tent.start(3021).then(()=>
 		{
 			done();
 		})

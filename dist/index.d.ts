@@ -38,11 +38,16 @@ export declare var Plugin: typeof PluginModule.Plugin;
 export interface PluginInterface extends PluginModule.PluginInterface {
 }
 /** Expose Route Class */
-export declare var Route: typeof RouteModule.Routes;
-export declare var Sanitation: typeof SanitationPluginModule.Sanitation;
-export declare var Validation: typeof ValidationModule.Validation;
-export declare var Authentication: typeof AuthenticationModule.AuthenticationPlugin;
-export declare var Permission: typeof PermissionModule.Permission;
+export declare class Route<T> extends RouteModule.Routes<T> {
+}
+export declare class Sanitation<T> extends SanitationPluginModule.Sanitation<T> {
+}
+export declare class Validation extends ValidationModule.Validation {
+}
+export declare class Authentication extends AuthenticationModule.AuthenticationPlugin {
+}
+export declare class Permission extends PermissionModule.Permission {
+}
 /** Expose mongoose types */
 export declare var Types: typeof Schema.Types;
 /**

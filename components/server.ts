@@ -25,7 +25,7 @@
 import { Server as HttpServer, createServer } 	from 'http'
 import { Application } 	 from 'express'
 
-import * as Mongoose 	 from 'mongoose'
+import Mongoose = require('mongoose');
 
 import Express = require('express');
 import CookieParser = require('cookie-parser');

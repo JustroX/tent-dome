@@ -259,10 +259,10 @@ describe("Validation Plugin", function () {
             chai_1.expect(mw).to.be.a('function');
         });
         it('should respond 400 - ValidationError`', function (done) {
+            req.tent.plugins.validation.error = { details: [{ message: "try" }] };
             util_1.promisify(mw, req, res).then(function () {
                 try {
                     chai_1.expect(res._getStatusCode()).to.be.equal(400);
-                    chai_1.expect(res._getData().error).to.be.equal("Request validation failed.");
                     done();
                 }
                 catch (err) {
@@ -305,7 +305,6 @@ describe("Validation Plugin", function () {
                 .then(function () {
                 try {
                     chai_1.expect(res._getStatusCode()).to.be.equal(400);
-                    chai_1.expect(res._getData().error).to.be.equal("Request validation failed.");
                     done();
                 }
                 catch (err) {
@@ -320,7 +319,6 @@ describe("Validation Plugin", function () {
                 .then(function () {
                 try {
                     chai_1.expect(res._getStatusCode()).to.be.equal(400);
-                    chai_1.expect(res._getData().error).to.be.equal("Request validation failed.");
                     done();
                 }
                 catch (err) {
@@ -343,7 +341,6 @@ describe("Validation Plugin", function () {
                 .then(function () {
                 try {
                     chai_1.expect(res._getStatusCode()).to.be.equal(400);
-                    chai_1.expect(res._getData().error).to.be.equal("Request validation failed.");
                     done();
                 }
                 catch (err) {

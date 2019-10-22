@@ -67,5 +67,8 @@
     "include":[
         "components/**/*.ts",
         "tests/**/*.spec.ts"
+    ],
+    "exlcude":[
+        "node_modules"
     ]
 }

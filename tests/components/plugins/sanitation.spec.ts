@@ -318,7 +318,6 @@ describe("Sanitation Plugin",function()
 			{
 				try
 				{
-					console.log
 					let list = (req.tent as Accessor<any>).list as Document<any>[]; 
 					expect(list[0].whitelist).to.be.equal( 1 );
 					done();

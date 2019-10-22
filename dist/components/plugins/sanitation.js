@@ -188,7 +188,7 @@ var Sanitation = /** @class */ (function () {
             }
             next();
         };
-        mw.tag = "outboundSanitation";
+        mw.tag = 'outboundSanitation';
         return mw;
     };
     Sanitation = __decorate([

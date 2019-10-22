@@ -225,7 +225,7 @@ export class Validation {
 	onFailMiddlewareFactory () : Middleware {
 	  /** On fail middleware */
 	  return function (req : Request, res: Response) {
-	    res.tent.apiError(400, 'Request validation failed.')
+	    res.tent.apiError(400, req.tent.plugins.validation.error.details[0].message)
 	  }
 	}
 

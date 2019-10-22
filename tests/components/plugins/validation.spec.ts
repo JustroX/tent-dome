@@ -364,12 +364,12 @@ describe("Validation Plugin",function()
 		});
 		it('should respond 400 - ValidationError`',function(done)
 		{
+			req.tent.plugins.validation.error = { details: [{message: "try"}] }
 			promisify(mw, req, res).then(()=>
 			{
 				try
 				{
 					expect(res._getStatusCode()).to.be.equal(400);
-					expect(res._getData().error).to.be.equal("Request validation failed.");
 					done();
 				}
 				catch(err)
@@ -430,7 +430,6 @@ describe("Validation Plugin",function()
 				try
 				{
 					expect(res._getStatusCode()).to.be.equal(400);
-					expect(res._getData().error).to.be.equal("Request validation failed.");
 					done()
 				}
 				catch(err)
@@ -451,7 +450,6 @@ describe("Validation Plugin",function()
 				try
 				{
 					expect(res._getStatusCode()).to.be.equal(400);
-					expect(res._getData().error).to.be.equal("Request validation failed.");
 					done();
 				}
 				catch(err)
@@ -485,7 +483,6 @@ describe("Validation Plugin",function()
 				try
 				{
 					expect(res._getStatusCode()).to.be.equal(400);
-					expect(res._getData().error).to.be.equal("Request validation failed.");
 					done()
 				}
 				catch(err)

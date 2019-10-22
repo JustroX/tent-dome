@@ -295,7 +295,7 @@ var Validation = /** @class */ (function () {
     Validation.prototype.onFailMiddlewareFactory = function () {
         /** On fail middleware */
         return function (req, res) {
-            res.tent.apiError(400, 'Request validation failed.');
+            res.tent.apiError(400, req.tent.plugins.validation.error.details[0].message);
         };
     };
     /** Plugin initialization */

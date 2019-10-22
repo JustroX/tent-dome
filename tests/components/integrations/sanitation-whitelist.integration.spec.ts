@@ -75,7 +75,6 @@ describe("Sanitation Plugin - Integration",function()
 
 			entity.Schema.model.deleteMany({}).exec();
 
-			console.log(entity.Routes.builder("/","GET").expose());
 		}).to.not.throw();
 		
 	});

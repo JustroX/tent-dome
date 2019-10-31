@@ -159,6 +159,7 @@ export class Builder<T> {
 	*/
 	replaceHead (mw : Middleware) {
 	  this.middlewares[this.head] = mw
+	  return this
 	}
 
 	/**
@@ -167,6 +168,7 @@ export class Builder<T> {
 	pop () {
 	  this.middlewares.pop()
 	  this.head = Math.min(this.head, this.middlewares.length - 1)
+	  return this
 	}
 
 	/**
@@ -227,9 +229,11 @@ export class Builder<T> {
 	  for (let i = 0; i < this.middlewares.length; i++) {
 	    if ((this.middlewares[i] as any).tag === name) {
 	      this.middlewares.splice(i, 0, mw)
-	      return
+	      return this
 	    }
 	  }
+
+	  return this
 	}
 
 	/**
@@ -241,9 +245,10 @@ export class Builder<T> {
 	  for (let i = 0; i < this.middlewares.length; i++) {
 	    if ((this.middlewares[i] as any).tag === name) {
 	      this.middlewares.splice(i + 1, 0, mw)
-	      return
+	      return this
 	    }
 	  }
+	  return this
 	}
 
 	/**

@@ -137,7 +137,9 @@ export class Accessor<T> {
 	Assign () {
 	  Assert(this.payload, 'Assign can not be called without first calling Sanitize')
 	  Assert(this.document, 'Assign can not be called without first calling Read or FreshDocument')
-	  for (const i in this.payload) { (this.document as Document<T>).set(i, this.payload[i]) }
+	  for (const i in this.payload) {
+	  	if (this.payload[i]) { (this.document as Document<T>).set(i, this.payload[i]) }
+	  }
 	}
 
 	/**
@@ -166,7 +168,7 @@ export class Accessor<T> {
 				 .limit(pagination.limit)
 				 .skip(pagination.offset * pagination.limit)
 
-		  for (const field of populate) { query.populate(field) }
+		  for (const field of populate) { query.populate(field, this.model.Expand.expose()[field]) }
 
 		  this.list = await query.exec()
 	  }

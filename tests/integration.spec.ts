@@ -292,6 +292,98 @@ describe("Tent integration run 1.",function()
 			})
 		});
 
+
+		describe("LIST Request with additional parameters.",()=>{
+			
+			for(let i=0; i<60; i++)
+				before((done)=>{
+					let sample_body = { name : "First Client "+i, number: 20, list:[{number : 1,text : "Hello"}]};
+					chai.request(Tent.app())
+					.post("/api/clients")
+					.send(sample_body)
+					.then((res)=>
+					{
+						done();
+					})
+					.catch((err)=>
+					{
+						done(err);
+					})
+				});
+
+			it("should return base value",function(done)
+			{
+				chai.request(Tent.app())
+				.get("/api/clients")
+				.send()
+				.then((res)=>
+				{
+					try
+					{
+						expect(res).to.have.status(200);
+						expect(res.body.length).to.be.equal(10);
+						done();
+					}
+					catch(err)
+					{
+						done(err);
+					}
+				})
+				.catch((err)=>
+				{
+					done(err);
+				})
+			});
+
+			it("should return proper value with limit=2",function(done)
+			{
+				chai.request(Tent.app())
+				.get("/api/clients?limit=30&offset=0")
+				.send()
+				.then((res)=>
+				{
+					try
+					{
+						expect(res).to.have.status(200);
+						expect(res.body.length).to.be.equal(30);
+						done();
+					}
+					catch(err)
+					{
+						done(err);
+					}
+				})
+				.catch((err)=>
+				{
+					done(err);
+				})
+			});
+
+			it("should return proper value with limit=2&offset=1",function(done)
+			{
+				chai.request(Tent.app())
+				.get("/api/clients?limit=2&offset=1")
+				.send()
+				.then((res)=>
+				{
+					try
+					{
+						expect(res).to.have.status(200);
+						expect(res.body.length).to.be.equal(2);
+						done();
+					}
+					catch(err)
+					{
+						done(err);
+					}
+				})
+				.catch((err)=>
+				{
+					done(err);
+				})
+			});
+		});
+
 		after(function(done)
 		{
 			entity.Schema.model.deleteMany({},done);

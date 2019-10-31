@@ -92,11 +92,11 @@ export declare class Builder<T> {
     * Replaces middleware on the head by another middleware.
     * @param mw Middlware to replace.
     */
-    replaceHead(mw: Middleware): void;
+    replaceHead(mw: Middleware): this;
     /**
     * Removes the last middleware on the sequence. Moves the head to the previous one if the head is pointing to the last element.
     */
-    pop(): void;
+    pop(): this;
     /**
     * Import built in middlewares.
     */
@@ -112,13 +112,13 @@ export declare class Builder<T> {
     * @param name Name of the reusable middleware
     * @param mw Middleware
     */
-    pre(name: string, mw: Middleware): void;
+    pre(name: string, mw: Middleware): this;
     /**
     * Inserts a middleware after a reusable middleware.
     * @param name Name of the reusable middleware
     * @param mw Middleware
     */
-    post(name: string, mw: Middleware): void;
+    post(name: string, mw: Middleware): this;
     /**
     * Returns the sequence of middlewares.
     */

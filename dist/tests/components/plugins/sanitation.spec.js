@@ -231,7 +231,6 @@ describe("Sanitation Plugin", function () {
             sanitationPlugin.outbound.whitelist("whitelist");
             sanitationPlugin.outboundMiddleware()(req, res, function () {
                 try {
-                    console.log;
                     var list = req.tent.list;
                     chai_1.expect(list[0].whitelist).to.be.equal(1);
                     done();

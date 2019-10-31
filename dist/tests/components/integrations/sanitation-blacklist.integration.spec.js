@@ -78,7 +78,6 @@ describe("Sanitation Plugin - Integration", function () {
             sanitation.outbound.blacklist(["writeOnly"]);
             entity.register();
             entity.Schema.model.deleteMany({}).exec();
-            console.log(entity.Routes.builder("/", "GET").expose());
         }).to.not["throw"]();
     });
     var _id = "";

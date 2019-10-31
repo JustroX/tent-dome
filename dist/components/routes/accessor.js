@@ -108,7 +108,8 @@ var Accessor = /** @class */ (function () {
         Assert(this.payload, 'Assign can not be called without first calling Sanitize');
         Assert(this.document, 'Assign can not be called without first calling Read or FreshDocument');
         for (var i in this.payload) {
-            this.document.set(i, this.payload[i]);
+            if (!!this.payload[i])
+                this.document.set(i, this.payload[i]);
         }
     };
     /**
@@ -156,7 +157,7 @@ var Accessor = /** @class */ (function () {
                             .skip(pagination.offset * pagination.limit);
                         for (_i = 0, populate_1 = populate; _i < populate_1.length; _i++) {
                             field = populate_1[_i];
-                            query.populate(field);
+                            query.populate(field, this.model.Expand.expose()[field]);
                         }
                         _b = this;
                         return [4 /*yield*/, query.exec()];

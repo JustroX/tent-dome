@@ -119,6 +119,7 @@ var Builder = /** @class */ (function () {
     */
     Builder.prototype.replaceHead = function (mw) {
         this.middlewares[this.head] = mw;
+        return this;
     };
     /**
     * Removes the last middleware on the sequence. Moves the head to the previous one if the head is pointing to the last element.
@@ -126,6 +127,7 @@ var Builder = /** @class */ (function () {
     Builder.prototype.pop = function () {
         this.middlewares.pop();
         this.head = Math.min(this.head, this.middlewares.length - 1);
+        return this;
     };
     /**
     * Import built in middlewares.
@@ -182,9 +184,10 @@ var Builder = /** @class */ (function () {
         for (var i = 0; i < this.middlewares.length; i++) {
             if (this.middlewares[i].tag === name) {
                 this.middlewares.splice(i, 0, mw);
-                return;
+                return this;
             }
         }
+        return this;
     };
     /**
     * Inserts a middleware after a reusable middleware.
@@ -195,9 +198,10 @@ var Builder = /** @class */ (function () {
         for (var i = 0; i < this.middlewares.length; i++) {
             if (this.middlewares[i].tag === name) {
                 this.middlewares.splice(i + 1, 0, mw);
-                return;
+                return this;
             }
         }
+        return this;
     };
     /**
     * Returns the sequence of middlewares.

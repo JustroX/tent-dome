@@ -235,8 +235,10 @@ export class Accessor<T> {
 	*  Returns `Accessor.list`
 	*/
 	Present () {
+	  if (this.param.options) {
+	   return this.info
+	  }
 	  Assert(this.list, 'Present can not be called without first calling List')
-	  if (this.param.options) { return this.info }
 	  return this.list
 	}
 

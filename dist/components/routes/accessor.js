@@ -108,8 +108,9 @@ var Accessor = /** @class */ (function () {
         Assert(this.payload, 'Assign can not be called without first calling Sanitize');
         Assert(this.document, 'Assign can not be called without first calling Read or FreshDocument');
         for (var i in this.payload) {
-            if (!!this.payload[i])
+            if (this.payload[i]) {
                 this.document.set(i, this.payload[i]);
+            }
         }
     };
     /**
@@ -247,10 +248,10 @@ var Accessor = /** @class */ (function () {
     *  Returns `Accessor.list`
     */
     Accessor.prototype.Present = function () {
-        Assert(this.list, 'Present can not be called without first calling List');
         if (this.param.options) {
             return this.info;
         }
+        Assert(this.list, 'Present can not be called without first calling List');
         return this.list;
     };
     /**

@@ -296,6 +296,25 @@ describe("Tent integration run 1.", function () {
                     done(err);
                 });
             });
+            it("should return option value", function (done) {
+                chai.request(Tent.app())
+                    .get("/api/clients?option=true")
+                    .send()
+                    .then(function (res) {
+                    try {
+                        expect(res).to.have.status(200);
+                        expect(res.body).to.be.deep.equal({
+                            numOfDocs: 60
+                        });
+                        done();
+                    }
+                    catch (err) {
+                        done(err);
+                    }
+                })["catch"](function (err) {
+                    done(err);
+                });
+            });
             it("should return proper value with limit=2", function (done) {
                 chai.request(Tent.app())
                     .get("/api/clients?limit=30&offset=0")

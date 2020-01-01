@@ -252,7 +252,7 @@ describe("Authentication Plugin - Integration", function () {
                     .post("/api/userauths/login")
                     .send({
                     email: "johny@gmail.com",
-                    password: "wrongpassword"
+                    password: "w"
                 })
                     .then(function (res) {
                     try {
@@ -305,7 +305,7 @@ describe("Authentication Plugin - Integration", function () {
                     .post("/api/userauths/login")
                     .send({
                     email: "johny@gmail.com",
-                    password: "wrongpassword"
+                    password: "w"
                 })
                     .then(function (res) {
                     try {

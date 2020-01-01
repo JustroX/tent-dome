@@ -67,7 +67,7 @@ export function buildSchema () {
     // validation
     const raw : any = {}
     raw[emailToken] = Joi.string().regex(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).required()
-    raw[passwordToken] = Joi.string().regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!$%@#£€*?&]{8,}$/).required()
+    raw[passwordToken] = Joi.string().min(6).required()
 
     const schema = Joi.object(raw)
 

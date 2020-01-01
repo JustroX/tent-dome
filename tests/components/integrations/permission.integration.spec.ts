@@ -325,7 +325,7 @@ describe("Permission Plugin - Integration",function()
 				.post("/api/userpermissions/login")
 				.send({
 					email 		: "johny@gmail.com",
-					password	: "wrongpassword"
+					password	: "w"
 				})
 				.then((res)=>
 				{
@@ -380,7 +380,7 @@ describe("Permission Plugin - Integration",function()
 				.post("/api/userpermissions/login")
 				.send({
 					email 		: "johny@gmail.com",
-					password	: "wrongpassword"
+					password	: "w"
 				})
 				.then((res)=>
 				{
@@ -608,7 +608,7 @@ describe("Permission Plugin - Integration",function()
 				.post("/api/userpermissions/login")
 				.send({
 					email 		: "johny@gmail.com",
-					password	: "wrongpassword"
+					password	: "w"
 				})
 				.then((res)=>
 				{

@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "compile": "tsc index.ts  --experimentalDecorators --outDir dist --declaration",
-    "test": "tsc && mocha ./dist/tests/index.spec.js --exit && mocha ./dist/tests/integration.spec.js --exit && mocha-parallel-tests ./dist/tests/components/integrations/*.spec.js --timeout 5000 --exit",
+    "test": "tsc && mocha ./dist/tests/index.spec.js --timeout 5000 --exit && mocha ./dist/tests/integration.spec.js --timeout 5000 --exit && mocha-parallel-tests ./dist/tests/components/integrations/*.spec.js --timeout 5000 --exit",
     "test-watch": "cls && tsc ./tests/index.spec.ts --outDir dist --experimentalDecorators --watch ",
     "create-docs": "typedoc --readme README.md --out docs/ index.ts --mode modules --name Tent",
     "lint": "eslint index.ts components/**/*.ts --fix"

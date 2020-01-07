@@ -32,6 +32,8 @@ import CookieParser = require('cookie-parser');
 import BodyParser = require('body-parser');
 import morgan = require('morgan');
 
+import { Tent } from '../index';
+
 var urlencodedParser = BodyParser.urlencoded({ extended: true })
 
 export interface HttpServerInterface extends HttpServer {};
@@ -56,7 +58,7 @@ export class Server {
 	initDefaultMiddlewares () {
 	  this.app.use(morgan('dev'))
 	  this.app.use(urlencodedParser)
-	  this.app.use(BodyParser.json())
+	  this.app.use(BodyParser.json(Tent.get('bodyparser options')))
 	  this.app.use(CookieParser())
 	}
 

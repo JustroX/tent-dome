@@ -28,6 +28,7 @@ var Express = require("express");
 var CookieParser = require("cookie-parser");
 var BodyParser = require("body-parser");
 var morgan = require("morgan");
+var index_1 = require("../index");
 var urlencodedParser = BodyParser.urlencoded({ extended: true });
 ;
 /**
@@ -45,7 +46,7 @@ var Server = /** @class */ (function () {
     Server.prototype.initDefaultMiddlewares = function () {
         this.app.use(morgan('dev'));
         this.app.use(urlencodedParser);
-        this.app.use(BodyParser.json());
+        this.app.use(BodyParser.json(index_1.Tent.get('bodyparser options')));
         this.app.use(CookieParser());
     };
     /**

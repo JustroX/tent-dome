@@ -90,12 +90,12 @@ See this [link](https://justrox.github.io/tent-dome/) for the documentation.
 
 ## Core Roadmap
 - [x] Sanitation
-- [x] Validation
+- [x] Validation `needs refactor`
 - [x] Expand Query
-- [x] Virtual fields
+- [x] Virtual fields 
 - [x] Methods and Statics
-- [x] Authentication Plugin
-- [x] Permissions Plugin
+- [x] Authentication Plugin `needs refactor`
+- [x] Permissions Plugin `needs refactor`
 - [ ] Rate Limiting
 - [ ] Decorator Functions
 

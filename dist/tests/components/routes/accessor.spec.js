@@ -61,6 +61,7 @@ describe("Accessor", function () {
             layer: {
                 sublayer: Number
             },
+            is_recent: Boolean,
             bubble: { type: mongoose.Schema.Types.ObjectId, ref: "Bubble" }
         });
         bubble = new model_1.Model("Bubble");
@@ -302,7 +303,7 @@ describe("Accessor", function () {
             }).to["throw"]("Assign can not be called without first calling Sanitize");
         });
         it("should throw error if #Read or #FreshDocument is not yet called", function () {
-            accessor.Sanitize({ name: "Sample", age: 18 });
+            accessor.Sanitize({ name: "Sample", age: 18, is_recent: false });
             chai_1.expect(function () {
                 accessor.Assign();
             }).to["throw"]("Assign can not be called without first calling Read or FreshDocument");
@@ -314,7 +315,7 @@ describe("Accessor", function () {
             }).to.not["throw"]();
         });
         it("should assign value properly", function () {
-            var keys = ["name", "age"];
+            var keys = ["name", "age", "is_recent"];
             for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
                 var i = keys_1[_i];
                 chai_1.expect(accessor.document.get(i)).to.be.equal(accessor.payload[i]);

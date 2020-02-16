@@ -138,7 +138,7 @@ export class Accessor<T> {
 	  Assert(this.payload, 'Assign can not be called without first calling Sanitize')
 	  Assert(this.document, 'Assign can not be called without first calling Read or FreshDocument')
 	  for (const i in this.payload) {
-	  	if (this.payload[i]) { (this.document as Document<T>).set(i, this.payload[i]) }
+	  	if (this.payload[i] || this.payload[i]===false) { (this.document as Document<T>).set(i, this.payload[i]) }
 	  }
 	}
 

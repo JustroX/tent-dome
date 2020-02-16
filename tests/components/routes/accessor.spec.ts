@@ -30,7 +30,8 @@ describe("Accessor",function()
 			sublayer: number
 		},
 		not_field?: number,
-		bubble ?: any
+		bubble ?: any,
+		is_recent?: boolean
 	}
 
 	let accessor 	: Accessor<SampleSchema>;
@@ -49,6 +50,7 @@ describe("Accessor",function()
 			{
 				sublayer: Number
 			},
+			is_recent: Boolean,
 			bubble : { type: mongoose.Schema.Types.ObjectId, ref: "Bubble"}
 		});
 
@@ -389,7 +391,7 @@ describe("Accessor",function()
 
 		it("should throw error if #Read or #FreshDocument is not yet called",function()
 		{
-			accessor.Sanitize({ name: "Sample", age: 18 });
+			accessor.Sanitize({ name: "Sample", age: 18, is_recent: false });
 			expect(function()
 			{
 				accessor.Assign();
@@ -407,9 +409,10 @@ describe("Accessor",function()
 
 		it("should assign value properly",function()
 		{
-			const keys = ["name","age"];
-			for(let i of keys)
+			const keys = ["name","age","is_recent"];
+			for(let i of keys) {
 				expect(accessor.document.get(i)).to.be.equal(accessor.payload[i]);
+			}
 		});
 	});
 

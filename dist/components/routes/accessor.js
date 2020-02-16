@@ -108,7 +108,7 @@ var Accessor = /** @class */ (function () {
         Assert(this.payload, 'Assign can not be called without first calling Sanitize');
         Assert(this.document, 'Assign can not be called without first calling Read or FreshDocument');
         for (var i in this.payload) {
-            if (this.payload[i]) {
+            if (this.payload[i] || this.payload[i] === false) {
                 this.document.set(i, this.payload[i]);
             }
         }

@@ -25,14 +25,14 @@
 import { Server as HttpServer, createServer } 	from 'http'
 import { Application } 	 from 'express'
 
+import { Tent } from '../index'
+
 import Mongoose = require('mongoose');
 
 import Express = require('express');
 import CookieParser = require('cookie-parser');
 import BodyParser = require('body-parser');
 import morgan = require('morgan');
-
-import { Tent } from '../index';
 
 var urlencodedParser = BodyParser.urlencoded({ extended: true })
 

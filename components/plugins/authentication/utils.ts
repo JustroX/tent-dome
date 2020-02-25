@@ -33,6 +33,16 @@ import jwt = require('jsonwebtoken');
 import Joi = require('@hapi/joi');
 import assert = require('assert');
 
+/** Authentication Validation Options */
+interface AuthValidationOptions{
+  emailPattern: RegExp,
+  passwordPattern: RegExp,
+  emailMin: number,
+  emailMax: number,
+  passwordMin: number,
+  passwordMax: number
+}
+
 /** @hidden */
 function isTentAvailable (tent: Accessor<any> | undefined) : tent is Accessor<any> {
   return tent !== undefined
@@ -64,10 +74,33 @@ export function buildSchema () {
   addValidPasswordMethod(UserModel)
 
   const validationMW = (req: Request, res: Response, next: NextFunction) => {
+    const {
+      emailPattern,
+      emailMax,
+      emailMin,
+
+      passwordPattern,
+      passwordMax,
+      passwordMin
+    } : Partial<AuthValidationOptions> =
+     Tent.get<Partial<AuthValidationOptions>>('auth validation options') || {}
+
     // validation
     const raw : any = {}
-    raw[emailToken] = Joi.string().regex(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).required()
-    raw[passwordToken] = Joi.string().min(6).required()
+
+    // for emails
+    let emailValidator = Joi.string().required()
+    if (emailMax) emailValidator = emailValidator.max(emailMax)
+    if (emailMin) emailValidator = emailValidator.min(emailMin)
+    if (emailPattern) emailValidator = emailValidator.regex(emailPattern)
+    raw[emailToken] = emailValidator
+
+    // for emails
+    let passwordValidator = Joi.string().required()
+    if (passwordMax) passwordValidator = passwordValidator.max(passwordMax)
+    if (passwordMin) passwordValidator = passwordValidator.min(passwordMin)
+    if (passwordPattern) passwordValidator = passwordValidator.regex(passwordPattern)
+    raw[passwordToken] = passwordValidator
 
     const schema = Joi.object(raw)
 

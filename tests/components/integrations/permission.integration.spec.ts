@@ -38,6 +38,14 @@ describe("Permission Plugin - Integration",function()
 				"auth secret" : "Shhhhh",
 				"auth signup" : true,
 				"auth activation token": "active",
+				"auth validation options":  {
+					emailPattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+					passwordPattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+					emailMin: 6,
+					emailMax: 32,
+					passwordMin: 6,
+					passwordMax: 32
+				},
 				"permission payload role" : "roles"
 			});
 

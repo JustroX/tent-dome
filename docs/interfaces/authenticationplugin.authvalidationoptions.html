@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Tent</title>
+	<title>AuthValidationOptions | Tent</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="tent.html">Tent</a>
+					<a href="../modules/authenticationplugin.html">AuthenticationPlugin</a>
+				</li>
+				<li>
+					<a href="authenticationplugin.authvalidationoptions.html">AuthValidationOptions</a>
 				</li>
 			</ul>
-			<h1>External module Tent</h1>
+			<h1>Interface AuthValidationOptions</h1>
 		</div>
 	</div>
 </header>
@@ -69,85 +72,97 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<h1 id="tent-framework">Tent Framework</h1>
-						<p>This module contains functions and definitions needed to setup a tent app.</p>
+						<p>Authentication Validation Options</p>
 					</div>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">AuthValidationOptions</span>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/tent.authentication.html" class="tsd-kind-icon">Authentication</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/tent.permission.html" class="tsd-kind-icon">Permission</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter"><a href="../classes/tent.route.html" class="tsd-kind-icon">Route</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter"><a href="../classes/tent.sanitation.html" class="tsd-kind-icon">Sanitation</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/tent.tentdome.html" class="tsd-kind-icon">Tent<wbr>Dome</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/tent.validation.html" class="tsd-kind-icon">Validation</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/tent.plugininterface.html" class="tsd-kind-icon">Plugin<wbr>Interface</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/tent.tentoptionsinterface.html" class="tsd-kind-icon">Tent<wbr>Options<wbr>Interface</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Variables</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="tent.html#plugin" class="tsd-kind-icon">Plugin</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="tent.html#tent-1" class="tsd-kind-icon">Tent</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="tent.html#types" class="tsd-kind-icon">Types</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="authenticationplugin.authvalidationoptions.html#emailmax" class="tsd-kind-icon">email<wbr>Max</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="authenticationplugin.authvalidationoptions.html#emailmin" class="tsd-kind-icon">email<wbr>Min</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="authenticationplugin.authvalidationoptions.html#emailpattern" class="tsd-kind-icon">email<wbr>Pattern</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="authenticationplugin.authvalidationoptions.html#passwordmax" class="tsd-kind-icon">password<wbr>Max</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="authenticationplugin.authvalidationoptions.html#passwordmin" class="tsd-kind-icon">password<wbr>Min</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="authenticationplugin.authvalidationoptions.html#passwordpattern" class="tsd-kind-icon">password<wbr>Pattern</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
-					<a name="plugin" class="tsd-anchor"></a>
-					<h3>Plugin</h3>
-					<div class="tsd-signature tsd-kind-icon">Plugin<span class="tsd-signature-symbol">:</span> <a href="plugin.html#plugin-1" class="tsd-signature-type">Plugin</a><span class="tsd-signature-symbol"> =&nbsp;PluginModule.Plugin</span></div>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external tsd-is-not-exported">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+					<a name="emailmax" class="tsd-anchor"></a>
+					<h3>email<wbr>Max</h3>
+					<div class="tsd-signature tsd-kind-icon">email<wbr>Max<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/JustroX/tent-dome/blob/3b6a136/index.ts#L46">index.ts:46</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Expose Plugin Class</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
-					<a name="tent-1" class="tsd-anchor"></a>
-					<h3>Tent</h3>
-					<div class="tsd-signature tsd-kind-icon">Tent<span class="tsd-signature-symbol">:</span> <a href="../classes/tent.tentdome.html" class="tsd-signature-type">TentDome</a><span class="tsd-signature-symbol"> =&nbsp;new TentDome()</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/JustroX/tent-dome/blob/3b6a136/index.ts#L192">index.ts:192</a></li>
+							<li>Defined in <a href="https://github.com/JustroX/tent-dome/blob/3b6a136/components/plugins/authentication/utils.ts#L41">components/plugins/authentication/utils.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
-					<a name="types" class="tsd-anchor"></a>
-					<h3>Types</h3>
-					<div class="tsd-signature tsd-kind-icon">Types<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Types</span><span class="tsd-signature-symbol"> =&nbsp;Schema.Types</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+					<a name="emailmin" class="tsd-anchor"></a>
+					<h3>email<wbr>Min</h3>
+					<div class="tsd-signature tsd-kind-icon">email<wbr>Min<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/JustroX/tent-dome/blob/3b6a136/index.ts#L58">index.ts:58</a></li>
+							<li>Defined in <a href="https://github.com/JustroX/tent-dome/blob/3b6a136/components/plugins/authentication/utils.ts#L40">components/plugins/authentication/utils.ts:40</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Expose mongoose types</p>
-						</div>
-					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+					<a name="emailpattern" class="tsd-anchor"></a>
+					<h3>email<wbr>Pattern</h3>
+					<div class="tsd-signature tsd-kind-icon">email<wbr>Pattern<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/JustroX/tent-dome/blob/3b6a136/components/plugins/authentication/utils.ts#L38">components/plugins/authentication/utils.ts:38</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+					<a name="passwordmax" class="tsd-anchor"></a>
+					<h3>password<wbr>Max</h3>
+					<div class="tsd-signature tsd-kind-icon">password<wbr>Max<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/JustroX/tent-dome/blob/3b6a136/components/plugins/authentication/utils.ts#L43">components/plugins/authentication/utils.ts:43</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+					<a name="passwordmin" class="tsd-anchor"></a>
+					<h3>password<wbr>Min</h3>
+					<div class="tsd-signature tsd-kind-icon">password<wbr>Min<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/JustroX/tent-dome/blob/3b6a136/components/plugins/authentication/utils.ts#L42">components/plugins/authentication/utils.ts:42</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+					<a name="passwordpattern" class="tsd-anchor"></a>
+					<h3>password<wbr>Pattern</h3>
+					<div class="tsd-signature tsd-kind-icon">password<wbr>Pattern<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/JustroX/tent-dome/blob/3b6a136/components/plugins/authentication/utils.ts#L39">components/plugins/authentication/utils.ts:39</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -160,90 +175,90 @@
 					<li class="label tsd-is-external">
 						<span>Internals</span>
 					</li>
-					<li class="current tsd-kind-external-module">
-						<a href="tent.html">Tent</a>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/tent.html">Tent</a>
 					</li>
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="accessor.html">Accessor</a>
+						<a href="../modules/accessor.html">Accessor</a>
+					</li>
+					<li class="current tsd-kind-external-module tsd-is-external">
+						<a href="../modules/authenticationplugin.html">Authentication<wbr>Plugin</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="authenticationplugin.html">Authentication<wbr>Plugin</a>
+						<a href="../modules/builder.html">Builder</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="builder.html">Builder</a>
+						<a href="../modules/expand.html">Expand</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="expand.html">Expand</a>
+						<a href="../modules/middlewares.html">Middlewares</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="middlewares.html">Middlewares</a>
+						<a href="../modules/model.html">Model</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="model.html">Model</a>
+						<a href="../modules/params.html">Params</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="params.html">Params</a>
+						<a href="../modules/permissionsplugin.html">Permissions<wbr>Plugin</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="permissionsplugin.html">Permissions<wbr>Plugin</a>
+						<a href="../modules/plugin.html">Plugin</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="plugin.html">Plugin</a>
+						<a href="../modules/routes.html">Routes</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="routes.html">Routes</a>
+						<a href="../modules/sanitationplugin.html">Sanitation<wbr>Plugin</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="sanitationplugin.html">Sanitation<wbr>Plugin</a>
+						<a href="../modules/schema.html">Schema</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="schema.html">Schema</a>
+						<a href="../modules/server.html">Server</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="server.html">Server</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="validationplugin.html">Validation<wbr>Plugin</a>
+						<a href="../modules/validationplugin.html">Validation<wbr>Plugin</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/tent.authentication.html" class="tsd-kind-icon">Authentication</a>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-is-external">
+						<a href="../classes/authenticationplugin.authenticationplugin-1.html" class="tsd-kind-icon">Authentication<wbr>Plugin</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/tent.permission.html" class="tsd-kind-icon">Permission</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="authenticationplugin.authvalidationoptions.html" class="tsd-kind-icon">Auth<wbr>Validation<wbr>Options</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+								<a href="authenticationplugin.authvalidationoptions.html#emailmax" class="tsd-kind-icon">email<wbr>Max</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+								<a href="authenticationplugin.authvalidationoptions.html#emailmin" class="tsd-kind-icon">email<wbr>Min</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+								<a href="authenticationplugin.authvalidationoptions.html#emailpattern" class="tsd-kind-icon">email<wbr>Pattern</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+								<a href="authenticationplugin.authvalidationoptions.html#passwordmax" class="tsd-kind-icon">password<wbr>Max</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+								<a href="authenticationplugin.authvalidationoptions.html#passwordmin" class="tsd-kind-icon">password<wbr>Min</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+								<a href="authenticationplugin.authvalidationoptions.html#passwordpattern" class="tsd-kind-icon">password<wbr>Pattern</a>
+							</li>
+						</ul>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="../classes/tent.route.html" class="tsd-kind-icon">Route</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="../classes/tent.sanitation.html" class="tsd-kind-icon">Sanitation</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/tent.tentdome.html" class="tsd-kind-icon">Tent<wbr>Dome</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/tent.validation.html" class="tsd-kind-icon">Validation</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/tent.plugininterface.html" class="tsd-kind-icon">Plugin<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/tent.tentoptionsinterface.html" class="tsd-kind-icon">Tent<wbr>Options<wbr>Interface</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
-						<a href="tent.html#plugin" class="tsd-kind-icon">Plugin</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
-						<a href="tent.html#tent-1" class="tsd-kind-icon">Tent</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
-						<a href="tent.html#types" class="tsd-kind-icon">Types</a>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/authenticationplugin.html#middleware" class="tsd-kind-icon">Middleware</a>
 					</li>
 				</ul>
 			</nav>

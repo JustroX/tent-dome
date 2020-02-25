@@ -110,8 +110,33 @@ describe("Authentication Plugin - Integration",function()
 			.catch(done)
 		});
 
-		it("should deny invalid inputs",function(done)
+		it("should accept any kind of inputs by default",function(done)
 		{
+			chai.request(Tent.app())
+			.post("/api/userauths/signup")
+			.send({
+				email 		: "johnyNotEmail",
+				password	: "w"
+			})
+			.then((res)=>
+			{
+				try	{
+					expect(res).to.have.status(200);
+					done();
+				}
+				catch(err) {
+					done(err);
+				}
+			})
+			.catch(done)
+		});
+
+		it("should deny invalid inputs - wrong email regex format",function(done)
+		{
+			Tent.set("auth validation options", {
+				emailPattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+			});
+
 			chai.request(Tent.app())
 			.post("/api/userauths/signup")
 			.send({
@@ -133,8 +158,152 @@ describe("Authentication Plugin - Integration",function()
 			.catch(done)
 		});
 
+		it("should deny invalid inputs - wrong email minimum length",function(done)
+		{
+			Tent.set("auth validation options", {
+				emailMin: 10000
+			});
+
+			chai.request(Tent.app())
+			.post("/api/userauths/signup")
+			.send({
+				email 		: "johnyNotEmail",
+				password	: "w"
+			})
+			.then((res)=>
+			{
+				try
+				{
+					expect(res).to.have.status(400);
+					done();
+				}
+				catch(err)
+				{
+					done(err);
+				}
+			})
+			.catch(done)
+		});
+
+		it("should deny invalid inputs - wrong email maximum length",function(done)
+		{
+			Tent.set("auth validation options", {
+				emailMax: 2
+			});
+
+			chai.request(Tent.app())
+			.post("/api/userauths/signup")
+			.send({
+				email 		: "johnyNotEmail",
+				password	: "w"
+			})
+			.then((res)=>
+			{
+				try
+				{
+					expect(res).to.have.status(400);
+					done();
+				}
+				catch(err)
+				{
+					done(err);
+				}
+			})
+			.catch(done)
+		});
+
+		it("should deny invalid inputs - wrong password regex format",function(done)
+		{
+			Tent.set("auth validation options", {
+				passwordPattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+			});
+
+			chai.request(Tent.app())
+			.post("/api/userauths/signup")
+			.send({
+				email 		: "johnyNotEmail",
+				password	: "w"
+			})
+			.then((res)=>
+			{
+				try
+				{
+					expect(res).to.have.status(400);
+					done();
+				}
+				catch(err)
+				{
+					done(err);
+				}
+			})
+			.catch(done)
+		});
+
+		it("should deny invalid inputs - wrong password minimum length",function(done)
+		{
+			Tent.set("auth validation options", {
+				passwordMin: 10000
+			});
+
+			chai.request(Tent.app())
+			.post("/api/userauths/signup")
+			.send({
+				email 		: "johnyNotEmail",
+				password	: "w"
+			})
+			.then((res)=>
+			{
+				try
+				{
+					expect(res).to.have.status(400);
+					done();
+				}
+				catch(err)
+				{
+					done(err);
+				}
+			})
+			.catch(done)
+		});
+
+		it("should deny invalid inputs - wrong password maximum length",function(done)
+		{
+			Tent.set("auth validation options", {
+				passwordMax: 1
+			});
+
+			chai.request(Tent.app())
+			.post("/api/userauths/signup")
+			.send({
+				email 		: "johnyNotEmail",
+				password	: "wwwwww"
+			})
+			.then((res)=>
+			{
+				try
+				{
+					expect(res).to.have.status(400);
+					done();
+				}
+				catch(err)
+				{
+					done(err);
+				}
+			})
+			.catch(done)
+		});
+
 		it("create new user",function(done)
 		{
+			Tent.set("auth validation options", {
+				emailPattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+				passwordPattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+				emailMin: 6,
+				emailMax: 32,
+				passwordMin: 6,
+				passwordMax: 32
+			});
+
 			chai.request(Tent.app())
 			.post("/api/userauths/signup")
 			.send({
@@ -175,7 +344,7 @@ describe("Authentication Plugin - Integration",function()
 					try
 					{
 						expect(res).to.have.status(200);
-						expect(res.body.length).to.be.equal(1);
+						expect(res.body.length).to.be.equal(2);
 						_id = res.body[0]._id;
 						done();
 					}
@@ -438,7 +607,7 @@ describe("Authentication Plugin - Integration",function()
 					try
 					{
 						expect(res).to.have.status(200);
-						expect(res.body.length).to.be.equal(1);
+						expect(res.body.length).to.be.equal(2);
 						_id = res.body[0]._id;
 						done();
 					}

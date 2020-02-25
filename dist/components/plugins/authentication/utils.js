@@ -91,10 +91,27 @@ function buildSchema() {
     var UserModel = model_1.get(userModelName);
     addValidPasswordMethod(UserModel);
     var validationMW = function (req, res, next) {
+        var _a = index_1.Tent.get('auth validation options') || {}, emailPattern = _a.emailPattern, emailMax = _a.emailMax, emailMin = _a.emailMin, passwordPattern = _a.passwordPattern, passwordMax = _a.passwordMax, passwordMin = _a.passwordMin;
         // validation
         var raw = {};
-        raw[emailToken] = Joi.string().regex(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).required();
-        raw[passwordToken] = Joi.string().min(6).required();
+        // for emails
+        var emailValidator = Joi.string().required();
+        if (emailMax)
+            emailValidator = emailValidator.max(emailMax);
+        if (emailMin)
+            emailValidator = emailValidator.min(emailMin);
+        if (emailPattern)
+            emailValidator = emailValidator.regex(emailPattern);
+        raw[emailToken] = emailValidator;
+        // for emails
+        var passwordValidator = Joi.string().required();
+        if (passwordMax)
+            passwordValidator = passwordValidator.max(passwordMax);
+        if (passwordMin)
+            passwordValidator = passwordValidator.min(passwordMin);
+        if (passwordPattern)
+            passwordValidator = passwordValidator.regex(passwordPattern);
+        raw[passwordToken] = passwordValidator;
         var schema = Joi.object(raw);
         var error = schema.validate(req.body).error;
         if (error) {
